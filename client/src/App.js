@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import ReactHome from './Pages/ReactHome';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <Router>
+    <Routes>
+
+    {/* This will be our home page - unathenticated users*/}
+    <Route path="/" element={<ReactHome/>} /> 
+
+    {/* This will house the lobby components - authenticated users */}
+    <Route path="/lobby" element={<div></div>} />
+
+    {/* This will be for routing to game session - users in game*/}
+    <Route path="/session" element={<div></div>}/>
+
+    </Routes>
+  </Router>
   );
 }
 
