@@ -1,5 +1,5 @@
-import ReactHome from './Pages/ReactHome';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import GameSession from './Pages/GameSession';
 
 function App() {
   return (
@@ -7,7 +7,7 @@ function App() {
     <Routes>
 
     {/* This will be our home page - unathenticated users*/}
-    <Route path="/" element={<ReactHome/>} /> 
+    <Route path="/" element={<GameSession/>} /> 
 
     {/* This will house the lobby components - authenticated users */}
     <Route path="/lobby" element={<div></div>} />
