@@ -1,0 +1,9 @@
+.resourceCard {
+  height: 94px;
+  width: 75px;
+  border-radius: 10px;
+  border: 1px solid #fcf7f7;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+}
