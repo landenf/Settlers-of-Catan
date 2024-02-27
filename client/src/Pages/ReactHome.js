@@ -1,9 +1,11 @@
-import TestComponent from "../Components/testComponent"
+import PlayerComponent from "../Components/playerComponent"
 
 const ReactHome = () => {
     return (
         <div>
-            <TestComponent/>
+            <PlayerComponent 
+                image="empty-avatar"
+            />
         </div>
 )}
 

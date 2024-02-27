@@ -1,0 +1,45 @@
+.playerBox {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    height: 20vh;
+    width: 25vw;
+    background-color: hsla(0, 100%, 30%, 0.4);
+}
+
+.avatar {
+    width: 75%;
+    display: block;
+    position: relative;
+    text-align: center;
+    margin: auto;
+    border-radius: 50%;
+}
+
+.heading {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    margin-top: 5%;
+}
+
+.statHeading {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+    margin: 10% 0 0 0;
+}
+
+.statContainer {
+    margin-top: 5%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.statBox {
+    display: block;
+    text-align: center;
+    background-color: white;
+    width: 75%;
+    height: 100px;
+    margin: auto;
+}
