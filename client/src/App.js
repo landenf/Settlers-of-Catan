@@ -1,4 +1,4 @@
-import ReactHome from './Pages/ReactHome';
+import PlayerBarExample from './Pages/PlayerBarExample';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <Routes>
 
     {/* This will be our home page - unathenticated users*/}
-    <Route path="/" element={<ReactHome/>} /> 
+    <Route path="/" element={<PlayerBarExample/>} /> 
 
     {/* This will house the lobby components - authenticated users */}
     <Route path="/lobby" element={<div></div>} />
