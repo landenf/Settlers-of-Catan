@@ -1,5 +1,5 @@
-import PlayerBarExample from './Pages/PlayerBarExample';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import GameSession from './Pages/GameSession';
 
 function App() {
   return (
@@ -7,7 +7,8 @@ function App() {
     <Routes>
 
     {/* This will be our home page - unathenticated users*/}
-    <Route path="/" element={<PlayerBarExample/>} /> 
+
+    <Route path="/" element={<GameSession/>} /> 
 
     {/* This will house the lobby components - authenticated users */}
     <Route path="/lobby" element={<div></div>} />
