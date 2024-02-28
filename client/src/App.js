@@ -7,6 +7,7 @@ function App() {
     <Routes>
 
     {/* This will be our home page - unathenticated users*/}
+
     <Route path="/" element={<GameSession/>} /> 
 
     {/* This will house the lobby components - authenticated users */}

@@ -1,0 +1,90 @@
+.playerBox {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    height: 18vh;
+    width: 25vw;
+    background-color: hsla(0, 0%, 100%, 0.6);
+}
+
+.avatar {
+    width: 65%;
+    display: block;
+    position: relative;
+    text-align: center;
+    margin: auto;
+    border-radius: 50%;
+}
+
+.red {
+    border: 5px solid red;
+}
+
+.orange {
+    border: 5px solid orange;
+}
+
+.green {
+    border: 5px solid green;
+}
+
+.blue {
+    border: 5px solid blue;
+}
+
+.heading {
+    text-align: center;
+    font-weight: bold;
+    font-size: 5vmin;
+    margin-top: 1%;
+    margin-bottom: 5%;
+}
+
+.statContainer {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.statBox {
+    display: block;
+    text-align: center;
+    background-color: white;
+    width: 75%;
+    height: 100%;
+    margin: auto;
+}
+
+.statHeading {
+    text-align: center;
+    font-weight: bold;
+    font-size: 2vmin;
+    margin: 10% 0 0 0;
+}
+
+.statText {
+    text-align: center;
+    font-size: 1.5vmin;
+    margin: 0 10% 10% 10%;
+}
+
+.statHoverText {
+    text-align: center;
+    font-size: 1.5vmin;
+    margin: 12%;
+}
+
+.playerAwards {
+    padding: 1.5vh 0 1.5vh 0;
+    height: 4vh;
+    width: 25vw;
+    text-align: center;
+    background-color: hsla(0, 0%, 80%, 0.6);
+}
+
+.playerAwards img {
+    height: 120%;
+    
+}
+
+.hidden {
+    display: none;
+}
