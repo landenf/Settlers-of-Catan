@@ -6,10 +6,11 @@ const Dice = () => {
     DiceState = 1;
     imgUrl = "";
 
-    rollDice() {
+    rollDice() = () => {
         this.DiceState = Math.floor(Math.random() * 6) + 1;
         this.imgUrl = './images/dice/' + {DiceState} + '.png';
-    }
+    };
+
     return (
         <div id="dice" width='34' height='30' href={this.imgUrl}></div>
     );
