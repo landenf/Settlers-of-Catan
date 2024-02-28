@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from 'react-hexgrid';
-import { GameBoardConfiguration } from '../Data/GameBoardStatic';
+import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
 import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
 

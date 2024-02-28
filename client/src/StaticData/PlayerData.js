@@ -1,7 +1,3 @@
-import PlayerBarComponent from "../Components/playerBarComponent";
-
-const PlayerBarExample = () => {
-
     const player1 = {
         name: "steven",
         image: "empty-avatar",
@@ -34,14 +30,5 @@ const PlayerBarExample = () => {
         resources: 1
     }
 
-    const players = [player1, player2, player3, player4]
+export const players = [player1, player2, player3, player4]
 
-    return (
-        <div>
-            <PlayerBarComponent 
-                players = {players}
-            />
-        </div>
-)}
-
-export default PlayerBarExample;
