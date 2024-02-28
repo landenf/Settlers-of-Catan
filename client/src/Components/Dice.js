@@ -1,18 +1,18 @@
-import React from 'react'; // Import React
+import React, { useState } from "react";
 import logo from '../logo.svg';
-import '../App.css';
 
 const Dice = () => {
-    DiceState = 1;
-    imgUrl = "";
-
-    rollDice() = () => {
+    const DiceState = 1;
+    const imgUrl = `../images/dice/${DiceState}.png`;
+    function roll () {
         this.DiceState = Math.floor(Math.random() * 6) + 1;
-        this.imgUrl = './images/dice/' + {DiceState} + '.png';
+        this.imgUrl = `./images/dice/${DiceState}.png`
     };
-
     return (
-        <div id="dice" width='34' height='30' href={this.imgUrl}></div>
+        <div id="dice" width='34' height='30'>
+            <img src={imgUrl}></img>
+        </div>
     );
     
 };
+export default Dice;

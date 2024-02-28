@@ -1,16 +1,17 @@
-import React from 'react'; // Import React
+import React, { useState } from "react";
 import logo from '../logo.svg';
-import '../App.css';
+import { Dice } from './Dice.js';
 
 
 const RollButton = () => {
-    dice1 = new Dice();
-    dice2 = new Dice();
-    totalRoll = 0;
+    // const dice1 = new Dice();
+    // const dice2 = new Dice();
+    const totalRoll = 0;
     const handleClick = () => {
-        dice1.rollDice();
-        dice2.rollDice();
-        totalRoll = dice1.DiceState + dice2.DiceState;
+        // dice[0].roll();
+        // dice[1].roll();
+
+        // totalRoll = dice[0].DiceState + dice[1].DiceState;
     };
 
     return (
@@ -20,3 +21,5 @@ const RollButton = () => {
         </div>
     )
 };
+
+export default RollButton;
