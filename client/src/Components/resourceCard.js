@@ -1,8 +1,8 @@
-import "./resourceCard.css";
 import { useState } from "react";
 
 export default function ResourceCard({ type }) {
   const [numCards, setNumCards] = useState(0);
+  const cardType = type;
 
   function getNumCards() {
     setNumCards({
@@ -22,7 +22,7 @@ export default function ResourceCard({ type }) {
           left: 0,
           top: 0,
           position: "absolute",
-          borderRadius: 8,
+          borderRadius: 10,
           border: "1px #FCF8F8 solid",
         }}
         /** reference image in GameBoardStatic.js when Landen's merges */
@@ -58,7 +58,6 @@ export default function ResourceCard({ type }) {
         }}
       >
         {/** pull from PlayerData.js in Data once Landen's PR is merged */}
-        {numCards}
         numCards
       </div>
     </div>
