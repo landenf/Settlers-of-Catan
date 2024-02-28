@@ -1,17 +1,32 @@
 import ResourceCard from "./resourceCard";
 import Resources from "../Enums/resources";
-import DevelopmentCard from "./developmentCard";
+import "./hand.css";
 
-export default function Hand() {
-  <div
-    className="PersonalCards"
-    style={{ width: 250, height: 197, position: "relative" }}
-  >
-    <DevelopmentCard />
+const Hand = () => {
+  /**
+   *get player resources
+   */
 
-    {/** Makes a card for each resource */}
-    {Object.values(Resources).map((resourceId) => {
-      return <ResourceCard type={resourceId} />;
-    })}
-  </div>;
-}
+  let resources = [
+    { Name: "sheep", Value: 1 },
+    { Name: "wheat", Value: 1 },
+    { Name: "wood", Value: 1 },
+    { Name: "brick", Value: 1 },
+    { Name: "stone", Value: 1 },
+  ];
+  const getResources = () => {};
+  console.log(resources);
+
+  return (
+    <div className="personalCards" style={{ position: "relative" }}>
+      {/** Makes a card for each resource */}
+      {resources.map((resource) => {
+        return <ResourceCard type={resource.Name} Value={resource.Value} />;
+      })}
+
+      <ResourceCard type="developmentCard" Value={1} />
+    </div>
+  );
+};
+
+export default Hand;
