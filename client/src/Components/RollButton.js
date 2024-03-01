@@ -6,7 +6,7 @@ import { Dice } from './Dice.js';
 const RollButton = () => {
     // const dice1 = new Dice();
     // const dice2 = new Dice();
-    const totalRoll = 0;
+    
     const handleClick = () => {
         // dice[0].roll();
         // dice[1].roll();

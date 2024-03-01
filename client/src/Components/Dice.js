@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import logo from '../logo.svg';
 
 const Dice = () => {
-    const DiceState = 1;
-    const imgUrl = `../images/dice/${DiceState}.png`;
+    const [DiceState, setDiceState] = useState(1);
+    const imgUrl = `./images/dice/${DiceState}.png`;
+
+    //figure out where this logic goes later
     function roll () {
-        this.DiceState = Math.floor(Math.random() * 6) + 1;
-        this.imgUrl = `./images/dice/${DiceState}.png`
+        newDiceValue = Math.floor(Math.random() * 6) + 1;
+        setDiceState(newDiceValue);
+        imgUrl = `./images/dice/${DiceState}.png`
     };
     return (
         <div id="dice" width='34' height='30'>
