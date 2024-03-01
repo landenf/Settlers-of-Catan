@@ -12,7 +12,7 @@ function App() {
     <Router>
       <Routes>
         {/* This will be our home page - unathenticated users*/}
-        <Route path="/" element={<Hand />} />
+        <Route path="/" element={<ReactHome />} />
 
         {/* This will house the lobby components - authenticated users */}
         <Route path="/lobby" element={<div></div>} />
