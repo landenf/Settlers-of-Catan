@@ -1,4 +1,6 @@
 import GameBoard from "../Components/GameBoard";
+import { players } from "../StaticData/PlayerData.js";
+import PlayerbarComponet from '../Components/playerBarComponent.js';
 import Dice from "../Components/Dice";
 import RollButton from "../Components/RollButton"
 
@@ -9,6 +11,7 @@ const GameSession = () => {
     return (
         <div>
             <GameBoard/>
+            <PlayerbarComponet players={players}></PlayerbarComponet>
             <Dice/>
             <Dice/>
             <RollButton/>
@@ -16,5 +19,4 @@ const GameSession = () => {
         </div>
         
 )}
-
 export default GameSession;

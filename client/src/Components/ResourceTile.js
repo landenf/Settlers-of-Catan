@@ -1,5 +1,5 @@
 import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from 'react-hexgrid';
-import { Tile_Resources } from '../Data/GameBoardStatic';
+import { Tile_Resources } from '../StaticData/GameBoardStatic';
 
 //renders svg !!!
 const ResourceTile = (props) => {
