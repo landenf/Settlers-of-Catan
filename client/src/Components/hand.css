@@ -1,0 +1,50 @@
+.personalCards {
+  height: 198px;
+  width: 255px;
+  margin: auto;
+  overflow: visible;
+  display: flex;
+  flex-flow: row wrap;
+  bottom: 0;
+}
+
+.resourceCard {
+  height: 94px;
+  width: 75px;
+  border-radius: 10px;
+  border: 1px solid black;
+  left: 0px;
+  top: 0px;
+  display: flex;
+  flex-flow: row wrap;
+  border: 5px white solid;
+}
+
+.resourceImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  position: absolute;
+}
+
+.backgroundCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  margin: auto;
+  position: relative;
+  background: white;
+}
+
+.cardNumber {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  position: absolute;
+  line-height: 94px;
+  color: black;
+  font-size: 35;
+  font-family: Inter;
+  font-weight: 500px;
+  word-wrap: break-word;
+}
