@@ -1,8 +1,8 @@
-import GameBoard from "../Components/GameBoard";
-import { players } from "../StaticData/PlayerData.js";
-import PlayerbarComponet from '../Components/playerBarComponent.js';
-import Dice from "../Components/Dice";
-import RollButton from "../Components/RollButton"
+import GameBoard from "../Components/GameBoard.tsx";
+import { players } from "../StaticData/PlayerData.ts";
+import PlayerBarComponent from '../Components/PlayerBarComponent.tsx';
+import Dice from "../Components/Dice.tsx"
+import RollButton from "../Components/RollButton.tsx"
 
 const GameSession = () => {
     // const d1 = new Dice();
@@ -11,7 +11,7 @@ const GameSession = () => {
     return (
         <div>
             <GameBoard/>
-            <PlayerbarComponet players={players}></PlayerbarComponet>
+            <PlayerBarComponent players={players}/>
             <Dice/>
             <Dice/>
             <RollButton/>

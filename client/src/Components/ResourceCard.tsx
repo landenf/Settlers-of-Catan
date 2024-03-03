@@ -1,14 +1,14 @@
 import { useState } from "react";
-import "./hand.css";
+import "../Styles/hand.css";
+import React from "react";
 
 const ResourceCard = (props) => {
   const [numCards, setNumCards] = useState(0);
   const cardType = props.type;
 
   function getNumCards() {
-    setNumCards({
-      /** get from user */
-    });
+    /** get from user */
+    // setNumCards();
   }
   return (
     <div

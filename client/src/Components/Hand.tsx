@@ -1,6 +1,6 @@
 import ResourceCard from "./resourceCard";
-import Resources from "../Enums/resources";
-import "./hand.css";
+import "../Styles/hand.css";
+import React from "react";
 
 const Hand = () => {
   /**

@@ -1,5 +1,4 @@
-import Hand from "./Components/hand";
-import ReactHome from "./Pages/ReactHome";
+import GameSession from "./Pages/GameSession";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,8 +10,6 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* This will be our home page - unathenticated users*/}
-        <Route path="/" element={<ReactHome />} />
 
         {/* This will be our home page - unathenticated users*/}
         <Route path="/" element={<GameSession/>} /> 

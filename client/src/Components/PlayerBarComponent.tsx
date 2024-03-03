@@ -1,5 +1,5 @@
 import React from "react";
-import PlayerComponent from "./playerComponent";
+import PlayerComponent from "./PlayerComponent.tsx";
 import '../Styles/PlayerBarComponent.css';
 
 /**
