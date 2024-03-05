@@ -1,9 +1,9 @@
 import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from 'react-hexgrid';
-import { Tile_Resources } from '../StaticData/GameBoardStatic.ts';
+import { Tile_Resources } from '../StaticData/GameBoardStatic';
 import React from 'react';
 
 //renders svg !!!
-const ResourceTile = (props) => {
+const ResourceTile = (props: any) => {
 
     const handleClick = () => {
         //implement what happens when tile clicked
@@ -11,7 +11,7 @@ const ResourceTile = (props) => {
     };
     
     const determineResource = () => {
-    return Tile_Resources[props.index];
+        return Tile_Resources[props.index];
     };
 
     return (

@@ -1,6 +1,6 @@
-import ResourceCard from "./resourceCard";
 import "../Styles/hand.css";
 import React from "react";
+import ResourceCard from "./ResourceCard";
 
 const Hand = () => {
   /**

@@ -2,7 +2,7 @@ import { useState } from "react";
 import "../Styles/hand.css";
 import React from "react";
 
-const ResourceCard = (props) => {
+const ResourceCard = (props: any) => {
   const [numCards, setNumCards] = useState(0);
   const cardType = props.type;
 

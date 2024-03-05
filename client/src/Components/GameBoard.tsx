@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from 'react-hexgrid';
-import { GameBoardConfiguration } from '../StaticData/GameBoardStatic.ts';
+import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
 import Patterns from '../Styles/Patterns';
-import ResourceTile from './ResourceTile.tsx';
+import ResourceTile from './ResourceTile';
 
 const GameBoard = () => {
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
-  const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps);
+  const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
   const [hexagons, setHexagons] = useState(initialHexagons);
   const [config, setConfig] = useState(GameBoardConfiguration);
   const layout = config.layout;

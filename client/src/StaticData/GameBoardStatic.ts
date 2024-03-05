@@ -1,6 +1,6 @@
 import { Hexagon } from "react-hexgrid";
 
-export const Tile_Resources = {
+export const Tile_Resources: {[index: number]:any} = {
     0: "woodPattern",
     1: "woodPattern",
     2: "brickPattern",

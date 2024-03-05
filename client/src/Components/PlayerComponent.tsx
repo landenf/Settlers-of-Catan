@@ -9,7 +9,7 @@ import '../Styles/PlayerComponent.css';
  * total VP, resources, and avatar.
  * @returns a front-end component representing a player and their current stats.
  */
-const PlayerComponent = (player) => {
+const PlayerComponent = (player: any) => {
     
     const [isShown, setHover] = useState(false);
 
