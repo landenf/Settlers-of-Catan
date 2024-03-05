@@ -3,6 +3,7 @@ import { players } from "../StaticData/PlayerData.js";
 import PlayerbarComponet from '../Components/playerBarComponent.js';
 import Dice from "../Components/Dice";
 import RollButton from "../Components/RollButton"
+import ActionsBarComponent from "../Components/ActionsBarComponent.js";
 
 const GameSession = () => {
     // const d1 = new Dice();
@@ -12,10 +13,7 @@ const GameSession = () => {
         <div>
             <GameBoard/>
             <PlayerbarComponet players={players}></PlayerbarComponet>
-            <Dice/>
-            <Dice/>
-            <RollButton/>
-            
+            <ActionsBarComponent></ActionsBarComponent>
         </div>
         
 )}
