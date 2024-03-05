@@ -3,6 +3,7 @@ import { players } from "../StaticData/PlayerData.ts";
 import PlayerBarComponent from '../Components/PlayerBarComponent.tsx';
 import Dice from "../Components/Dice.tsx"
 import RollButton from "../Components/RollButton.tsx"
+import Hand from "../Components/Hand.tsx"
 
 const GameSession = () => {
     // const d1 = new Dice();

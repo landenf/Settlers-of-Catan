@@ -1,4 +1,7 @@
-    const player1 = {
+import { Player } from "@backend/types"
+
+    const player1: Player = {
+        id: 1,
         name: "steven",
         image: "empty-avatar",
         color: "red",
@@ -6,7 +9,8 @@
         resources: 2
     }
 
-    const player2 = {
+    const player2: Player = {
+        id: 2,
         name: "steve",
         image: "empty-avatar",
         color: "orange",
@@ -14,7 +18,8 @@
         resources: 15
     }
 
-    const player3 = {
+    const player3: Player = {
+        id: 3,
         name: "stevie",
         image: "empty-avatar",
         color: "green",
@@ -22,7 +27,8 @@
         resources: 98
     }
 
-    const player4 = {
+    const player4: Player = {
+        id: 4,
         name: "stephan",
         image: "empty-avatar",
         color: "blue",

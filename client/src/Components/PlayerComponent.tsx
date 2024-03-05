@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import '../Styles/PlayerComponent.css';
+import { Player } from "@backend/types";
 
 /**
  * A React component corresponding to a specific Catan player. Created using 
@@ -9,7 +10,7 @@ import '../Styles/PlayerComponent.css';
  * total VP, resources, and avatar.
  * @returns a front-end component representing a player and their current stats.
  */
-const PlayerComponent = (player: any) => {
+const PlayerComponent = (player: Player) => {
     
     const [isShown, setHover] = useState(false);
 
