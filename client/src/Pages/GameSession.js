@@ -1,16 +1,13 @@
 import GameBoard from "../Components/GameBoard";
 import { players } from "../StaticData/PlayerData";
-import PlayerBarComponent from "../Components/PlayerComponent.tsx"
-import ActionsBarComponent from "../Components/ActionsBarComponent.js";
+import PlayerBarComponent from "../Components/PlayerBarComponent.tsx"
+import ActionsBarComponent from "../Components/ActionsBarComponent.tsx";
 
 const GameSession = () => {
-    // const d1 = new Dice();
-    // const d2 = new Dice();
-    // const roll = new RollButton([d1, d2]);
     return (
         <div>
             <GameBoard/>
-            <PlayerBarComponent players={players}/>
+            <PlayerBarComponent players={players}></PlayerBarComponent>
             <ActionsBarComponent></ActionsBarComponent>
         </div>
         
