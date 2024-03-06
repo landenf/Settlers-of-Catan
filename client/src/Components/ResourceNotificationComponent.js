@@ -11,9 +11,10 @@ const ResourceNotificationComponent = (props) => {
   return (
     <div className="resourceAnnouncement">
       <div className="announcementText">
-        {" "}
-        {props.playerName} recieved {props.numberReceived}{" "}
-        {props.resourceRecieved}
+        <p>
+          {props.playerName} recieved {props.numberReceived}
+          {props.resourceRecieved}
+        </p>
       </div>
     </div>
   );

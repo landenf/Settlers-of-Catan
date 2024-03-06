@@ -8,11 +8,12 @@ ul {
   height: 30px;
   background: #c3332b;
   border-radius: 25px;
+  position: absolute;
 }
 
 .announcementText {
-  width: 262px;
-  height: 28px;
+  text-align: center;
+  line-height: 1px;
   color: white;
   font-size: 15px;
   font-family: Inter;
