@@ -1,9 +1,7 @@
-import GameBoard from "../Components/GameBoard.tsx";
-import { players } from "../StaticData/PlayerData.ts";
-import PlayerBarComponent from '../Components/PlayerBarComponent.tsx';
-import Dice from "../Components/Dice.tsx"
-import RollButton from "../Components/RollButton.tsx"
-import Hand from "../Components/Hand.tsx"
+import GameBoard from "../Components/GameBoard";
+import { players } from "../StaticData/PlayerData";
+import PlayerBarComponent from "../Components/PlayerComponent.tsx"
+import ActionsBarComponent from "../Components/ActionsBarComponent.js";
 
 const GameSession = () => {
     // const d1 = new Dice();
@@ -13,10 +11,7 @@ const GameSession = () => {
         <div>
             <GameBoard/>
             <PlayerBarComponent players={players}/>
-            <Dice/>
-            <Dice/>
-            <RollButton/>
-            
+            <ActionsBarComponent></ActionsBarComponent>
         </div>
         
 )}
