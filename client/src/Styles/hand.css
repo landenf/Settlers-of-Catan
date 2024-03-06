@@ -8,44 +8,6 @@
   bottom: 0;
 }
 
-.victoryPointBackground {
-  width: 134px;
-  height: 118px;
-  left: 0px;
-  top: 0px;
-  position: absolute;
-  background: #c3332b;
-  border-radius: 25px;
-}
-
-.victoryPointsLabel {
-  width: 76px;
-  height: 42px;
-  left: 29px;
-  top: 61px;
-  position: absolute;
-  text-align: center;
-  color: white;
-  font-size: 50px;
-  font-family: Inter;
-  font-weight: 700px;
-  word-wrap: break-word;
-}
-
-.victoryPointsNumber {
-  width: 105px;
-  height: 35px;
-  left: 15px;
-  top: 13px;
-  position: absolute;
-  text-align: center;
-  color: white;
-  font-size: 20px;
-  font-family: Inter;
-  font-weight: 700;
-  word-wrap: break-word;
-}
-
 .resourceCard {
   height: 94px;
   width: 75px;
