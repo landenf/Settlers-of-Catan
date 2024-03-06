@@ -1,4 +1,21 @@
 ul {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.resourceAnnouncement {
+  width: 221px;
+  height: 30px;
+  background: #c3332b;
+  border-radius: 25px;
+}
+
+.announcementText {
+  width: 262px;
+  height: 28px;
+  color: white;
+  font-size: 15px;
+  font-family: Inter;
+  font-weight: 700px;
+  word-wrap: break-word;
 }
