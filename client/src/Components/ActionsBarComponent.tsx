@@ -4,7 +4,7 @@ import '../Styles/ActionsBar.css';
 //Sidebar for user actions
 const ActionsBarComponent = () => {
 
-  const handleButtonClick = (action) => {
+  const handleButtonClick = (action: string) => {
     //call back end
     console.log(`Action performed: ${action}`);
   };

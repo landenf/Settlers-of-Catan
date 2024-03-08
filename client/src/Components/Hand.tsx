@@ -1,6 +1,6 @@
-import ResourceCard from "./resourceCard";
-import Resources from "../Enums/resources";
 import "../Styles/hand.css";
+import React from "react";
+import ResourceCard from "./ResourceCard";
 
 const Hand = () => {
   /**
@@ -8,11 +8,11 @@ const Hand = () => {
    */
 
   let resources = [
-    { Name: "sheep", Value: 1 },
-    { Name: "wheat", Value: 1 },
-    { Name: "wood", Value: 1 },
-    { Name: "brick", Value: 1 },
-    { Name: "stone", Value: 1 },
+    { name: "sheep", value: 1 },
+    { name: "wheat", value: 1 },
+    { name: "wood", value: 1 },
+    { name: "brick", value: 1 },
+    { name: "stone", value: 1 },
   ];
   const getResources = () => {};
   console.log(resources);
@@ -21,10 +21,10 @@ const Hand = () => {
     <div className="personalCards" style={{ position: "relative" }}>
       {/** Makes a card for each resource */}
       {resources.map((resource) => {
-        return <ResourceCard type={resource.Name} Value={resource.Value} />;
+        return <ResourceCard type={resource.name} value={resource.value} />;
       })}
 
-      <ResourceCard type="developmentCard" Value={1} />
+      <ResourceCard type="developmentCard" value={1} />
     </div>
   );
 };
