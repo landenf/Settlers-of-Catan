@@ -1,21 +1,14 @@
 import GameBoard from "../Components/GameBoard";
-import { players } from "../StaticData/PlayerData.js";
-import PlayerbarComponet from "../Components/playerBarComponent.js";
-import Dice from "../Components/Dice";
-import RollButton from "../Components/RollButton";
+import { players } from "../StaticData/PlayerData";
+import PlayerBarComponent from "../Components/PlayerBarComponent.tsx";
+import ActionsBarComponent from "../Components/ActionsBarComponent.tsx";
 
 const GameSession = () => {
-  // const d1 = new Dice();
-  // const d2 = new Dice();
-  // const roll = new RollButton([d1, d2]);
   return (
     <div>
       <GameBoard />
-      <Hand />
-      <PlayerbarComponet players={players}></PlayerbarComponet>
-      <Dice />
-      <Dice />
-      <RollButton />
+      <PlayerBarComponent players={players}></PlayerBarComponent>
+      <ActionsBarComponent></ActionsBarComponent>
     </div>
   );
 };

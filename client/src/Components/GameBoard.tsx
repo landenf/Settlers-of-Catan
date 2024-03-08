@@ -5,8 +5,8 @@ import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
 
 const GameBoard = () => {
-  const BoardGenerator = GridGenerator.getGenerator(GameBoardConfiguration.map);
-  const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps);
+  const BoardGenerator = GridGenerator.getGenerator('hexagon');
+  const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
   const [hexagons, setHexagons] = useState(initialHexagons);
   const [config, setConfig] = useState(GameBoardConfiguration);
   const layout = config.layout;

@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import logo from '../logo.svg';
-import { Dice } from './Dice.js';
 
 
 const RollButton = () => {

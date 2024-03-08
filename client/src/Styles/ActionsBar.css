@@ -1,0 +1,44 @@
+/* ActionsBarComponent.css */
+.actions-bar {
+    width: 354px;
+    height: 876px;
+    position: relative;
+}
+
+.inner-box {
+    width: 353px;
+    height: 873px;
+    position: absolute;
+    background: white;
+}
+
+.absolute-container {
+    position: absolute;
+}
+
+.line {
+    width: 353px;
+    height: 0;
+    border: 1px #767676 solid;
+}
+
+.line-thick {
+    border: 2px black solid;
+    width: 100%; 
+}
+
+.text {
+    color: black;
+    font-size: 30px;
+    font-family: 'Inter';
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.text-bold {
+    font-weight: 700;
+}
+
+.indented-text {
+    padding-left: 20px;
+}
