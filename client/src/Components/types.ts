@@ -7,7 +7,7 @@ import { Hex } from "react-hexgrid";
 /**
  * A wrapper type that provides strong typing to a list of players as a prop.
  */
-export interface BarProp {
+export type BarProp = {
     /**
      * A list of players.
      */
@@ -17,7 +17,7 @@ export interface BarProp {
 /**
  * A wrapper type that provides strong typing to a resource tile's hexagon prop.
  */
-export interface HexProp {
+export type HexProp = {
     /**
      * A hexagon object representing this particular tile's placement on the grid.
      */

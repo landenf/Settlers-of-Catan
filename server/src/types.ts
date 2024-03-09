@@ -4,7 +4,7 @@
 /**
  * A player (user) of Catan.
  */
-export interface Player {
+export type Player = {
 
     /**
      * A unique user ID.
@@ -22,8 +22,7 @@ export interface Player {
     image: string;
 
     /**
-     * The player's in-game color, to be displayed as a border on their 
-     * avatar.
+     * The player's in-game color.
      */
     color: string;
 
@@ -33,15 +32,48 @@ export interface Player {
     vp: number;
 
     /**
-     * The player's total count of resources.
+     * A dictionary of resource values currently held by the player.
      */
-    resources: number;
+    resources: {
+        "wheat": 0
+        "brick": 0
+        "stone": 0
+        "sheep": 0
+        "wood": 0
+    };
+
+    /**
+     * A list of communities held by the player. 
+     */
+    communities_owned: []
+
+    /**
+     * A list of spots the player could build a community on.
+     */
+    potential_communities: []
+    
+    /**
+     * A list of roads held by the player.
+     */
+    roads_owned: []
+
+    /**
+     * A list of spots the player could build a road on.
+     */
+    potential_roads: []
+
+    /**
+     * A dictionary of this player's stats in all games.
+     */
+    player_stats: {
+
+    }
 }
 
 /**
  * Represents a resource or development card.
  */
-export interface Card {
+export type Card = {
     /**
      * The card's type, whether it be a resource type (think ore, wood, sheep, etc.) 
      * or a development type (think knight, monopoly, etc.)

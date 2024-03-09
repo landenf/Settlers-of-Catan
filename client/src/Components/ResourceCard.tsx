@@ -1,16 +1,16 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "../Styles/hand.css";
-import React from "react";
-import { Card } from "@backend/types";
 
-const ResourceCard = (props: Card) => {
+const ResourceCard = (props: any) => {
   const [numCards, setNumCards] = useState(0);
   const cardType = props.type;
 
   function getNumCards() {
-    /** get from user */
-    // setNumCards();
+    // setNumCards({
+    //   /** get from user */
+    // });
   }
+  
   return (
     <div
       className="resourceCard"
@@ -18,13 +18,14 @@ const ResourceCard = (props: Card) => {
     >
       <img
         className="resourceImage"
+        src="../public/images/resources/{props.type}.jpg"
       />
 
       <div className="backgroundCircle"></div>
 
       <div className="cardNumber">
         {/** pull from PlayerData.js in Data once Landen's PR is merged */}
-        {props.value}
+        {props.Value}
       </div>
     </div>
   );
