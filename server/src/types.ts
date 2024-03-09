@@ -32,42 +32,87 @@ export type Player = {
     vp: number;
 
     /**
-     * A dictionary of resource values currently held by the player.
+     * A dictionary of resources cards currently held in the player's hand.
      */
-    resources: {
-        "wheat": 0
-        "brick": 0
-        "stone": 0
-        "sheep": 0
-        "wood": 0
-    };
+    hand: resource_counts;
+
+    /**
+     * Total resources held by a player.
+     */
+    resources: number;
+
+    /**
+     * Dictionary representing each resource type gained when a particular
+     * number is rolled.
+     */
+    resource_gain: {
+        2: resource_counts;
+        3: resource_counts;
+        4: resource_counts;
+        5: resource_counts;
+        6: resource_counts;
+        8: resource_counts;
+        9: resource_counts;
+        10: resource_counts;
+        11: resource_counts;
+        12: resource_counts;
+    }
 
     /**
      * A list of communities held by the player. 
      */
-    communities_owned: []
+    communities_owned: [];
 
     /**
      * A list of spots the player could build a community on.
      */
-    potential_communities: []
+    potential_communities: [];
     
     /**
      * A list of roads held by the player.
      */
-    roads_owned: []
+    roads_owned: [];
 
     /**
      * A list of spots the player could build a road on.
      */
-    potential_roads: []
+    potential_roads: [];
 
     /**
      * A dictionary of this player's stats in all games.
      */
     player_stats: {
+        /**
+         * Registers total wins by this player.
+         */
+        "total_wins": number;
 
+        /**
+         * Registers total games ended where this player held the largest army card.
+         */
+        "largest_armies": number;
+
+        /**
+         * Registers total games ended where this player held the longest road card.
+         */
+        "most_roads": number;
+
+        /**
+         * Measures total victory points throughtout this player's games.
+         */
+        "total_vp": number;
     }
+}
+
+/**
+ * Dictionary representing a count of each resource.
+ */
+export type resource_counts = {
+    "wheat": number;
+    "brick": number;
+    "stone": number;
+    "sheep": number;
+    "wood": number;
 }
 
 /**
