@@ -209,3 +209,40 @@ export type Board = {
      */
     tiles: Tile[]
 }
+
+/**
+ * Represents the game session's current state.
+ */
+export type GameState = {
+
+    /**
+     * A list of players who are in this current game session.
+     */
+    players: Player[]
+
+    /**
+     * The winner of this game. If there is no winner, it is set to undefined.
+     */
+    winner?: Player
+
+    /**
+     * The player who is currently playing through their turn.
+     */
+    current_player: Player
+
+    /**
+     * The player who currently holds the largest army card.
+     */
+    current_largest_army: string
+
+    /**
+     * The player who currently holds the longest road card.
+     */
+    current_longest_road: string
+
+    /**
+     * The current gameboard with its representations of player buildings
+     * and resource tiles.
+     */
+    gameboard: Board
+}

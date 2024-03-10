@@ -1,4 +1,4 @@
-import { Player, Tile } from "@backend/types";
+import { Player, Tile, GameState } from "@backend/types";
 import { Hex } from "react-hexgrid";
 
 // NOTE: Please use this file for only frontend-specific types. If your type is also used in the backend, please
@@ -32,4 +32,14 @@ export type HexProp = {
      * The backend information related to this hexagonal tile.
      */
     tile: Tile;
+}
+
+/**
+ * A wrapper type that provides strong typing to a game session's game state prop.
+ */
+export type StateProp = {
+    /**
+     * The current game session's state.
+     */
+    gamestate: GameState
 }
