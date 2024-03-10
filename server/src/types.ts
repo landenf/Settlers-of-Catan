@@ -126,9 +126,86 @@ export type Card = {
     type: string;
 
     /**
-     * The "count" so to speak of this card. It counts total resources or total development
-     * cards.
+     * The count of this card. It counts total resources or total development cards.
      */
     value: number;
 }
 
+/**
+ * Represents a single hexagonal tile on the gameboard.
+ */
+export type Tile = {
+    /**
+     * A list of spaces on a tile where communities are built or
+     * are already built.
+     */
+    community_spaces: community_spaces;
+
+    /**
+     * A list of spaces on a tile where roads are built or are 
+     * already built.
+     */
+    road_spaces: road_spaces;
+
+    /**
+     * The number which provides resources from this tile.
+     */
+    number_roll: number;
+
+    /**
+     * The type of resource this tile represents.
+     */
+    type: string;
+}
+
+/**
+ * A list of spaces on a tile where communities are built or
+ * are already built. The first number represents the space:
+ * the second number represents the ownership.
+ * On each space, 0 = unbuilt, 1 = player 1 ownership, etc.
+ */
+export type community_spaces = {
+    /** top-left vertex */
+    "0": 0
+    /** top-right vertex */
+    "1": 0
+    /** mid-right vertex */
+    "2": 0
+    /** bottom-right vertex*/
+    "3": 0
+    /** bottom-left vertex */
+    "4": 0
+    /** mid-left vertex */
+    "5": 0
+}
+
+/**
+ * A list of spaces on a tile where roads are built or are already 
+ * built. The first number represents the space: the second number 
+ * represents the ownership. On each space, 0 = unbuilt, 
+ * 1 = player 1 ownership, etc.
+ */
+export type road_spaces = {
+    /** top edge */
+    "0": 0
+    /** top-right edge */
+    "1": 0
+    /** bottom-right edge */
+    "2": 0
+    /** bottom edge*/
+    "3": 0
+    /** bottom-left edge */
+    "4": 0
+    /** top-left edge */
+    "5": 0
+}
+
+/**
+ * Represents a gameboard consisting of several hexagonal tiles.
+ */
+export type Board = {
+    /**
+     * A list of tiles that build the gameboard.
+     */
+    tiles: Tile[]
+}

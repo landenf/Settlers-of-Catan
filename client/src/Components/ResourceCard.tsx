@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "../Styles/hand.css";
+import { Card } from "@backend/types";
 
-const ResourceCard = (props: any) => {
+const ResourceCard = (props: Card) => {
   const [numCards, setNumCards] = useState(0);
   const cardType = props.type;
 
@@ -25,7 +26,7 @@ const ResourceCard = (props: any) => {
 
       <div className="cardNumber">
         {/** pull from PlayerData.js in Data once Landen's PR is merged */}
-        {props.Value}
+        {props.value}
       </div>
     </div>
   );

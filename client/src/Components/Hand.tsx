@@ -15,11 +15,11 @@ const Hand = () => {
    */
 
   let resources = [
-    { Name: "sheep", Value: 1 },
-    { Name: "wheat", Value: 1 },
-    { Name: "wood", Value: 1 },
-    { Name: "brick", Value: 1 },
-    { Name: "stone", Value: 1 },
+    { name: "sheep", value: 1 },
+    { name: "wheat", value: 1 },
+    { name: "wood", value: 1 },
+    { name: "brick", value: 1 },
+    { name: "stone", value: 1 },
   ];
   const getResources = () => {};
 
@@ -35,10 +35,10 @@ const Hand = () => {
       </div>
       {/** Makes a card for each resource */}
       {resources.map((resource) => {
-        return <ResourceCard type={resource.Name} Value={resource.Value} />;
+        return <ResourceCard type={resource.name} value={resource.value} />;
       })}
 
-      <ResourceCard type="developmentCard" Value={1} />
+      <ResourceCard type="developmentCard" value={1} />
     </div>
   );
 };
