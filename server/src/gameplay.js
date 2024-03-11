@@ -3,25 +3,6 @@ const { players } = require('../../client/src/StaticData/PlayerData');
 const app = express()
 
 
-/**
- * Rolls the dice. Two dice are rolled, and their respective images will be updated.
- * 
- * @returns the total number rolled
- */
-function rollDice() {
-     const dice1Roll = Math.floor(Math.random() * 6) + 1;
-     const dice2Roll = Math.floor(Math.random() * 6) + 1;
-
-     // TODO: update the dice images
-
-
-     const totalRolled = dice1Roll + dice2Roll;
-
-     return totalRolled;
-}
-
-
-
 
 /**
  * Function for distributing resources to the players based on the number rolled.
@@ -39,8 +20,9 @@ function distributeCards(players, numRolled) {
      }
 }
 
+app.get("/rollButtonClicked", (req, res) => {
+     distributeCards(players, req.numRolled);
 
-function rollButtonClicked(){
-     const numRolled = rollDice();
-     distributeCards(players, numRolled);
-}
+     // need to send back updated players
+     res.json({""});
+})
