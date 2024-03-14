@@ -1,0 +1,114 @@
+.background {
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0;
+  position: absolute;
+  background-color: #c3332b;
+}
+
+.title {
+  width: 364px;
+  height: 118px;
+  left: 164px;
+  top: 156px;
+  position: absolute;
+  color: #fdfdfd;
+  font-size: 110px;
+  font-family: Inter;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.createRoom {
+  width: 390px;
+  height: 90px;
+  left: 150px;
+  top: 309px;
+  position: absolute;
+}
+
+.createRoomButton {
+  width: 390px;
+  height: 90px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: white;
+  border-radius: 25px;
+}
+
+.createRoomText {
+  width: 294px;
+  height: 36px;
+  left: 48px;
+  top: 27px;
+  position: absolute;
+  color: #363636;
+  font-size: 30px;
+  font-family: Inter;
+  font-weight: 400;
+  word-wrap: break-word;
+}
+
+.onlineRoom {
+  width: 390px;
+  height: 90px;
+  left: 150px;
+  top: 428px;
+  position: absolute;
+}
+
+.onlineRoomButton {
+  width: 390px;
+  height: 90px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #f7c84f;
+  border-radius: 25px;
+}
+
+.onlineRoomText {
+  width: 294px;
+  height: 36px;
+  left: 48px;
+  top: 27px;
+  position: absolute;
+  color: #363636;
+  font-size: 30px;
+  font-family: Inter;
+  font-weight: 400px;
+  word-wrap: break-word;
+}
+
+.joinCode {
+  width: 390px;
+  height: 90px;
+  left: 150px;
+  top: 546px;
+  position: absolute;
+}
+
+.joinCodeButton {
+  width: 390px;
+  height: 90px;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background: #cbcbcb;
+  border-radius: 25px;
+}
+
+.joinCodeText {
+  width: 331.7px;
+  height: 42px;
+  left: 30.15px;
+  top: 28px;
+  position: absolute;
+  color: #767676;
+  font-size: 30px;
+  font-family: Inter;
+  font-weight: 400px;
+  word-wrap: break-word;
+}
