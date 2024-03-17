@@ -2,7 +2,7 @@ import ResourceCard from "./resourceCard";
 import Resources from "../Enums/resources";
 import "../Styles/hand.css";
 
-const Hand = () => {
+const PlayersHand = () => {
   /**
    *get player resources
    */
@@ -29,4 +29,4 @@ const Hand = () => {
   );
 };
 
-export default Hand;
+export default PlayersHand;

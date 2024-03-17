@@ -1,0 +1,25 @@
+.background-container {
+    background-image: url('../../public/images/background-image.jpg');
+   
+    height: 100vh; /* Optional: Adjusts the height of the container to fill the viewport */
+}
+
+.game-container {
+    background-color: hsla(0, 0%, 100%, 0.6);
+    display: flex; /* Enables flexbox, making its children flex items */
+    justify-content: center; /* Centers the items in the container horizontally */
+    align-items: center; /* Aligns items vertically */
+}
+
+.ActionsBarComponent, .GameBoard, .PlayerbarComponent {
+    flex: 1; /* Allows each child to grow equally, filling the container */
+    text-align: center; /* Centers the text inside each div */
+}
+
+.game-board {
+    display: flex; /* Enable Flexbox */
+    flex-direction: column; /* Stack children vertically */
+    text-align: center; /* Center text alignment for all child items */
+    align-items: center; /* Center items horizontally in the container */
+    justify-content: center; /* Center items vertically in the container */
+}

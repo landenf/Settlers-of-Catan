@@ -10,7 +10,7 @@ const ActionsBarComponent = () => {
   };
 
   return (
-    <div className="absolute-container" style={{height: 77, left: 1}}>
+    <div className="absolute-container">
       <h1 className="text-bold">BUILD</h1>
       <div className="line-thick"></div>
         <p className="button indented-text" onClick={() => handleButtonClick('buildRoad')}>Road</p>

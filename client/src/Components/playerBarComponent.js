@@ -8,7 +8,7 @@ import '../Styles/PlayerBarComponent.css';
  * @param props an object holding a list of players
  * @returns a front-end component representing up to four players
  */
-const PlayerBarComponent = (props) => {
+const PlayerbarComponent = (props) => {
 
     /**
      * A list of players to be rendered through the player bar component.
@@ -29,4 +29,4 @@ const PlayerBarComponent = (props) => {
         <ul>{players}</ul>
     )
 } 
-export default PlayerBarComponent;
+export default PlayerbarComponent;

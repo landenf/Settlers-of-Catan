@@ -3,7 +3,6 @@
     grid-template-columns: 35% 65%;
     height: 18vh;
     width: 25vw;
-    background-color: hsla(0, 0%, 100%, 0.6);
 }
 
 .avatar {

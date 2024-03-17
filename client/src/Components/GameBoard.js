@@ -3,6 +3,7 @@ import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from
 import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
 import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
+import '../Styles/GameBoard.css'
 
 // GameBoard component to render a hexagonal grid game board.
 const GameBoard = () => {
@@ -25,8 +26,7 @@ const GameBoard = () => {
   const size = { x: layout.width, y: layout.height };
 
   return (
-    <div id='GameBoard' style={{textAlign: 'center'}}>
-      <hr />
+    <div id='GameBoard' class="game-board" >
       <HexGrid width={config.width} height={config.height} >
         <Patterns/>
         <Layout size={size} flat={layout.flat} spacing={layout.spacing} origin={config.origin}>

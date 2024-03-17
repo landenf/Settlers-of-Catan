@@ -1,37 +1,37 @@
-/* ActionsBarComponent.css */
 .actions-bar {
-    width: 354px;
-    height: 876px;
+    width: 100%; /* Adjust based on parent size or specific requirement */
+    height: 100%; /* Adjust based on parent size or specific requirement */
     position: relative;
 }
 
 .inner-box {
-    width: 353px;
-    height: 873px;
+    width: 99.7%; /* Slightly less than 100% due to border considerations */
+    height: 99.7%; /* Adjust based on actions-bar height minus borders if any */
     position: absolute;
     background: white;
 }
 
 .absolute-container {
-    position: absolute;
+    position: auto;
+    width: 100%; /* Ensure it spans the full width of its parent */
+    height: auto; /* Adjust based on content, could also use 100% if filling parent */
 }
 
 .line {
-    width: 353px;
-    height: 0;
-    border: 1px #767676 solid;
+    width: 100%; /* Span the full width of its parent */
+    border-top: 1px solid #767676; /* Use border-top or border-bottom for a line */
 }
 
 .line-thick {
-    border: 2px black solid;
+    border-top: 2px solid black; /* Use border-top for consistency */
     width: 100%; 
 }
 
-.text {
+.text, .text-bold {
     color: black;
-    font-size: 30px;
+    font-size: 2vw; /* Adjust based on viewport width, or use % if relative to parent */
     font-family: 'Inter';
-    font-weight: 400;
+    font-weight: 400; /* 700 for .text-bold */
     word-wrap: break-word;
 }
 
@@ -40,5 +40,5 @@
 }
 
 .indented-text {
-    padding-left: 20px;
+    padding-left: 5%; /* Adjust based on parent width */
 }

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./hand.css";
 
 const ResourceCard = (props) => {
   const [numCards, setNumCards] = useState(0);

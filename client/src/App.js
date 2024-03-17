@@ -1,4 +1,3 @@
-import Hand from "./Components/hand";
 import GameSession from "./Pages/GameSession";
 import {
   BrowserRouter as Router,
