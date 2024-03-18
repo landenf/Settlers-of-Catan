@@ -6,7 +6,96 @@ import { Player } from "@backend/types"
         image: "empty-avatar",
         color: "red",
         vp: 1,
-        resources: 2
+        resources: 2,
+        hand: {
+            wheat: 0,
+            brick: 0,
+            stone: 0,
+            sheep: 0,
+            wood: 0
+        },
+        communities_owned: [],
+        potential_communities: [],
+        roads_owned: [],
+        potential_roads: [],
+        player_stats: {
+            total_wins: 0,
+            largest_armies: 0,
+            most_roads: 0,
+            total_vp: 0
+        },
+        resource_gain: {
+            2: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            3: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            4: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            5: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            6: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            8: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            9: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            10: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            11: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            12: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            }
+        }
     }
 
     const player2: Player = {
@@ -15,7 +104,96 @@ import { Player } from "@backend/types"
         image: "empty-avatar",
         color: "orange",
         vp: 7,
-        resources: 15
+        resources: 15,
+        hand: {
+            wheat: 0,
+            brick: 0,
+            stone: 0,
+            sheep: 0,
+            wood: 0
+        },
+        communities_owned: [],
+        potential_communities: [],
+        roads_owned: [],
+        potential_roads: [],
+        player_stats: {
+            total_wins: 0,
+            largest_armies: 0,
+            most_roads: 0,
+            total_vp: 0
+        },
+        resource_gain: {
+            2: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            3: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            4: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            5: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            6: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            8: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            9: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            10: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            11: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            12: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            }
+        }
     }
 
     const player3: Player = {
@@ -24,17 +202,97 @@ import { Player } from "@backend/types"
         image: "empty-avatar",
         color: "green",
         vp: 18,
-        resources: 98
+        resources: 98,
+        hand: {
+            wheat: 0,
+            brick: 0,
+            stone: 0,
+            sheep: 0,
+            wood: 0
+        },
+        communities_owned: [],
+        potential_communities: [],
+        roads_owned: [],
+        potential_roads: [],
+        player_stats: {
+            total_wins: 0,
+            largest_armies: 0,
+            most_roads: 0,
+            total_vp: 0
+        },
+        resource_gain: {
+            2: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            3: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            4: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            5: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            6: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            8: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            9: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            10: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            11: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            },
+            12: {
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
+            }
+        }
     }
 
-    const player4: Player = {
-        id: 4,
-        name: "stephan",
-        image: "empty-avatar",
-        color: "blue",
-        vp: 7,
-        resources: 1
-    }
-
-export const players = [player1, player2, player3, player4]
+export const players = [player1, player2, player3]
 
