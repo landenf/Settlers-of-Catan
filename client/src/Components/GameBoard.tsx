@@ -3,15 +3,16 @@ import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from
 import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
 import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
+import { Board } from '@backend/types';
 
-const GameBoard = () => {
-  const BoardGenerator = GridGenerator.getGenerator(GameBoardConfiguration.map);
-  const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps);
+const GameBoard = (props: Board) => {
+  const BoardGenerator = GridGenerator.getGenerator('hexagon');
+  const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
   const [hexagons, setHexagons] = useState(initialHexagons);
   const [config, setConfig] = useState(GameBoardConfiguration);
   const layout = config.layout;
   const size = { x: layout.width, y: layout.height };
- 
+
   return (
     <div id='GameBoard' style={{textAlign: 'center'}}>
       <hr />
@@ -20,9 +21,10 @@ const GameBoard = () => {
         <Layout size={size} flat={layout.flat} spacing={layout.spacing} origin={config.origin}>
           {hexagons.map((hex, i) => (
             <ResourceTile 
-              key={`tile-${i}`} 
-              hex={hex} 
-              index={i}
+              key={`tile-${i}`}
+              hex={hex}
+              index={i} 
+              tile={props.tiles[i]}
               />
           ))}
         </Layout>
