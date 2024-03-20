@@ -6,7 +6,6 @@ const RollButton = () => {
     // const dice2 = new Dice();
     
     function handleClick() {
-    //     const response = await fetch('http://localhost:5000/rollButtonClicked');
      }
 
     return (

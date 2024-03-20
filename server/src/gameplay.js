@@ -25,8 +25,8 @@ app.get("/rollButtonClicked", (req, res) => {
      const totalRolled = dice1 + dice2;
      distributeCards(players, totalRolled);
 
-     // need to send back updated players
-     res.json({"rolled": `${totalRolled}`});
+     // need to send back updated dice
+     res.json({"rolled": [`${dice1}}`, `${dice2}`]});
 })
 
 app.listen(5000, () => {console.log("Server Started")} )
