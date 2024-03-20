@@ -16,3 +16,32 @@ function distributeCards(players, numRolled) {
           }
      }
 }
+
+app.get("/buyDev", (req, res) => {
+     // get current player
+     const player = req.currPlayer;
+
+     // check to see if they have the needed resources
+     const canBuy = true;
+     if (player.resource_counts.get("sheep") == 0){
+          canBuy = false;
+     }
+     if (player.resource_counts.get("wheat") == 0){
+          canBuy = false;
+     }
+     if (player.resource_counts.get("stone") == 0){
+          canBuy = false;
+     }
+
+     // if can buy, decrease counts buy one and buy dev card
+     if(canBuy){
+          player.resource_counts.get("sheep") = player.resource_counts.get("sheep") - 1;
+          player.resource_counts.get("wheat") = player.resource_counts.get("sheep") - 1;
+          player.resource_counts.get("stone") = player.resource_counts.get("sheep") - 1;
+
+          // for now, buying dev card will give an additional VP.
+          //TODO: refactor to randomize vp vs army
+          player.vp += 1;
+     }
+     
+})
