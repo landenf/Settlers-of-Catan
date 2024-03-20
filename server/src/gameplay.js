@@ -13,7 +13,9 @@ const app = express()
 function distributeCards(numRolled) {
      for(let i = 0; i < players.length; i++){
           const map = players[i].resource_gain[numRolled];
+          console.log(players[i] + ": ");
           for(let j = 0; j < map.length; j++){
+               console.log(players.resources.get(map[j]) + ", ");
                players.resources.get(map[j]) = players.resources.get(map[j]) + 1;
           }
      }
