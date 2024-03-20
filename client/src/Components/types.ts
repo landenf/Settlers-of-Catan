@@ -1,4 +1,4 @@
-import { Player } from "@backend/types";
+import { Player, Tile, GameState } from "@backend/types";
 import { Hex } from "react-hexgrid";
 
 // NOTE: Please use this file for only frontend-specific types. If your type is also used in the backend, please
@@ -7,7 +7,7 @@ import { Hex } from "react-hexgrid";
 /**
  * A wrapper type that provides strong typing to a list of players as a prop.
  */
-export interface BarProp {
+export type BarProp = {
     /**
      * A list of players.
      */
@@ -17,7 +17,7 @@ export interface BarProp {
 /**
  * A wrapper type that provides strong typing to a resource tile's hexagon prop.
  */
-export interface HexProp {
+export type HexProp = {
     /**
      * A hexagon object representing this particular tile's placement on the grid.
      */
@@ -27,4 +27,19 @@ export interface HexProp {
      * The numbered index of this tile -- as in, its index placement on the grid.
      */
     index: number;
+
+    /**
+     * The backend information related to this hexagonal tile.
+     */
+    tile: Tile;
+}
+
+/**
+ * A wrapper type that provides strong typing to a game session's game state prop.
+ */
+export type StateProp = {
+    /**
+     * The current game session's state.
+     */
+    gamestate: GameState
 }
