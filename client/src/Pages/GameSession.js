@@ -3,11 +3,12 @@ import { players } from "../StaticData/PlayerData";
 import PlayerBarComponent from "../Components/PlayerBarComponent.tsx";
 import ActionsBarComponent from "../Components/ActionsBarComponent.tsx";
 import MenuComponent from "../Components/MenuComponent.tsx";
+import StatsComponent from "../Components/StatsComponent.tsx";
 
 const GameSession = () => {
   return (
     <div>
-      <MenuComponent />
+      <StatsComponent />
     </div>
   );
 };

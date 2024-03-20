@@ -5,53 +5,56 @@
  * A player (user) of Catan.
  */
 export interface Player {
+  /**
+   * A unique user ID.
+   */
+  id: number;
 
-    /**
-     * A unique user ID.
-     */
-    id: number;
+  /**
+   * The player's screen name.
+   */
+  name: string;
 
-    /**
-     * The player's screen name.
-     */
-    name: string;
+  /**
+   * The player's avatar URL. TODO: Connect to a database of user images.
+   */
+  image: string;
 
-    /**
-     * The player's avatar URL. TODO: Connect to a database of user images.
-     */
-    image: string;
+  /**
+   * The player's in-game color, to be displayed as a border on their
+   * avatar.
+   */
+  color: string;
 
-    /**
-     * The player's in-game color, to be displayed as a border on their 
-     * avatar.
-     */
-    color: string;
+  /**
+   * The player's total count of victory points.
+   */
+  vp: number;
 
-    /**
-     * The player's total count of victory points.
-     */
-    vp: number;
+  /**
+   * The player's total count of resources.
+   */
+  resources: number;
 
-    /**
-     * The player's total count of resources.
-     */
-    resources: number;
+  /**
+   * The player's stats.
+   */
+  stats: Array<number>;
 }
 
 /**
  * Represents a resource or development card.
  */
 export interface Card {
-    /**
-     * The card's type, whether it be a resource type (think ore, wood, sheep, etc.) 
-     * or a development type (think knight, monopoly, etc.)
-     */
-    type: string;
+  /**
+   * The card's type, whether it be a resource type (think ore, wood, sheep, etc.)
+   * or a development type (think knight, monopoly, etc.)
+   */
+  type: string;
 
-    /**
-     * The "count" so to speak of this card. It counts total resources or total development
-     * cards.
-     */
-    value: number;
+  /**
+   * The "count" so to speak of this card. It counts total resources or total development
+   * cards.
+   */
+  value: number;
 }
-

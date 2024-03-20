@@ -15,7 +15,6 @@ const Hand = () => {
     { name: "stone", value: 1 },
   ];
   const getResources = () => {};
-  console.log(resources);
 
   return (
     <div className="personalCards" style={{ position: "relative" }}>
