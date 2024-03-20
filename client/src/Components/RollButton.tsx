@@ -6,9 +6,8 @@ const RollButton = () => {
     // const dice2 = new Dice();
     
     function handleClick() {
-        //backend call to rollButtonClicked();
-        
-    }
+    //     const response = await fetch('http://localhost:5000/rollButtonClicked');
+     }
 
     return (
         <button className='button rollButton' onClick={handleClick}>
