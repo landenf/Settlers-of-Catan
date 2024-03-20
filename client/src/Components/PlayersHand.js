@@ -2,29 +2,27 @@ import ResourceCard from "./resourceCard";
 import Resources from "../Enums/resources";
 import "../Styles/hand.css";
 
+//Lots of hardcoding in this component that needs to be eventually grabbing values.
 const PlayersHand = () => {
-  /**
-   *get player resources
-   */
 
   let resources = [
     { Name: "sheep", Value: 1 },
-    { Name: "wheat", Value: 1 },
-    { Name: "wood", Value: 1 },
-    { Name: "brick", Value: 1 },
-    { Name: "stone", Value: 1 },
+    { Name: "wheat", Value: 3 },
+    { Name: "wood", Value: 5 },
+    { Name: "brick", Value: 3 },
+    { Name: "rock", Value: 6 },
   ];
-  const getResources = () => {};
-  console.log(resources);
+  const getResources = () => {
+    console.log(resources);
+  };
 
   return (
     <div className="personalCards" style={{ position: "relative" }}>
-      {/** Makes a card for each resource */}
       {resources.map((resource) => {
         return <ResourceCard type={resource.Name} Value={resource.Value} />;
       })}
 
-      <ResourceCard type="developmentCard" Value={1} />
+      <ResourceCard type="developmentcard" Value={1} />
     </div>
   );
 };
