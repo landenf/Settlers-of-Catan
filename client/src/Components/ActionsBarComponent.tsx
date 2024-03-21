@@ -4,8 +4,11 @@ import '../Styles/ActionsBar.css';
 //Sidebar for user actions
 const ActionsBarComponent = () => {
 
-  const handleButtonClick = (action: string) => {
+  const handleButtonClick = async (action: string) => {
     //call back end
+    const URL = 'http://localhost:5000/' + action;
+    console.log(URL);
+    const response = await fetch('http://localhost:5000/' + action);
     console.log(`Action performed: ${action}`);
   };
 
@@ -27,7 +30,7 @@ const ActionsBarComponent = () => {
       <div className="line"></div>
         <p className="button indented-text" onClick={() => handleButtonClick('tradePlayerThree')}>Player Three</p>
       <div className="line-thick"></div>
-      <h1 className="text-bold" onClick={() => handleButtonClick('settlementCard')}>SETTLEMENT CARD</h1>
+      <h1 className="text-bold" onClick={() => handleButtonClick('developmentCard')}>DEVELOPMENT CARD</h1>
       <div className="line-thick"></div>
       <h1 className="text-bold" onClick={() => handleButtonClick('passTurn')}>PASS TURN</h1>
       <div className="line-thick"></div>
