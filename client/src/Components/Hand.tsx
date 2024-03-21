@@ -1,6 +1,6 @@
 import React from "react";
 import ResourceCard from "./ResourceCard";
-import "../Styles/hand.css";
+import "../Styles/hand.css"
 
 /**
  * Component that displays the amount of victory points a player has as well as
