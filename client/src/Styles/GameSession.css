@@ -17,20 +17,16 @@
     text-align: center; /* Centers the text inside each div */
 }
 
-.ActionsBarComponent {
-    background-color: hsla(0, 0%, 100%, 0.3);
-}
-
 .center-column {
     display: flex; /* Enable Flexbox */
     flex-direction: column; /* Stack children vertically */
     text-align: center; /* Center text alignment for all child items */
     align-items: center; /* Center items horizontally in the container */
-    
+    height: 100%;
+    width: auto;
 }
 
 .game-board {
-    height: 80vh;
-    width: 50vw;
-    margin-top: -3vh;
+    height: auto;
+    width: auto;
 }

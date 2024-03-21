@@ -6,9 +6,9 @@ const Tile_Resources: {[index: number]:any} = {
     2: "brick",
     3: "wheat",
     4: "wood",
-    5: "rock",
+    5: "stone",
     6: "wood",
-    7: "rock",
+    7: "stone",
     8: "brick",
     9: "Desert",
     10: "wheat",
@@ -19,7 +19,7 @@ const Tile_Resources: {[index: number]:any} = {
     15: "sheep",
     16: "wood",
     17: "brick",
-    18: "rock",
+    18: "stone",
   };
 
 const Tile_Dice: {[index: number]:any} = {
@@ -71,7 +71,7 @@ export const tiles: Tile[] = total_tiles.map((index) => (
   
 export const GameBoardConfiguration =  {
     "width": "auto",
-    "height": "auto",
+    "height": "70vh",
     "layout": { "width": 9, "height": 9, "flat": false, "spacing": 1.02 },
     "origin": { "x": 0, "y": 0 },
     "map": "hexagon",

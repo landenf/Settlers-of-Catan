@@ -24,15 +24,7 @@ const Hand = () => {
   const getResources = () => {};
 
   return (
-    <div className="personalCards" style={{ position: "relative" }}>
-      <div
-        className="victoryPoints"
-        style={{ width: 134, height: 118, position: "relative" }}
-      >
-        <div className="victoryPointBackground" />
-        <div className="victoryPointsLabel">7</div>
-        <div className="victoryPointsNumber">victory points</div>
-      </div>
+    <div className="personalCards">
       {/** Makes a card for each resource */}
       {resources.map((resource) => {
         return <ResourceCard type={resource.name} value={resource.value} />;

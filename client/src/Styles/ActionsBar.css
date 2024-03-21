@@ -17,6 +17,13 @@
     height: auto; /* Adjust based on content, could also use 100% if filling parent */
 }
 
+.inner-container {
+    margin-left: 25%;
+    width: 70%;
+    padding: 2% 0%;
+    background-color: hsla(0, 0%, 100%, 0.3);
+}
+
 .line {
     margin: 0 auto;
     width: 50%; /* Span the full width of its parent */

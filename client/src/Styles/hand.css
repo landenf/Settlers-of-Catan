@@ -9,11 +9,11 @@
   bottom: 0;
   text-align: center;
   grid-template-columns: 5vw 5vw 5vw;
-  margin-top: -7vh;
+  grid-template-rows: 14vh 14vh;
 }
 
 .resourceCard {
-  height: 11vh;
+  height: 12vh;
   width: 4vw;
   border-radius: 10px;
   border: 1px solid black;
