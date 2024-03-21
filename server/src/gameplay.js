@@ -29,7 +29,7 @@ function buyDevCard(player) {
 
      // if can buy, decrease counts buy one and buy dev card
      if(canBuy){
-          player.hand["sheep"] = player.hand.get["sheep"] - 1;
+          player.hand["sheep"] = player.hand["sheep"] - 1;
           player.hand["wheat"] = player.hand["wheat"] - 1;
           player.hand["stone"] = player.hand["stone"] - 1;
 
@@ -37,6 +37,8 @@ function buyDevCard(player) {
           //TODO: refactor to randomize vp vs army
           player.vp += 1;
      }
+
+     return canBuy;
 }
 
 module.exports = { buyDevCard, distributeCards }
