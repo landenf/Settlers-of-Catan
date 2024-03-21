@@ -6,13 +6,13 @@ import { Player } from "@backend/types"
         image: "empty-avatar",
         color: "red",
         vp: 1,
-        resources: 2,
+        resources: 25,
         hand: {
-            wheat: 0,
-            brick: 0,
-            stone: 0,
-            sheep: 0,
-            wood: 0
+            wheat: 5,
+            brick: 5,
+            stone: 5,
+            sheep: 5,
+            wood: 5
         },
         communities_owned: [],
         potential_communities: [],
@@ -106,11 +106,11 @@ import { Player } from "@backend/types"
         vp: 7,
         resources: 15,
         hand: {
-            wheat: 0,
-            brick: 0,
-            stone: 0,
-            sheep: 0,
-            wood: 0
+            wheat: 4,
+            brick: 5,
+            stone: 6,
+            sheep: 4,
+            wood: 3
         },
         communities_owned: [],
         potential_communities: [],

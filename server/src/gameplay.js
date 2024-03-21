@@ -15,6 +15,7 @@ function distributeCards(players, numRolled) {
 }
 
 function buyDevCard(player) {
+     console.log(player);
      // check to see if they have the needed resources
      var canBuy = true;
      if (player.hand["sheep"] == 0){
@@ -33,6 +34,7 @@ function buyDevCard(player) {
           player.hand["wheat"] = player.hand["wheat"] - 1;
           player.hand["stone"] = player.hand["stone"] - 1;
 
+          player.resources -= 3;
           // for now, buying dev card will give an additional VP.
           //TODO: refactor to randomize vp vs army
           player.vp += 1;

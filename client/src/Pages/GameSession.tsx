@@ -10,7 +10,7 @@ import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
 
 const GameSession = (props: StateProp) => {
-  
+  const state = props;
   
   return (
     <div className="background-container">
@@ -20,7 +20,7 @@ const GameSession = (props: StateProp) => {
                     <div className="game-board"><GameBoard tiles={tiles}/></div>
                     <div className="user-info">
                       <VictoryPointsComponent/>
-                      <Hand/>
+                      <Hand gamestate={props.gamestate} />
                     </div>
                 </div>
                 <div className="ActionsBarComponent"><ActionsBarComponent/></div>
