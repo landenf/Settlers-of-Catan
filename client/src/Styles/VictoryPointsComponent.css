@@ -1,6 +1,6 @@
 .victoryPointBackground {
-  width: 134px;
-  height: 118px;
+  width: 100%;
+  height: 100%;
   left: 0px;
   top: 0px;
   position: absolute;
@@ -9,11 +9,7 @@
 }
 
 .victoryPointsNumber {
-  width: 76px;
-  height: 42px;
-  left: 29px;
-  top: 50px;
-  position: absolute;
+  position: relative;
   text-align: center;
   color: white;
   font-size: 50px;
@@ -23,15 +19,22 @@
 }
 
 .victoryPointsLabel {
-  width: 105px;
-  height: 35px;
-  left: 15px;
-  top: 5px;
-  position: absolute;
+  width: 100%;
+  margin: 10% 0% 2%;
+  position: relative;
   text-align: center;
   color: white;
   font-size: 20px;
   font-family: Inter;
   font-weight: 700;
   word-wrap: break-word;
+}
+
+.victoryPoints {
+  position: relative;
+  width: 75%;
+  height: 50%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

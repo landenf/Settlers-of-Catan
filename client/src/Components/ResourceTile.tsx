@@ -9,7 +9,7 @@ const ResourceTile = (props: HexProp) => {
         //implement what happens when tile clicked
         console.log(`Tile ${props.index} Clicked `)
     };
-
+    console.log(props)
     return (
         <Hexagon               
             onClick={() => handleClick()} 
