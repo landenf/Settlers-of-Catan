@@ -22,8 +22,8 @@ export const Tile_Resources = {
 
   
 export const GameBoardConfiguration =  {
-    "width": 1000,
-    "height": 700,
+    "width": "auto",
+    "height": "auto",
     "layout": { "width": 9, "height": 9, "flat": false, "spacing": 1.02 },
     "origin": { "x": 0, "y": 0 },
     "map": "hexagon",

@@ -13,7 +13,10 @@ const GameSession = () => {
         <div class="background-container">
             <div className="game-container">
                 <div class="PlayerbarComponent"><PlayerbarComponent players={players}/></div>
-                <div class="game-board"><GameBoard/><PlayersHand/></div>
+                <div class="center-column">
+                    <div class="game-board"><GameBoard/></div>
+                    <PlayersHand/>
+                </div>
                 <div class="ActionsBarComponent"><ActionsBarComponent/></div>
             </div>
         </div>   

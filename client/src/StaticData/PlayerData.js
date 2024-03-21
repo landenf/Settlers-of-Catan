@@ -22,13 +22,5 @@
         resources: 98
     }
 
-    const player4 = {
-        name: "stephan",
-        image: "empty-avatar",
-        color: "blue",
-        vp: 7,
-        resources: 1
-    }
-
-export const players = [player1, player2, player3, player4]
+export const players = [player1, player2, player3]
 

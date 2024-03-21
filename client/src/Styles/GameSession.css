@@ -8,7 +8,8 @@
     background-color: hsla(0, 0%, 100%, 0.6);
     display: flex; /* Enables flexbox, making its children flex items */
     justify-content: center; /* Centers the items in the container horizontally */
-    align-items: center; /* Aligns items vertically */
+    align-items: center;
+    height: 100vh;
 }
 
 .ActionsBarComponent, .GameBoard, .PlayerbarComponent {
@@ -16,10 +17,20 @@
     text-align: center; /* Centers the text inside each div */
 }
 
-.game-board {
+.ActionsBarComponent {
+    background-color: hsla(0, 0%, 100%, 0.3);
+}
+
+.center-column {
     display: flex; /* Enable Flexbox */
     flex-direction: column; /* Stack children vertically */
     text-align: center; /* Center text alignment for all child items */
     align-items: center; /* Center items horizontally in the container */
-    justify-content: center; /* Center items vertically in the container */
+    
+}
+
+.game-board {
+    height: 80vh;
+    width: 50vw;
+    margin-top: -3vh;
 }

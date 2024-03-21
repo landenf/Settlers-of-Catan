@@ -1,16 +1,20 @@
 .personalCards {
-  height: 198px;
-  width: 255px;
-  margin: auto;
+  padding: 0%;
+  height: auto;
+  width: auto;
   overflow: visible;
-  display: flex;
+  display: grid;
+  column-gap: 10px;
   flex-flow: row wrap;
   bottom: 0;
+  text-align: center;
+  grid-template-columns: 5vw 5vw 5vw;
+  margin-top: -7vh;
 }
 
 .resourceCard {
-  height: 94px;
-  width: 75px;
+  height: 11vh;
+  width: 4vw;
   border-radius: 10px;
   border: 1px solid black;
   left: 0px;
@@ -18,6 +22,10 @@
   display: flex;
   flex-flow: row wrap;
   border: 5px white solid;
+  margin: auto;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 
 .resourceImage {
@@ -31,20 +39,18 @@
   width: 30px;
   height: 30px;
   border-radius: 100%;
-  margin: auto;
-  position: relative;
+  position: absolute;
   background: white;
 }
 
 .cardNumber {
-  width: 100%;
-  height: 100%;
   text-align: center;
-  position: absolute;
+  position: relative;
   line-height: 94px;
   color: black;
-  font-size: 35;
+  font-size: 100%;
   font-family: Inter;
   font-weight: 500px;
   word-wrap: break-word;
+  margin: auto;
 }

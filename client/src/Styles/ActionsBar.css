@@ -2,6 +2,7 @@
     width: 100%; /* Adjust based on parent size or specific requirement */
     height: 100%; /* Adjust based on parent size or specific requirement */
     position: relative;
+    align-items: center;
 }
 
 .inner-box {
@@ -12,13 +13,13 @@
 }
 
 .absolute-container {
-    position: auto;
     width: 100%; /* Ensure it spans the full width of its parent */
     height: auto; /* Adjust based on content, could also use 100% if filling parent */
 }
 
 .line {
-    width: 100%; /* Span the full width of its parent */
+    margin: 0 auto;
+    width: 50%; /* Span the full width of its parent */
     border-top: 1px solid #767676; /* Use border-top or border-bottom for a line */
 }
 
@@ -40,5 +41,5 @@
 }
 
 .indented-text {
-    padding-left: 5%; /* Adjust based on parent width */
+    margin: 1vh 0;
 }
