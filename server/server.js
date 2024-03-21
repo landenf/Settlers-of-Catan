@@ -1,6 +1,8 @@
 const gameplay = require("./src/gameplay.js")
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+const port = 5000;
+const WebSocket = require('ws');
 const cors = require("cors");
 
 app.use(express.json())
@@ -9,10 +11,6 @@ app.use(cors("*"))
 
 app.get("/test", (req, res) => {
     res.json({"users": ["userone","usertwo"]})
-})
-
-app.post("/buyDevCard", (req, res) => {
-    gameplay.buyDevCard(req.body);
 })
 
 app.listen(5000, () => {console.log("Server Started")} )
