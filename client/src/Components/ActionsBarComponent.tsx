@@ -1,5 +1,6 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
+import { players } from '../StaticData/PlayerData';
 
 //Sidebar for user actions
 const ActionsBarComponent = () => {
@@ -8,7 +9,12 @@ const ActionsBarComponent = () => {
     //call back end
     const URL = 'http://localhost:5000/' + action;
     console.log(URL);
-    const response = await fetch('http://localhost:5000/' + action);
+    const response = await fetch('http://localhost:5000/' + action, {
+      method: "POST",
+      body: JSON.stringify(players[0]),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }});
     console.log(`Action performed: ${action}`);
   };
 
@@ -30,7 +36,7 @@ const ActionsBarComponent = () => {
       <div className="line"></div>
         <p className="button indented-text" onClick={() => handleButtonClick('tradePlayerThree')}>Player Three</p>
       <div className="line-thick"></div>
-      <h1 className="text-bold" onClick={() => handleButtonClick('developmentCard')}>DEVELOPMENT CARD</h1>
+      <h1 className="text-bold" onClick={() => handleButtonClick('buyDevCard')}>DEVELOPMENT CARD</h1>
       <div className="line-thick"></div>
       <h1 className="text-bold" onClick={() => handleButtonClick('passTurn')}>PASS TURN</h1>
       <div className="line-thick"></div>
