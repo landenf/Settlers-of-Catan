@@ -43,7 +43,5 @@ app.get("/developmentCard", (req, res) => {
           //TODO: refactor to randomize vp vs army
           player.vp += 1;
      }
-
-     res.send("Development Card Bought");
      
 })
