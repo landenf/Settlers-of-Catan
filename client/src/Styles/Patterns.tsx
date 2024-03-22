@@ -6,8 +6,8 @@ const Patterns = () => (
     <pattern id="wheat" width="1" height="1">
       <image href="./images/resources/wheat.jpg" width="20%" height="20%" preserveAspectRatio="none"/>
     </pattern>
-    <pattern id="rock" width="1" height="1">
-      <image href="./images/resources/rock.jpg" width="20%" height="20%" preserveAspectRatio="none"/>
+    <pattern id="stone" width="1" height="1">
+      <image href="./images/resources/stone.jpg" width="20%" height="20%" preserveAspectRatio="none"/>
     </pattern>
     <pattern id="sheep" width="1" height="1">
       <image href="./images/resources/sheep.jpg" width="20%" height="20%" preserveAspectRatio="none"/>

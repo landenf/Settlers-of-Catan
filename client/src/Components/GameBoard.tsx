@@ -15,7 +15,6 @@ const GameBoard = (props: Board) => {
 
   return (
     <div id='GameBoard' style={{textAlign: 'center'}}>
-      <hr />
       <HexGrid width={config.width} height={config.height} >
         <Patterns/>
         <Layout size={size} flat={layout.flat} spacing={layout.spacing} origin={config.origin}>
