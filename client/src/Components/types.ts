@@ -43,3 +43,10 @@ export type StateProp = {
      */
     gamestate: GameState
 }
+
+/**
+ * A wrapper type that provides strong typing to a vp prop.
+ */
+export type VPProp = {
+    vp: number
+}

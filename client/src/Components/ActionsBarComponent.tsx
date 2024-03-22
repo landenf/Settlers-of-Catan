@@ -1,12 +1,30 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
-
+import { players } from '../StaticData/PlayerData';
+import { StateProp } from './types';
+import { GameState } from '@backend/types';
+import { MockGameState } from '../StaticData/GameStateStatic';
+interface ActionsBarComponentProps {
+  updateState: (newState: GameState) => void;
+}
 //Sidebar for user actions
-const ActionsBarComponent = () => {
+const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ updateState }) => {
 
-  const handleButtonClick = (action: string) => {
+  const handleButtonClick = async (action: string) => {
     //call back end
+    const URL = 'http://localhost:5000/' + action;
+    console.log(URL);
+    const response = await fetch('http://localhost:5000/' + action, {
+      method: "POST",
+      body: JSON.stringify(players[0]),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }});
     console.log(`Action performed: ${action}`);
+    console.log(response.json);
+    let newState = await response.json();
+    console.log(newState.current_player);
+    updateState(newState);
   };
 
   return (
@@ -28,7 +46,7 @@ const ActionsBarComponent = () => {
         <div className="line"></div>
           <p className="button indented-text" onClick={() => handleButtonClick('tradePlayerThree')}>Player Three</p>
         <div className="line-thick"></div>
-        <h1 className="text-bold" onClick={() => handleButtonClick('settlementCard')}>SETTLEMENT CARD</h1>
+        <h1 className="text-bold" onClick={() => handleButtonClick('buyDevCard')}>DEVELOPMENT CARD</h1>
         <div className="line-thick"></div>
         <h1 className="text-bold" onClick={() => handleButtonClick('passTurn')}>PASS TURN</h1>
         <div className="line-thick"></div>

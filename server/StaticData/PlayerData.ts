@@ -1,5 +1,4 @@
-import { Player } from "@backend/types"
-
+import { GameState, Player } from "../src/types";
     const player1: Player = {
         id: 1,
         name: "steven",
