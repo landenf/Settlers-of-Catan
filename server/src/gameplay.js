@@ -1,3 +1,4 @@
+
 /**
  * Function for distributing resources to the players based on the number rolled.
  * NOTE: This function may have to change depending on what what data types is in the players function!
@@ -38,9 +39,10 @@ function buyDevCard(player) {
           // for now, buying dev card will give an additional VP.
           //TODO: refactor to randomize vp vs army
           player.vp += 1;
+          console.log(player.vp);
      }
 
-     return canBuy;
+     return player;
 }
 
 module.exports = { buyDevCard, distributeCards }

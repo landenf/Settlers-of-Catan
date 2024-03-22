@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ResourceCard from "./ResourceCard";
 import "../Styles/hand.css"
 import { Player } from "@backend/types";
@@ -15,13 +15,14 @@ const Hand = (props: StateProp) => {
   /**
    *get player resources
    */
-  const player = props.gamestate.current_player;
+  const [hand, setHandState] = useState(props.gamestate.current_player.hand);
+
   let resources = [
-    { name: "sheep", value: player.hand["sheep"]},
-    { name: "wheat", value: player.hand["wheat"] },
-    { name: "wood", value: player.hand["wood"] },
-    { name: "brick", value: player.hand["brick"] },
-    { name: "stone", value: player.hand["stone"] },
+    { name: "sheep", value: hand["sheep"]},
+    { name: "wheat", value: hand["wheat"] },
+    { name: "wood", value: hand["wood"] },
+    { name: "brick", value: hand["brick"] },
+    { name: "stone", value: hand["stone"] },
   ];
   const getResources = () => {};
 
@@ -32,7 +33,7 @@ const Hand = (props: StateProp) => {
         return <ResourceCard type={resource.name} value={resource.value} />;
       })}
 
-      <ResourceCard type="developmentCard" value={1} />
+      <ResourceCard type="developmentCard" value={0} />
     </div>
   );
 };
