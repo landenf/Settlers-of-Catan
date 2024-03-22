@@ -25,6 +25,7 @@ type ResourceGainKey = keyof typeof current_game.current_player.resource_gain;
 function distributeCards(numRolled: ResourceGainKey) {
      for(let i = 0; i < current_game.players.length; i++){
           const player = current_game.players[i];
+          console.log(player);
           const map = player.resource_gain[numRolled];
           player.hand["wheat"] += map["wheat"];
           player.hand["brick"] += map["brick"];
@@ -41,10 +42,15 @@ function distributeCards(numRolled: ResourceGainKey) {
      return current_game;
 }
 
+/**
+ * Rolls two dice and updates it in the current_game.
+ * @returns total rolled
+ */
 function rollDice(){
      const dice1 = Math.floor(Math.random() * 6) + 1;
      const dice2 = Math.floor(Math.random() * 6) + 1;
      current_game.diceNumber = dice1 + dice2;
+     return current_game.diceNumber;
 }
 
 function buyDevCard() {
@@ -74,4 +80,8 @@ function buyDevCard() {
      return current_game;
 }
 
-module.exports = { buyDevCard }
+function getGamestate(){
+     return current_game;
+}
+
+module.exports = { buyDevCard, rollDice, distributeCards, getGamestate }

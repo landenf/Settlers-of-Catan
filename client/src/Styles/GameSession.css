@@ -33,6 +33,10 @@
     place-items: center;
 }
 
+.roll-button {
+    place-items: right;
+}
+
 .game-board {
     height: auto;
     width: auto;
