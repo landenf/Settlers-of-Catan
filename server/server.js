@@ -12,7 +12,6 @@ app.get("/test", (req, res) => {
 })
 
 app.post("/buyDevCard", (req, res) => {
-    console.log("entered");
     const gamestate = gameplay.buyDevCard(req.body);
     res.json(gamestate);
 })

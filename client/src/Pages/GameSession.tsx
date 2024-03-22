@@ -10,7 +10,7 @@ import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
 import { GameState } from "@backend/types";
 
-const GameSession = (props: StateProp) => {
+const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
 
   const updateState = (newState: GameState) => {
@@ -19,15 +19,15 @@ const GameSession = (props: StateProp) => {
   return (
     <div className="background-container">
             <div className="game-container">
-                <div className="PlayerbarComponent"><PlayerBarComponent players={players}/></div>
+                <div className="PlayerbarComponent"><PlayerBarComponent players={state.players}/></div>
                 <div className="center-column">
                     <div className="game-board"><GameBoard tiles={tiles}/></div>
                     <div className="user-info">
-                      <VictoryPointsComponent vp={props.gamestate.current_player.vp}/>
-                      <Hand gamestate={props.gamestate} />
+                      <VictoryPointsComponent vp={state.current_player.vp}/>
+                      <Hand gamestate={state} />
                     </div>
                 </div>
-                <div className="ActionsBarComponent"><ActionsBarComponent gamestate={props.gamestate}/></div>
+                <div className="ActionsBarComponent"><ActionsBarComponent updateState={updateState}/></div>
             </div>
         </div>   
   );

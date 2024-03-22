@@ -15,7 +15,7 @@ const Hand = (props: StateProp) => {
   /**
    *get player resources
    */
-  const [hand, setHandState] = useState(props.gamestate.current_player.hand);
+  const hand = props.gamestate.current_player.hand;
 
   let resources = [
     { name: "sheep", value: hand["sheep"]},
