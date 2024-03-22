@@ -1,0 +1,17 @@
+.rollButton {
+    width: 78px;
+    height: 45px;
+    position: 'relative';
+    background: '#C3332B';
+    border-radius: 25px;
+    text-align: 'center';
+    display: 'inline-block';
+    font-size: 20px;
+    
+}
+
+
+.roll-button {
+    justify-content: center;
+    align-items: center;
+}
