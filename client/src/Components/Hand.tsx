@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import ResourceCard from "./ResourceCard";
 import "../Styles/hand.css"
+import { Player } from "@backend/types";
+import { StateProp } from "../Components/types";
 
 /**
  * Component that displays the amount of victory points a player has as well as
@@ -9,17 +11,18 @@ import "../Styles/hand.css"
  *
  * @returns all cards in hand and victory points
  */
-const Hand = () => {
+const Hand = (props: StateProp) => {
   /**
    *get player resources
    */
+  const [hand, setHandState] = useState(props.gamestate.current_player.hand);
 
   let resources = [
-    { name: "sheep", value: 1 },
-    { name: "wheat", value: 1 },
-    { name: "wood", value: 1 },
-    { name: "brick", value: 1 },
-    { name: "stone", value: 1 },
+    { name: "sheep", value: hand["sheep"]},
+    { name: "wheat", value: hand["wheat"] },
+    { name: "wood", value: hand["wood"] },
+    { name: "brick", value: hand["brick"] },
+    { name: "stone", value: hand["stone"] },
   ];
   const getResources = () => {};
 
@@ -30,7 +33,7 @@ const Hand = () => {
         return <ResourceCard type={resource.name} value={resource.value} />;
       })}
 
-      <ResourceCard type="developmentCard" value={1} />
+      <ResourceCard type="developmentCard" value={0} />
     </div>
   );
 };
