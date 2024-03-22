@@ -1,4 +1,4 @@
-const gameplay = require("./src/gameplay.js")
+const gameplay = require("./src/gameplay")
 const express = require('express')
 const app = express()
 const cors = require("cors");
@@ -19,7 +19,16 @@ app.post("/buyDevCard", (req, res) => {
 
 app.post("/rollButtonClicked", (req, res) => {
     const numRolled = gameplay.rollDice();
-    const gamestate = gameplay.distributeCards(numRolled);
-    return gamestate;
+    console.log(numRolled);
+    
+    if (numRolled != 7){
+        console.log("hello!");
+        const gamestate = gameplay.distributeCards(numRolled);
+        res.json(gamestate);
+    } else {
+        const gamestate = gameplay.getGamestate();
+        res.json(gamestate);
+    }
+
 })
 app.listen(5000, () => {console.log("Server Started")} )

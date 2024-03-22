@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import '../Styles/RollButton.css'
+import { GameState } from "@backend/types";
 
-const RollButton = () => {
-    // const dice1 = new Dice();
-    // const dice2 = new Dice();
+interface RollButtonProps {
+    updateState: (newState: GameState) => void;
+}
+const RollButton: React.FC<RollButtonProps> = ({ updateState }) => {
     
     async function handleClick() {
-        const response = await fetch('https://localhost:5000/rollButtonClicked', {
+        console.log("hello");
+        const response = await fetch('http://localhost:5000/rollButtonClicked', {
             method: "POST",
             headers: {
-                "Content=type": "application/json; charset=UTF-8"
+                "Content-type": "application/json; charset=UTF-8"
             }
         });
-        const json = await response.json();
-        console.log(json);
+        let newState = await response.json();
+        updateState(newState);
+        console.log(newState);
     }
 
     return (

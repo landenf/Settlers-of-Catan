@@ -9,6 +9,7 @@ import { players } from "../StaticData/PlayerData";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
 import { GameState } from "@backend/types";
+import RollButton from "../Components/RollButton";
 
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
@@ -25,6 +26,9 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                     <div className="user-info">
                       <VictoryPointsComponent vp={state.current_player.vp}/>
                       <Hand gamestate={state} />
+                    </div>
+                    <div className="roll-button">
+                    <RollButton updateState={updateState}/>
                     </div>
                 </div>
                 <div className="ActionsBarComponent"><ActionsBarComponent updateState={updateState}/></div>
