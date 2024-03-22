@@ -26,10 +26,9 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                     <div className="user-info">
                       <VictoryPointsComponent vp={state.current_player.vp}/>
                       <Hand gamestate={state} />
+                      <RollButton updateState={updateState}/>
                     </div>
-                    <div className="roll-button">
-                    <RollButton updateState={updateState}/>
-                    </div>
+  
                 </div>
                 <div className="ActionsBarComponent"><ActionsBarComponent updateState={updateState}/></div>
             </div>

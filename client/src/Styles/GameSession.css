@@ -28,14 +28,11 @@
 
 .user-info {
     display: grid;
-    grid-template-columns: 50% 50%;
-    width: 100%;
+    grid-template-columns: 33% 33% 33%;
+    width: 130%;
     place-items: center;
 }
 
-.roll-button {
-    place-items: right;
-}
 
 .game-board {
     height: auto;
