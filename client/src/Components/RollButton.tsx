@@ -1,22 +1,30 @@
 import React, { useState } from "react";
+import '../Styles/RollButton.css'
+import { GameState } from "@backend/types";
 
-
-const RollButton = () => {
-    // const dice1 = new Dice();
-    // const dice2 = new Dice();
+interface RollButtonProps {
+    updateState: (newState: GameState) => void;
+}
+const RollButton: React.FC<RollButtonProps> = ({ updateState }) => {
     
-    const handleClick = () => {
-        // dice[0].roll();
-        // dice[1].roll();
-
-        // totalRoll = dice[0].DiceState + dice[1].DiceState;
-    };
+    async function handleClick() {
+        console.log("hello");
+        const response = await fetch('http://localhost:5000/rollButtonClicked', {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+        let newState = await response.json();
+        updateState(newState);
+        console.log(newState);
+    }
 
     return (
-        <div style={{width: 78, height: 45, position: 'relative'}}>
-            <div style={{width: 78, height: 45, left: 0, top: 0, position: 'absolute', background: '#C3332B', borderRadius: 25}} />
-            <div style={{width: 76, height: 42, left: 1, top: 0, position: 'absolute', textAlign: 'center', color: 'white', fontSize: 20, fontFamily: 'Inter', fontWeight: '700', wordWrap: 'break-word'}}>roll</div>
-        </div>
+        <button className='button rollButton' onClick={handleClick}>
+            roll
+        </button>
+
     )
 };
 

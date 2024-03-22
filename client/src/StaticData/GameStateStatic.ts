@@ -3,6 +3,7 @@ import { players } from "./PlayerData";
 import { tiles } from "../StaticData/GameBoardStatic";
 
 export const MockGameState: GameState = {
+    diceNumber: 0,
     players: players,
     winner: undefined,
     current_player: players[0],
