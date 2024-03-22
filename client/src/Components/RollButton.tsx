@@ -6,7 +6,12 @@ const RollButton = () => {
     // const dice2 = new Dice();
     
     async function handleClick() {
-        const response = await fetch('https://localhost:5000/rollButtonClicked');
+        const response = await fetch('https://localhost:5000/rollButtonClicked', {
+            method: "POST",
+            headers: {
+                "Content=type": "application/json; charset=UTF-8"
+            }
+        });
         const json = await response.json();
         console.log(json);
     }

@@ -21,14 +21,8 @@ function distributeCards(numRolled) {
      }
 }
 
-app.get("/rollButtonClicked", (req, res) => {
-     const dice1 = Math.floor(Math.random() * 6) + 1;
-     const dice2 = Math.floor(Math.random() * 6) + 1;
-     const totalRolled = dice1 + dice2;
-     distributeCards(players, totalRolled);
-
-     // need to send back updated dice
-     res.json({"rolled": [`${dice1}}`, `${dice2}`]});
-})
+function roll() {
+     return Math.floor(Math.random() * 6) + 1;
+}
 
 app.listen(5000, () => {console.log("Server Started")} )
