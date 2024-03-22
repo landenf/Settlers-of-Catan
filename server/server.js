@@ -17,4 +17,9 @@ app.post("/buyDevCard", (req, res) => {
     res.json(gamestate);
 })
 
+app.post("/rollButtonClicked", (req, res) => {
+    const numRolled = gameplay.rollDice();
+    const gamestate = gameplay.distributeCards(numRolled);
+    return gamestate;
+})
 app.listen(5000, () => {console.log("Server Started")} )

@@ -214,6 +214,10 @@ export type Board = {
  * Represents the game session's current state.
  */
 export type GameState = {
+    /**
+     * The latest roll of the dice. This will be the two numbers added together;
+     */
+    diceNumber: number;
 
     /**
      * A list of players who are in this current game session.

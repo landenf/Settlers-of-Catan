@@ -1,10 +1,11 @@
-import { GameState, Player } from "./types";
+import { GameState, Player, resource_counts } from "./types";
 import { players } from "../StaticData/PlayerData"
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
  * here in this file, then must be passed via response to the frontend for rendering.
  */
 var current_game: GameState = {
+     diceNumber: 0,
      players: players,
      current_player: players[0],
      current_largest_army: "",
@@ -13,22 +14,38 @@ var current_game: GameState = {
           tiles: []
      }
 }
-
+type ResourceGainKey = keyof typeof current_game.current_player.resource_gain;
+/**
 /**
  * Function for distributing resources to the players based on the number rolled.
  * NOTE: This function may have to change depending on what what data types is in the players function!
  * 
- * @param {*} players list of players in the game
- * @param {int} numRolled the number rolled
+ * @param {ResourceGainKey} numRolled the number rolled
  */
-// function distributeCards(players: Player, numRolled: number) {
-//      for(let i = 0; i < players.length; i++){
-//           const map = players[i].getResources(numRolled);
-//           for(let j = 0; j < map.length; j++){
-//                players.resources.get(map[i]) = players.resources.get(map[i]) + 1;
-//           }
-//      }
-// }
+function distributeCards(numRolled: ResourceGainKey) {
+     for(let i = 0; i < current_game.players.length; i++){
+          const player = current_game.players[i];
+          const map = player.resource_gain[numRolled];
+          player.hand["wheat"] += map["wheat"];
+          player.hand["brick"] += map["brick"];
+          player.hand["sheep"] += map["sheep"];
+          player.hand["stone"] += map["stone"];
+          player.hand["wood"] += map["wood"];
+          player.resources = player.hand["wheat"] 
+                              + player.hand["brick"] 
+                              + player.hand["sheep"]
+                              + player.hand["stone"]
+                              + player.hand["wood"];
+          
+     }
+     return current_game;
+}
+
+function rollDice(){
+     const dice1 = Math.floor(Math.random() * 6) + 1;
+     const dice2 = Math.floor(Math.random() * 6) + 1;
+     current_game.diceNumber = dice1 + dice2;
+}
 
 function buyDevCard() {
      // check to see if they have the needed resources
