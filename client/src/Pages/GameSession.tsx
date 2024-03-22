@@ -5,11 +5,9 @@ import Hand from "../Components/Hand"
 import VictoryPointsComponent from "../Components/victoryPointsComponent";
 import React, { Component, useState } from "react";
 import { StateProp } from "../Components/types";
-import { players } from "../StaticData/PlayerData";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
 import { GameState } from "@backend/types";
-import RollButton from "../Components/RollButton";
 import RollButton from "../Components/RollButton";
 
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
