@@ -1,9 +1,10 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
 import { players } from '../StaticData/PlayerData';
+import { StateProp } from './types';
 
 //Sidebar for user actions
-const ActionsBarComponent = () => {
+const ActionsBarComponent = (props: StateProp) => {
 
   const handleButtonClick = async (action: string) => {
     //call back end
@@ -16,6 +17,8 @@ const ActionsBarComponent = () => {
         "Content-type": "application/json; charset=UTF-8"
       }});
     console.log(`Action performed: ${action}`);
+    let newState = JSON.parse(JSON.stringify(response.json));
+    //super.updateState(newState);
   };
 
   return (

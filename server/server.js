@@ -13,8 +13,8 @@ app.get("/test", (req, res) => {
 
 app.post("/buyDevCard", (req, res) => {
     console.log("entered");
-    const boughtCard = gameplay.buyDevCard(req.body);
-    res.json({'devCardBought' : `${boughtCard}`})
+    const gamestate = gameplay.buyDevCard(req.body);
+    res.json(gamestate);
 })
 
 app.listen(5000, () => {console.log("Server Started")} )
