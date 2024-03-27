@@ -3,45 +3,30 @@ import "../Styles/Stats.css";
 import { Player } from "@backend/types";
 const StatsComponent = (props: Player) => {
   let statLabels = [
-    "Games Won: ",
-    "Largest Army: ",
-    "Most Roads: ",
-    "Total VPs: ",
-    "Total Wheat: ",
-    "Total Rock: ",
-    "Total Wood: ",
-    "Total Brick: ",
-    "Total Sheep: ",
+    { name: "Games Won: ", value: 1 },
+    { name: "Largest Army: ", value: 2 },
+    { name: "Most Roads: ", value: 3 },
+    { name: "Total VPs: ", value: 4 },
+    { name: "Total Wheat: ", value: 5 },
+    { name: "Total Rock: ", value: 6 },
+    { name: "Total Wood: ", value: 7 },
+    { name: "Total Brick: ", value: 8 },
+    { name: "Total Sheep: ", value: 9 },
   ];
 
   return (
-    <div
-      className="Profile"
-      style={{ width: 470, height: 643, position: "relative" }}
-    >
+    <div className="Profile">
       <div className="backgroundRectangle" />
       <div className="avatar">
         {" "}
-        <img src="client/public/images/avatar.jpg" alt="Avatar Image" />
+        <img src={props.image} alt="Avatar Image" />
       </div>
       <div className="stats">
-        {statLabels.map((label) => label)}
-        Games Won: 27
-        <br />
-        Largest Army: 4<br />
-        Most Roads: 15
-        <br />
-        Total VP: 300
-        <br />
-        Total Wheat: 1230
-        <br />
-        Total Rock: 856
-        <br />
-        Total Wood: 732
-        <br />
-        Total Brick: 877
-        <br />
-        Total Sheep: 1222{" "}
+        {props.stats.map((label: {}) => {
+          {
+            label.name + label.value;
+          }
+        })}
       </div>
       <div className="playerName">STEVE</div>
     </div>

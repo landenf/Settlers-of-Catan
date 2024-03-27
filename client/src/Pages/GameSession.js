@@ -8,7 +8,7 @@ import StatsComponent from "../Components/StatsComponent.tsx";
 const GameSession = () => {
   return (
     <div>
-      <StatsComponent />
+      <StatsComponent player={players[0]} />
     </div>
   );
 };

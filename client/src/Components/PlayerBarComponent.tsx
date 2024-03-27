@@ -24,6 +24,7 @@ const PlayerBarComponent = (props: BarProp) => {
       color={player.color}
       vp={player.vp}
       resources={player.resources}
+      stats={player.stats}
     />
   ));
 

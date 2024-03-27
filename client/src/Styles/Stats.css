@@ -1,9 +1,18 @@
+body {
+}
+
+.Profile {
+  align-items: flex-end;
+  height: 100%;
+  width: 50%;
+  position: relative;
+}
+
 .backgroundRectangle {
   width: 461px;
   height: 643px;
   left: 9px;
   top: 0px;
-  position: absolute;
   background: #c3332b;
   border-radius: 129px;
 }
@@ -40,8 +49,8 @@
 .playerName {
   width: 184px;
   height: 73px;
-  left: 38%;
-  top: 10%;
+  top: 0;
+  left: 50%;
   position: relative;
   color: white;
   font-size: 40px;
