@@ -1,46 +1,53 @@
+@keyframes onActionHover {
+    0% {background: hsla(0, 0%, 100%, 0.3);}
+    100% {background: hsla(0, 0%, 50%, 0.3);}
+}
+
 .actions-bar {
-    width: 100%; /* Adjust based on parent size or specific requirement */
-    height: 100%; /* Adjust based on parent size or specific requirement */
+    width: 100%;
+    height: 100%;
     position: relative;
     align-items: center;
 }
 
 .inner-box {
-    width: 99.7%; /* Slightly less than 100% due to border considerations */
-    height: 99.7%; /* Adjust based on actions-bar height minus borders if any */
+    width: 99.7%; 
+    height: 99.7%;
     position: absolute;
     background: white;
 }
 
 .absolute-container {
-    width: 100%; /* Ensure it spans the full width of its parent */
-    height: auto; /* Adjust based on content, could also use 100% if filling parent */
+    width: 100%;
+    height: auto;
 }
 
 .inner-container {
-    margin-left: 25%;
-    width: 70%;
-    padding: 2% 0%;
+    width: 90%;
     background-color: hsla(0, 0%, 100%, 0.3);
+    margin: auto;
+    padding: 1%;
 }
 
 .line {
     margin: 0 auto;
-    width: 50%; /* Span the full width of its parent */
-    border-top: 1px solid #767676; /* Use border-top or border-bottom for a line */
+    width: 50%; 
+    border-top: 1px solid #767676; 
 }
 
 .line-thick {
-    border-top: 2px solid black; /* Use border-top for consistency */
+    border-top: 2px solid black; 
     width: 100%; 
 }
 
 .text, .text-bold {
     color: black;
-    font-size: 2vw; /* Adjust based on viewport width, or use % if relative to parent */
+    font-size: 2vw; 
     font-family: 'Inter';
-    font-weight: 400; /* 700 for .text-bold */
+    font-weight: 400;
     word-wrap: break-word;
+    margin: 0;
+    padding: 1vh;
 }
 
 .text-bold {
@@ -48,5 +55,14 @@
 }
 
 .indented-text {
-    margin: 1vh 0;
+    padding: 1vh 0;
+    margin: 0;
+}
+
+.button:hover {
+    animation-name: onActionHover;
+    animation-duration: .1s;
+    animation-timing-function: linear;
+    background: hsla(0, 0%, 50%, 0.3);
+    cursor: pointer;
 }

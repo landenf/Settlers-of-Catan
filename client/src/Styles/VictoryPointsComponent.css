@@ -19,12 +19,12 @@
 }
 
 .victoryPointsLabel {
-  width: 100%;
-  margin: 10% 0% 2%;
+  width: 80%;
+  margin: 5% auto;
   position: relative;
   text-align: center;
   color: white;
-  font-size: 20px;
+  font-size: 23px;
   font-family: Inter;
   font-weight: 700;
   word-wrap: break-word;
@@ -33,8 +33,70 @@
 .victoryPoints {
   position: relative;
   width: 75%;
-  height: 50%;
+  height: 100px;
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+@media (max-height: 1200px) {
+  .victoryPointsLabel {
+    margin: auto;
+    margin-top: 5%;
+  }
+}
+
+@media (max-width: 1400px) {
+  .victoryPointsLabel {
+    font-size: 20px;
+  }
+
+}
+
+@media (max-width: 1200px) {
+  .victoryPointsLabel {
+    font-size: 18px;
+  }
+
+  .victoryPointsNumber {
+    font-size: 45px;
+  }
+
+  .victoryPoints {
+    height: 80px;
+  }
+}
+
+@media (max-width: 1090px) {
+  .victoryPointsLabel {
+    font-size: 16px;
+  }
+
+  .victoryPointsNumber {
+    font-size: 40px;
+  }
+
+  .victoryPoints {
+    height: 70px;
+  }
+}
+
+@media (max-width: 950px) {
+  .victoryPointsLabel {
+    font-size: 14px;
+  }
+
+  .victoryPointsNumber {
+    font-size: 35px;
+  }
+}
+
+@media (max-width: 830px) {
+  .victoryPointsLabel {
+    font-size: 12px;
+  }
+
+  .victoryPointsNumber {
+    font-size: 30px;
+  }
 }

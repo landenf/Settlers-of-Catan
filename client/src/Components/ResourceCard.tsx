@@ -1,15 +1,16 @@
 import React from "react";
 import { useState } from "react";
+import { ResourceCardProp } from "./types";
 
-const ResourceCard = (props: any) => {
+const ResourceCard = (props: ResourceCardProp) => {
   const [numCards, setNumCards] = useState(0);
   const cardType = props.type;
-  console.log(props.value)
   return (
     <div className="resourceCard" style={{ position: "relative" }} >
     <img className="resourceImage" src={`./images/resources/${cardType}.jpg`} alt={cardType} />
-      <div className="backgroundCircle"></div>
-      <div className="cardNumber">{props.value}</div>
+      <div className="backgroundCircle">
+        <div className="cardNumber">{props.value}</div>
+      </div>
     </div>
   );
 };

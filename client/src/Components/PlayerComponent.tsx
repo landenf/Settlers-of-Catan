@@ -11,8 +11,6 @@ import { Player } from "@backend/types";
  * @returns a front-end component representing a player and their current stats.
  */
 const PlayerComponent = (player: Player) => {
-    
-    const [isShown, setHover] = useState(false);
 
     /**
      * The player's avatar URL. TODO: Connect to a database of user images.
@@ -47,12 +45,9 @@ const PlayerComponent = (player: Player) => {
                 <div>
                     <p className="heading">{player_name}</p>
                     <div className="statContainer">
-                        <div className="statBox" 
-                        onMouseEnter={() => setHover(true)}
-                        onMouseLeave={() => setHover(false)}>
-                            {!isShown && (<p className="statHeading">{player_vp}</p>)}
-                            {!isShown && (<div className="statText">Victory Points</div>)}
-                            {isShown && (<div className="statHoverText">Get 10 Victory Points to win!</div>)}
+                        <div className="statBox" >
+                            <p className="statHeading">{player_vp}</p>
+                            <div className="statText">Victory Points</div>
                         </div>
                         <div className="statBox">
                             <p className="statHeading">{player_resources}</p>

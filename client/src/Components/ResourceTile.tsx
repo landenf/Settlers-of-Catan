@@ -2,14 +2,19 @@ import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from
 import React from 'react';
 import { HexProp } from './types';
 
-//renders svg !!!
+/**
+ * An individual component used by the gameboard as a tile. Each resource tile has a 
+ * resource type and a number associated.
+ * @param props information about the tile passed through, typically from the backend server.
+ */
 const ResourceTile = (props: HexProp) => {
 
+    /**
+     * TODO: To be used to build settlements or roads.
+     */
     const handleClick = () => {
-        //implement what happens when tile clicked
-        console.log(`Tile ${props.index} Clicked `)
     };
-    console.log(props)
+
     return (
         <Hexagon               
             onClick={() => handleClick()} 

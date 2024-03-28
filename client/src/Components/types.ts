@@ -5,9 +5,9 @@ import { Hex } from "react-hexgrid";
 // add it here: server\src\types.ts
 
 /**
- * A wrapper type that provides strong typing to a list of players as a prop.
+ * An interface that provides strong typing to a list of players as a prop.
  */
-export type BarProp = {
+export interface PlayerBarProp {
     /**
      * A list of players.
      */
@@ -15,9 +15,9 @@ export type BarProp = {
 }
 
 /**
- * A wrapper type that provides strong typing to a resource tile's hexagon prop.
+ * An interface that provides strong typing to a resource tile's hexagon prop.
  */
-export type HexProp = {
+export interface HexProp {
     /**
      * A hexagon object representing this particular tile's placement on the grid.
      */
@@ -35,9 +35,9 @@ export type HexProp = {
 }
 
 /**
- * A wrapper type that provides strong typing to a game session's game state prop.
+ * An interface that provides strong typing to a game session's game state prop.
  */
-export type StateProp = {
+export interface StateProp {
     /**
      * The current game session's state.
      */
@@ -45,8 +45,42 @@ export type StateProp = {
 }
 
 /**
- * A wrapper type that provides strong typing to a vp prop.
+ * An interface that provides strong typing to a vp prop.
  */
-export type VPProp = {
+export interface VPProp {
+
+    /**
+     * The current user's score of victory points.
+     */
     vp: number
+}
+
+/**
+ * An interface that provides strong typing to a resource card prop.
+ */
+export interface ResourceCardProp {
+
+    /**
+     * Represents the card's type (either resource type or dev card)
+     */
+    type: string;
+
+    /**
+     * Represents the count of the resource or dev card in hand.
+     */
+    value: number;
+}
+
+/**
+ * An interface that provides strong typing to a gamestate passed to the action bar.
+ */
+export interface ActionsBarComponentProps {
+    updateState: (newState: GameState) => void;
+  }
+
+/**
+* An interface that provides strong typing to a gamestate passed to the roll
+*/
+export interface RollButtonProps {
+    updateState: (newState: GameState) => void;
 }
