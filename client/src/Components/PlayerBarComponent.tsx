@@ -1,8 +1,17 @@
 import React from "react";
 import PlayerComponent from "./PlayerComponent";
 import { Player } from "@backend/types"
-import { PlayerBarProp } from "./types";
 import '../Styles/PlayerBarComponent.css';
+
+/**
+ * An interface that provides strong typing to a list of players as a prop.
+ */
+export interface PlayerBarProp {
+    /**
+     * A list of players.
+     */
+    players: Player[];
+}
 
 /**
  * A React component representing a list of players to be rendered on the left

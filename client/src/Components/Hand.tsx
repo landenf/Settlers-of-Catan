@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import ResourceCard from "./ResourceCard";
 import "../Styles/hand.css"
-import { Player } from "@backend/types";
-import { StateProp } from "../Components/types";
+import { GameState, Player } from "@backend/types";
+
+/**
+ * An interface that provides strong typing to a game session's game state prop.
+ */
+export interface StateProp {
+  /**
+   * The current game session's state.
+   */
+  gamestate: GameState
+}
 
 /**
  * Component that displays the amount of victory points a player has as well as

@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import '../Styles/RollButton.css'
 import { GameState } from "@backend/types";
-import { RollButtonProps } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDice } from "@fortawesome/free-solid-svg-icons";
+
+/**
+* An interface that provides strong typing to a gamestate passed to the roll
+*/
+export interface RollButtonProps {
+    updateState: (newState: GameState) => void;
+}
 
 const RollButton: React.FC<RollButtonProps> = ({ updateState }) => {
     

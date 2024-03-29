@@ -1,7 +1,16 @@
 import React from "react";
 import "../Styles/VictoryPointsComponent.css";
 import { Player } from "@backend/types";
-import { VPProp } from "./types";
+/**
+ * An interface that provides strong typing to a vp prop.
+ */
+export interface VPProp {
+
+  /**
+   * The current user's score of victory points.
+   */
+  vp: number
+}
 
 /**
  * A red box to display the user's current count of victory points.

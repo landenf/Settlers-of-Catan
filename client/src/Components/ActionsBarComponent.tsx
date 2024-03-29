@@ -2,7 +2,13 @@ import React from 'react';
 import '../Styles/ActionsBar.css'; 
 import { players } from '../StaticData/PlayerData';
 import { GameState } from '@backend/types';
-import { ActionsBarComponentProps } from './types';
+
+/**
+ * An interface that provides strong typing to a gamestate passed to the action bar.
+ */
+export interface ActionsBarComponentProps {
+  updateState: (newState: GameState) => void;
+}
 
 /**
  * The sidebar used to trade resources, build settlements, and buy development 

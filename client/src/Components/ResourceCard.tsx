@@ -1,6 +1,21 @@
 import React from "react";
 import { useState } from "react";
-import { ResourceCardProp } from "./types";
+
+/**
+ * An interface that provides strong typing to a resource card prop.
+ */
+export interface ResourceCardProp {
+
+  /**
+   * Represents the card's type (either resource type or dev card)
+   */
+  type: string;
+
+  /**
+   * Represents the count of the resource or dev card in hand.
+   */
+  value: number;
+}
 
 const ResourceCard = (props: ResourceCardProp) => {
   const [numCards, setNumCards] = useState(0);
