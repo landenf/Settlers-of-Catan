@@ -1,29 +1,38 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
 import { players } from '../StaticData/PlayerData';
-import { StateProp } from './types';
 import { GameState } from '@backend/types';
-import { MockGameState } from '../StaticData/GameStateStatic';
-interface ActionsBarComponentProps {
+
+/**
+ * An interface that provides strong typing to a gamestate passed to the action bar.
+ */
+export interface ActionsBarComponentProps {
   updateState: (newState: GameState) => void;
 }
-//Sidebar for user actions
+
+/**
+ * The sidebar used to trade resources, build settlements, and buy development 
+ * cards. Appears on a player's game turn.
+ */
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ updateState }) => {
 
+  /**
+   * Function used to call the backend API given a particular action, like
+   * building settlements or roads.
+   * @param action the type of action, such as buyDevCard
+   */
   const handleButtonClick = async (action: string) => {
-    //call back end
+    // call back end
     const URL = 'http://localhost:5000/' + action;
-    console.log(URL);
     const response = await fetch('http://localhost:5000/' + action, {
       method: "POST",
       body: JSON.stringify(players[0]),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
       }});
-    console.log(`Action performed: ${action}`);
-    console.log(response.json);
+
+    // retrieve the new game state and update it in the frontend
     let newState = await response.json();
-    console.log(newState.current_player);
     updateState(newState);
   };
 
@@ -46,9 +55,9 @@ const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ updateState }
         <div className="line"></div>
           <p className="button indented-text" onClick={() => handleButtonClick('tradePlayerThree')}>Player Three</p>
         <div className="line-thick"></div>
-        <h1 className="text-bold" onClick={() => handleButtonClick('buyDevCard')}>DEVELOPMENT CARD</h1>
+        <h1 className="button text-bold" onClick={() => handleButtonClick('buyDevCard')}>DEVELOPMENT CARD</h1>
         <div className="line-thick"></div>
-        <h1 className="text-bold" onClick={() => handleButtonClick('passTurn')}>PASS TURN</h1>
+        <h1 className="button text-bold" onClick={() => handleButtonClick('passTurn')}>PASS TURN</h1>
         <div className="line-thick"></div>
         </div>
     </div>

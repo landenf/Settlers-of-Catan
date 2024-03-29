@@ -5,7 +5,14 @@ import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
 import { Board } from '@backend/types';
 
+/**
+ * The gameboard where the magic happens. Rendered at the center of the screen,
+ * it shows each individual tile, their resource type, and their number to roll.
+ * @param props a boardstate often retrieved and modified in the backend
+ */
 const GameBoard = (props: Board) => {
+
+  // generate hexagonal grid
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
   const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
   const [hexagons, setHexagons] = useState(initialHexagons);

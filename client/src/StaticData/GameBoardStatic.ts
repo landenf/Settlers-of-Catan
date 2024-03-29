@@ -70,7 +70,7 @@ export const tiles: Tile[] = total_tiles.map((index) => (
 )
   
 export const GameBoardConfiguration =  {
-    "width": "auto",
+    "width": "100%",
     "height": "70vh",
     "layout": { "width": 9, "height": 9, "flat": false, "spacing": 1.02 },
     "origin": { "x": 0, "y": 0 },

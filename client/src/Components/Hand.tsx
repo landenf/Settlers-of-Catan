@@ -1,8 +1,17 @@
 import React, { useState } from "react";
 import ResourceCard from "./ResourceCard";
 import "../Styles/hand.css"
-import { Player } from "@backend/types";
-import { StateProp } from "../Components/types";
+import { GameState, Player } from "@backend/types";
+
+/**
+ * An interface that provides strong typing to a game session's game state prop.
+ */
+export interface StateProp {
+  /**
+   * The current game session's state.
+   */
+  gamestate: GameState
+}
 
 /**
  * Component that displays the amount of victory points a player has as well as
@@ -12,11 +21,15 @@ import { StateProp } from "../Components/types";
  * @returns all cards in hand and victory points
  */
 const Hand = (props: StateProp) => {
+
   /**
    *get player resources
    */
   const hand = props.gamestate.current_player.hand;
 
+  /**
+   * the set of resources this player holds
+   */
   let resources = [
     { name: "sheep", value: hand["sheep"]},
     { name: "wheat", value: hand["wheat"] },
@@ -24,7 +37,6 @@ const Hand = (props: StateProp) => {
     { name: "brick", value: hand["brick"] },
     { name: "stone", value: hand["stone"] },
   ];
-  const getResources = () => {};
 
   return (
     <div className="personalCards">

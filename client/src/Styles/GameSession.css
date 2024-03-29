@@ -6,22 +6,23 @@
 
 .game-container {
     background-color: hsla(0, 0%, 100%, 0.6);
-    display: flex; /* Enables flexbox, making its children flex items */
-    justify-content: center; /* Centers the items in the container horizontally */
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
 .ActionsBarComponent, .GameBoard, .PlayerbarComponent {
-    flex: 1; /* Allows each child to grow equally, filling the container */
-    text-align: center; /* Centers the text inside each div */
+    flex: 1; 
+    text-align: center; 
 }
 
 .center-column {
-    display: flex; /* Enable Flexbox */
-    flex-direction: column; /* Stack children vertically */
-    text-align: center; /* Center text alignment for all child items */
-    align-items: center; /* Center items horizontally in the container */
+    display: flex; 
+    flex-direction: column; 
+    text-align: center; 
+    align-items: center;
     height: 100%;
     width: auto;
 }
@@ -29,10 +30,9 @@
 .user-info {
     display: grid;
     grid-template-columns: 33% 33% 33%;
-    width: 130%;
+    width: 100%;
     place-items: center;
 }
-
 
 .game-board {
     height: auto;

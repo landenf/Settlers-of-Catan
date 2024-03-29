@@ -4,11 +4,20 @@ import ActionsBarComponent from "../Components/ActionsBarComponent";
 import Hand from "../Components/Hand"
 import VictoryPointsComponent from "../Components/victoryPointsComponent";
 import React, { Component, useState } from "react";
-import { StateProp } from "../Components/types";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
 import { GameState } from "@backend/types";
 import RollButton from "../Components/RollButton";
+
+/**
+ * An interface that provides strong typing to a game session's game state prop.
+ */
+export interface StateProp {
+  /**
+   * The current game session's state.
+   */
+  gamestate: GameState
+}
 
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
