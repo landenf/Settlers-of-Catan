@@ -1,6 +1,6 @@
 "use strict";
 
-import { Player } from "@backend/types";
+import { Player } from "@shared/types";
     const player1: Player = {
         id: 1,
         name: "steven",

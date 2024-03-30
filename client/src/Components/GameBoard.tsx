@@ -3,7 +3,7 @@ import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from
 import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
 import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
-import { Board } from '@backend/types';
+import { Board } from '@shared/types';
 
 /**
  * The gameboard where the magic happens. Rendered at the center of the screen,

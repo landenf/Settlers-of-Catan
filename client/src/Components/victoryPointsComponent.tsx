@@ -1,6 +1,5 @@
 import React from "react";
 import "../Styles/VictoryPointsComponent.css";
-import { Player } from "@backend/types";
 /**
  * An interface that provides strong typing to a vp prop.
  */

@@ -6,7 +6,7 @@ import VictoryPointsComponent from "../Components/victoryPointsComponent";
 import React, { Component, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
-import { GameState } from "@backend/types";
+import { GameState } from "@shared/types";
 import RollButton from "../Components/RollButton";
 
 /**
