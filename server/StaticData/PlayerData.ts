@@ -1,4 +1,4 @@
-import { GameState, Player } from "../src/types";
+import { GameState, Player } from "@shared/types";
     const player1: Player = {
         id: 1,
         name: "steven",

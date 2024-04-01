@@ -1,4 +1,4 @@
-import { GameState, Player, resource_counts } from "./types";
+import { GameState } from "@shared/types";
 import { players } from "../StaticData/PlayerData"
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
@@ -15,7 +15,25 @@ var current_game: GameState = {
      }
 }
 type ResourceGainKey = keyof typeof current_game.current_player.resource_gain;
+
 /**
+ * Function to roll the dice and distribute resources based upon the result.
+ */
+function handleDiceRoll() {
+
+     // roll dice
+     rollDice();
+     let numRolled: any;
+     numRolled = current_game.diceNumber
+     var gamestate;
+
+     // handle resource distribution
+     if (numRolled != 7) {
+          gamestate = distributeCards(numRolled)
+     } 
+     return getGamestate();
+}
+
 /**
  * Function for distributing resources to the players based on the number rolled.
  * NOTE: This function may have to change depending on what what data types is in the players function!
@@ -25,7 +43,6 @@ type ResourceGainKey = keyof typeof current_game.current_player.resource_gain;
 function distributeCards(numRolled: ResourceGainKey) {
      for(let i = 0; i < current_game.players.length; i++){
           const player = current_game.players[i];
-          console.log(player);
           const map = player.resource_gain[numRolled];
           player.hand["wheat"] += map["wheat"];
           player.hand["brick"] += map["brick"];
@@ -39,18 +56,15 @@ function distributeCards(numRolled: ResourceGainKey) {
                               + player.hand["wood"];
           
      }
-     return current_game;
 }
 
 /**
  * Rolls two dice and updates it in the current_game.
- * @returns total rolled
  */
-function rollDice(){
+function rollDice() {
      const dice1 = Math.floor(Math.random() * 6) + 1;
      const dice2 = Math.floor(Math.random() * 6) + 1;
      current_game.diceNumber = dice1 + dice2;
-     return current_game.diceNumber;
 }
 
 function buyDevCard() {
@@ -84,4 +98,4 @@ function getGamestate(){
      return current_game;
 }
 
-module.exports = { buyDevCard, rollDice, distributeCards, getGamestate }
+module.exports = { buyDevCard, handleDiceRoll }
