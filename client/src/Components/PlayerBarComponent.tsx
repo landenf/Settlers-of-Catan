@@ -1,6 +1,6 @@
 import React from "react";
 import PlayerComponent from "./PlayerComponent";
-import { Player } from "@backend/types"
+import { Player } from "@shared/types"
 import '../Styles/PlayerBarComponent.css';
 
 /**

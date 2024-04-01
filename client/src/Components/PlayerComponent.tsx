@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import '../Styles/PlayerComponent.css';
-import { Player } from "@backend/types";
+import { Player } from "@shared/types";
 
 /**
  * A React component corresponding to a specific Catan player. Created using 

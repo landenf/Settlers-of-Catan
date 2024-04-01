@@ -1,7 +1,7 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
 import { players } from '../StaticData/PlayerData';
-import { GameState } from '@backend/types';
+import { GameState } from '@shared/types';
 
 /**
  * An interface that provides strong typing to a gamestate passed to the action bar.

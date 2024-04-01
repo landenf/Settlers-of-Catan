@@ -1,4 +1,4 @@
-import { GameState } from "@backend/types";
+import { GameState } from "@shared/types";
 import { players } from "./PlayerData";
 import { tiles } from "../StaticData/GameBoardStatic";
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ResourceCard from "./ResourceCard";
 import "../Styles/hand.css"
-import { GameState, Player } from "@backend/types";
+import { GameState, Player } from "@shared/types";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.

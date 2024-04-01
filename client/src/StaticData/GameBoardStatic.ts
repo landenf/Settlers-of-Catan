@@ -1,4 +1,4 @@
-import { Tile } from "@backend/types";
+import { Tile } from "@shared/types";
 
 const Tile_Resources: {[index: number]:any} = {
     0: "wheat",

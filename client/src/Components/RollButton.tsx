@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import '../Styles/RollButton.css'
-import { GameState } from "@backend/types";
+import { GameState } from "@shared/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDice } from "@fortawesome/free-solid-svg-icons";
 
