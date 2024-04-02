@@ -1,0 +1,32 @@
+.createRoom {
+  width: 19vw;
+  height: 7vh;
+  left: 0vh;
+  top: 0vh;
+  position: absolute;
+  border-radius: 20px;
+  border: none;
+  font-size: 30px;
+  font-family: Inter;
+  font-weight: 400;
+  word-wrap: break-word;
+  opacity: 0.9;
+  color: #767676;
+}
+.createRoom:active {
+  color: black;
+  opacity: 1;
+  background-color: white;
+}
+.createRoom:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  cursor: grab;
+}
+
+.createRoomText {
+  left: 59px;
+  top: 15px;
+  position: relative;
+  color: #363636;
+}

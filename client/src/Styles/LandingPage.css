@@ -1,0 +1,11 @@
+.landing-page {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../../public/images/background-image.jpg");
+  background-size: cover;
+  overflow: hidden;
+}
