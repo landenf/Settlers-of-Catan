@@ -38,6 +38,10 @@ app.post("/roll", (req, res) => {
     const gamestate = gameplay.handleDiceRoll();
     res.json(gamestate)
 
+app.post("/tradeWithBank", (req, res) =>  {
+    console.log(req.body)
+})
+
 })
 
 // open app server.

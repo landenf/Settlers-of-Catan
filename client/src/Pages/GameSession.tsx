@@ -38,7 +38,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                     </div>
   
                 </div>
-                <div className="ActionsBarComponent"><ActionsBarComponent updateState={updateState}/></div>
+                <div className="ActionsBarComponent"><ActionsBarComponent state={state} updateState={updateState}/></div>
             </div>
         </div>   
   );
