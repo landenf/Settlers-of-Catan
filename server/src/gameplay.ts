@@ -1,4 +1,4 @@
-import { GameState } from "@shared/types";
+import { GameState, ResourceType } from "@shared/types";
 import { players } from "../StaticData/PlayerData"
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
@@ -94,8 +94,55 @@ function buyDevCard() {
      return current_game;
 }
 
-function getGamestate(){
+/**
+ * Handles trading between players and the bank.
+ * @param resourceOffer the resource the player is offering
+ * @param resourceGain the resource the player is receiving
+ */
+function tradeWithBank(resourceOffer: string, resourceGain: string) {
+
+     // check to see if they have three of the offered resource
+     var canTrade = true;
+     const player = current_game.current_player;
+
+     if (player.hand[translateToEnum(resourceOffer)] < 3){
+          canTrade = false;
+     }
+
+}
+
+/**
+ * Translates a string literal (typically from a JSON object) 
+ * to the resource type enum.
+ * @param toTranslate the string to translate
+ */
+function translateToEnum(toTranslate: string) {
+     var translation: ResourceType
+     switch (toTranslate) {
+          case "wheat":
+               translation = ResourceType.Wheat
+               break;
+          case "brick":
+               translation = ResourceType.Brick
+               break;
+          case "stone":
+               translation = ResourceType.Stone
+               break;
+          case "sheep":
+               translation = ResourceType.Sheep
+               break;
+          case "wood":
+               translation = ResourceType.Wood
+               break;
+          default:
+               // TODO: Do something with this, brother!
+               throw Error
+     }
+     return translation
+}
+
+function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank }

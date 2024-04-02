@@ -2,6 +2,17 @@
 // Please add all front-end specific files to: client\src\Components\types.ts.
 
 /**
+ * Represents each resource type, from wheat, brick, stone, sheep, and wood.
+ */
+export enum ResourceType {
+    Wheat,
+    Brick,
+    Stone,
+    Sheep,
+    Wood
+}
+
+/**
  * A player (user) of Catan.
  */
 export type Player = {
@@ -104,15 +115,21 @@ export type Player = {
     }
 }
 
+const wheat = ResourceType.Wheat
+const brick = ResourceType.Brick
+const stone = ResourceType.Stone
+const sheep = ResourceType.Sheep
+const wood = ResourceType.Wood
+
 /**
  * Dictionary representing a count of each resource.
  */
 export type resource_counts = {
-    "wheat": number;
-    "brick": number;
-    "stone": number;
-    "sheep": number;
-    "wood": number;
+    wheat: number;
+    brick: number;
+    stone: number;
+    sheep: number;
+    wood: number;
 }
 
 /**

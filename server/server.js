@@ -39,7 +39,7 @@ app.post("/roll", (req, res) => {
     res.json(gamestate)
 
 app.post("/tradeWithBank", (req, res) =>  {
-    console.log(req.body)
+    const gamestate = gameplay.tradeWithBank();
 })
 
 })

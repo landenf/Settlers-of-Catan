@@ -18,7 +18,7 @@ export interface ActionsBarComponentProps {
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({state, updateState }) => {
 
   /**
- * A null body with the mock gamestate. This'll definitely be removed before
+ * A null body with the gamestate. This'll probably be removed before
  * heading onto production.
  */
 const NullBody: BackendRequest = {
@@ -26,7 +26,7 @@ const NullBody: BackendRequest = {
 }
 
 /**
-* A trade body with the mock gamestate. This'll be changed into something
+* A trade body with the gamestate. This'll be changed into something
 * more useful heading into production. 
 */
 const TradeBody: TradeRequest = {
