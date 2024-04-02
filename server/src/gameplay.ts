@@ -1,5 +1,6 @@
-import { GameState, ResourceType } from "@shared/types";
+import { GameState } from "@shared/types";
 import { players } from "../StaticData/PlayerData"
+import { InvalidResourceError } from "./errors";
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
  * here in this file, then must be passed via response to the frontend for rendering.
@@ -15,6 +16,7 @@ var current_game: GameState = {
      }
 }
 type ResourceGainKey = keyof typeof current_game.current_player.resource_gain;
+type ResourcesKey = keyof typeof current_game.current_player.hand;
 
 /**
  * Function to roll the dice and distribute resources based upon the result.
@@ -25,11 +27,10 @@ function handleDiceRoll() {
      rollDice();
      let numRolled: any;
      numRolled = current_game.diceNumber
-     var gamestate;
 
      // handle resource distribution
      if (numRolled != 7) {
-          gamestate = distributeCards(numRolled)
+          distributeCards(numRolled)
      } 
      return getGamestate();
 }
@@ -101,48 +102,55 @@ function buyDevCard() {
  */
 function tradeWithBank(resourceOffer: string, resourceGain: string) {
 
-     // check to see if they have three of the offered resource
-     var canTrade = true;
      const player = current_game.current_player;
 
-     if (player.hand[translateToEnum(resourceOffer)] < 3){
-          canTrade = false;
+     let translatedOffer = translateToResourcesKey(resourceOffer)
+     let translatedGain = translateToResourcesKey(resourceGain)
+
+     if (player.hand[translatedOffer] >= 3){
+          player.hand[translatedOffer] -= 3;
+          player.hand[translatedGain]++;
      }
+
+     return getGamestate();
 
 }
 
 /**
  * Translates a string literal (typically from a JSON object) 
- * to the resource type enum.
+ * to the ResourcseKey type.
  * @param toTranslate the string to translate
  */
-function translateToEnum(toTranslate: string) {
-     var translation: ResourceType
+function translateToResourcesKey(toTranslate: string) {
+     var translation: ResourcesKey
      switch (toTranslate) {
           case "wheat":
-               translation = ResourceType.Wheat
+               translation = "wheat"
                break;
           case "brick":
-               translation = ResourceType.Brick
+               translation = "brick"
                break;
           case "stone":
-               translation = ResourceType.Stone
+               translation = "stone"
                break;
           case "sheep":
-               translation = ResourceType.Sheep
+               translation = "sheep"
                break;
           case "wood":
-               translation = ResourceType.Wood
+               translation = "wood"
                break;
           default:
-               // TODO: Do something with this, brother!
-               throw Error
+               throw new InvalidResourceError(`The resource type '${toTranslate}' isn't recognized by the system!`);
      }
      return translation
+}
+
+function setGameState(gamestate: GameState) {
+     current_game = gamestate;
 }
 
 function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState }

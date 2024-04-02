@@ -15,7 +15,7 @@ export interface ActionsBarComponentProps {
  * The sidebar used to trade resources, build settlements, and buy development 
  * cards. Appears on a player's game turn.
  */
-const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({state, updateState }) => {
+const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -68,11 +68,11 @@ const TradeBody: TradeRequest = {
         <div className="line-thick"></div>
         <h1 className="text-bold">Trade</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeWithBank', TradeBody)}>Player One</p>
+          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', TradeBody)}>Player One</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeWithBank', TradeBody)}>Player Two</p>
+          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', TradeBody)}>Player Two</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeWithBank', TradeBody)}>Player Three</p>
+          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', TradeBody)}>Player Three</p>
         <div className="line-thick"></div>
         <h1 className="button text-bold" onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</h1>
         <div className="line-thick"></div>
