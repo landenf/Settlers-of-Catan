@@ -6,7 +6,7 @@ import '../Styles/PlayerBarComponent.css';
 /**
  * An interface that provides strong typing to a list of players as a prop.
  */
-export interface PlayerBarProp {
+interface PlayerBarProp {
     /**
      * A list of players.
      */

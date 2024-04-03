@@ -18,7 +18,6 @@ export interface ResourceCardProp {
 }
 
 const ResourceCard = (props: ResourceCardProp) => {
-  const [numCards, setNumCards] = useState(0);
   const cardType = props.type;
   return (
     <div className="resourceCard" style={{ position: "relative" }} >

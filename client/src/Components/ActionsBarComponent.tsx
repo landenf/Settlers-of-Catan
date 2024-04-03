@@ -1,14 +1,28 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
 import { GameState } from '@shared/types';
-import { BackendRequest, TradeRequest } from '../Enums/requests';
+import { BackendRequest } from '../Enums/requests';
 
 /**
- * An interface that provides strong typing to a gamestate passed to the action bar.
+ * An interface that provides strong typing to props passed to the action bar.
  */
-export interface ActionsBarComponentProps {
+interface ActionsBarComponentProps {
+
+  /**
+   * Function to set the trading modal on or off.
+   * @param newState "true" to display trading modal, "false" to not
+   */
   setModal: (newState: boolean) => void;
+
+  /**
+   * Function to update the frontend gamestate.
+   * @param newState the new gamestate to update to
+   */
   updateState: (newState: GameState) => void;
+
+  /**
+   * The current representation of the gamestate.
+   */
   state: GameState;
 }
 

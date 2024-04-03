@@ -9,7 +9,7 @@ import { TradeParams } from "../Enums/tradebody";
 interface EmptyResourceCardProp {
 
   /**
-   * Represents the card's type (either resource type or dev card)
+   * Represents the card's resource type
    */
   type: string;
 
@@ -19,7 +19,7 @@ interface EmptyResourceCardProp {
   cardIsSelected: boolean;
 
   /**
-   * Set true if a card in this row has been selected.
+   * Function to set card selection on/off in this row.
    */
   setCardIsSelected: (newState: boolean) => void;
 
@@ -46,6 +46,10 @@ const EmptyResourceCard: React.FC<EmptyResourceCardProp> = ({ type, cardIsSelect
   const cardType = type;
   const [isSelected, setSelected] = useState(false);
 
+  /**
+   * Function to set the card if there is not one already set
+   * in this row.
+   */
   const setIfNoSelection = () => {
     if (!isSelected && !cardIsSelected) {
       setSelected(true)
@@ -58,6 +62,10 @@ const EmptyResourceCard: React.FC<EmptyResourceCardProp> = ({ type, cardIsSelect
     }
   }
 
+  /**
+   * Updates the trade parameters.
+   * @param newParam the new resource to offer or gain
+   */
   const updateTradeParams = (newParam: string) => {
 
     if (tradeType == "offer") {
