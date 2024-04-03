@@ -61,12 +61,12 @@ export type Player = {
     /**
      * A list of communities held by the player. 
      */
-    communities_owned: [];
+    communities_owned: [community_spaces];
 
     /**
      * A list of spots the player could build a community on.
      */
-    potential_communities: [];
+    potential_communities: [community_spaces];
     
     /**
      * A list of roads held by the player.

@@ -1,4 +1,4 @@
-import { GameState, Player, resource_counts, road_spaces } from "../../shared/types";
+import { GameState, Player, community_spaces, resource_counts, road_spaces } from "../../shared/types";
 import { players } from "../StaticData/PlayerData"
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
@@ -102,8 +102,52 @@ function buyRoad(road: road_spaces){
           player.hand["brick"] = player.hand["brick"] - 1;
           player.hand["wood"] = player.hand["wood"] - 1;
           player.roads_owned.push(road);
+
+          //update potential roads and potential communities
+          const index = player.potential_roads.indexOf(road);
+          player.potential_roads.splice(index, 1);
+          //TODO: add the stuff
+     }
+}
+
+
+function buySettlement(settlement: community_spaces){
+     const player = current_game.current_player;
+     // verify needed resources
+     var canBuy = true;
+     if(player.hand["brick"] == 0){
+          canBuy = false;
+     }
+
+     if(player.hand["wood"] == 0){
+          canBuy = false;
+     }
+
+     if(player.hand["sheep"] == 0){
+          canBuy = false;
+     }
+
+     if(player.hand["wheat"] == 0){
+          canBuy = false;
+     }
+
+     if(!player.potential_communities.includes(settlement)){
+          canBuy = false;
+     }
+
+     // if can buy, do buying functionality
+     if(canBuy){
+          //decrease counts buy one for brick and wood sheep and wheat and add the road to the player's list
+          player.hand["brick"] = player.hand["brick"] - 1;
+          player.hand["wood"] = player.hand["wood"] - 1;
+          player.hand["sheep"] = player.hand["sheep"] - 1;
+          player.hand["wheat"] = player.hand["wheat"] - 1;
+          player.communities_owned.push(settlement);
           
-          //add new potential roads and potential communities
+          //update potential communities
+          const index = player.potential_communities.indexOf(settlement);
+          player.potential_communities.splice(index, 1);
+          //TODO: add the stuff
      }
 }
 
