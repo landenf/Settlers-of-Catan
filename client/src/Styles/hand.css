@@ -1,3 +1,8 @@
+@keyframes onEmptyHover {
+  0% {filter: brightness(100%)};
+  100% {filter: brightness(50%)};
+}
+
 .personalCards {
   padding: 0%;
   height: auto;
@@ -10,6 +15,14 @@
   text-align: center;
   grid-template-columns: 5vw 5vw 5vw;
   grid-template-rows: 14vh 14vh;
+}
+
+.displayCards {
+  height: auto;
+  width: 70%;
+  text-align: center;
+  margin: auto;
+  display: flex;
 }
 
 .resourceCard {
@@ -28,10 +41,26 @@
   justify-content: center;
 }
 
+.empty {
+  border-radius: 3px;
+  border: 5px black solid;
+}
+
+.empty:hover {
+  filter: brightness(50%);
+  animation-name: onEmptyHover;
+  animation-duration: .05s;
+  animation-timing-function: linear;
+  cursor: pointer;
+}
+
+.selected {
+  border: 5px red solid;
+}
+
 .resourceImage {
   width: 100%;
   height: 100%;
-  border-radius: 10px;
   position: absolute;
 }
 

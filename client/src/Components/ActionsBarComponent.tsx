@@ -7,6 +7,7 @@ import { BackendRequest, TradeRequest } from '../Enums/requests';
  * An interface that provides strong typing to a gamestate passed to the action bar.
  */
 export interface ActionsBarComponentProps {
+  setModal: (newState: boolean) => void;
   updateState: (newState: GameState) => void;
   state: GameState;
 }
@@ -15,7 +16,7 @@ export interface ActionsBarComponentProps {
  * The sidebar used to trade resources, build settlements, and buy development 
  * cards. Appears on a player's game turn.
  */
-const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState }) => {
+const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setModal }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -23,16 +24,6 @@ const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, update
  */
 const NullBody: BackendRequest = {
   state: state
-}
-
-/**
-* A trade body with the gamestate. This'll be changed into something
-* more useful heading into production. 
-*/
-const TradeBody: TradeRequest = {
-  state: state,
-  resourceOffered: "sheep",
-  resourceGained: "brick"
 }
 
   /**
@@ -66,13 +57,15 @@ const TradeBody: TradeRequest = {
         <div className="line"></div>
           <p className="button indented-text" onClick={() => handleButtonClick('buildCity', NullBody)}>City</p>
         <div className="line-thick"></div>
-        <h1 className="text-bold">Trade</h1>
+        <h1 className="text-bold">TRADE</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', TradeBody)}>Player One</p>
+          <p className="button indented-text" onClick={() => setModal(true)}>Bank</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', TradeBody)}>Player Two</p>
+          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player One</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', TradeBody)}>Player Three</p>
+          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Two</p>
+        <div className="line"></div>
+          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Three</p>
         <div className="line-thick"></div>
         <h1 className="button text-bold" onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</h1>
         <div className="line-thick"></div>

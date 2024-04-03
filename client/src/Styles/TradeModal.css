@@ -1,0 +1,99 @@
+@keyframes onCancelHover {
+    0% {background: rgb(255, 121, 121);}
+    100% {background: rgb(165, 76, 76);}
+}
+
+@keyframes onAffirmHover {
+    0% {background: rgb(139, 255, 139);}
+    100% {background: rgb(86, 158, 86);}
+}
+
+.trade-modal {
+    height: 60vh;
+    width: 50vw;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    background-color: hsla(0, 0%, 100%, 1);
+    outline: 5px solid rgb(60, 0, 0);
+    text-align: center;
+    display: grid;
+    grid-template-rows: 10% 10% 25% 10% 25% 15%;
+}
+
+.header {
+    color: black;
+    font-size: 2vw; 
+    font-family: 'Inter';
+    font-weight: 400;
+    word-wrap: break-word;
+    padding: 1vh;
+    margin-top: .5%;
+}
+
+.description {
+    display: flex;
+    font-style: italic;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+}
+
+.tradeButtons {
+    text-align: center;
+    justify-content: center;
+    margin: auto 0%;
+}
+
+.cancelTrade, .affirmTrade {
+    margin: 0% 5%;
+    height: 6vh;
+    width: 25%;
+    text-align: center;
+
+    font-size: 1.5vw; 
+    word-wrap: break-word;
+    font-style: bold;
+
+    border: 1px solid rgb(60, 0, 0);
+    border-radius: 10px;
+}
+
+.cancelTrade {
+    background-color: rgb(255, 121, 121); 
+}
+
+.cancelTrade:hover {
+    background-color: rgb(165, 76, 76); 
+    animation-name: onCancelHover;
+    animation-duration: .05s;
+    animation-timing-function: linear;
+    cursor: pointer;  
+}
+
+.affirmTrade {
+    background-color: rgb(139, 255, 139);
+}
+
+.affirmTrade:hover {
+    animation-name: onAffirmHover;
+    animation-duration: .05s;
+    animation-timing-function: linear;
+    cursor: pointer;  
+    background-color: rgb(86, 158, 86);
+}
+
+.dark {
+    background-color: rgb(86, 158, 86);
+}
+
+.dark:hover {
+    animation-duration: 0s;
+    cursor: default;
+}
+
+.disabled {
+    display: none;
+}
