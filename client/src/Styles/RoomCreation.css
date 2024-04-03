@@ -1,9 +1,7 @@
 .createRoom {
   width: 19vw;
   height: 7vh;
-  left: 0vh;
-  top: 0vh;
-  position: absolute;
+  /* position: absolute; */
   border-radius: 20px;
   border: none;
   font-size: 30px;
@@ -29,4 +27,9 @@
   top: 15px;
   position: relative;
   color: #363636;
+}
+
+.parentCreateRoom {
+  display: grid;
+  grid-template-rows: 33% 33% 33%;
 }

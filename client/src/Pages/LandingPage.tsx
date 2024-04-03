@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import SignIn from "../Components/Authentication/SignIn";
-import SignUp from "../Components/Authentication/Signup";
 import "../Styles/LandingPage.css";
 import CreateRoomComponent from "../Components/CreateRoomComponent";
+import CreateRoomToggleComponent from "../Components/CreateRoomToggleComponent";
 
-const AuthenticationPage: React.FC = () => {
-  const [isNotInGame, setisNotInGame] = useState(true); // Start with Sign In
+const LandingPage: React.FC = () => {
+  const [isNotInGame, setisNotInGame] = useState(true);
 
   const toggleGameMode = () => setisNotInGame(!isNotInGame);
 
   return (
     <div className="landing-page">
-      <CreateRoomComponent />
+      <CreateRoomToggleComponent />
     </div>
   );
 };
 
-export default AuthenticationPage;
+export default LandingPage;
