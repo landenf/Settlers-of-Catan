@@ -1,11 +1,11 @@
-import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern, Hex } from 'react-hexgrid';
+import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
 import { Tile } from '@shared/types';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.
  */
-export interface HexProp {
+interface HexProp {
     /**
      * A hexagon object representing this particular tile's placement on the grid.
      */

@@ -40,6 +40,11 @@ app.post("/roll", (req, res) => {
 
 })
 
+app.post("/tradeBank", (req, res) =>  {
+    const gamestate = gameplay.tradeWithBank(req.body.resourceOffered, req.body.resourceGained);
+    res.json(gamestate)
+})
+
 // open app server.
 // TODO: Run API on online hosting.
 app.listen(5000, () => {console.log("Server Started")} )
