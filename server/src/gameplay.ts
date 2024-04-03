@@ -1,4 +1,4 @@
-import { GameState, Player, resource_counts } from "./types";
+import { GameState, Player, resource_counts, road_spaces } from "../../shared/types";
 import { players } from "../StaticData/PlayerData"
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
@@ -78,6 +78,33 @@ function buyDevCard() {
           player.vp += 1;
      }
      return current_game;
+}
+
+function buyRoad(road: road_spaces){
+     const player = current_game.current_player;
+     // verify needed resources
+     var canBuy = true;
+     if(player.hand["brick"] == 0){
+          canBuy = false;
+     }
+
+     if(player.hand["wood"] == 0){
+          canBuy = false;
+     }
+
+     if(!player.potential_roads.includes(road)){
+          canBuy = false;
+     }
+
+     // if can buy, do buying functionality
+     if(canBuy){
+          //decrease counts buy one for brick and wood and add the road to the player's list
+          player.hand["brick"] = player.hand["brick"] - 1;
+          player.hand["wood"] = player.hand["wood"] - 1;
+          player.roads_owned.push(road);
+          
+          //add new potential roads and potential communities
+     }
 }
 
 function getGamestate(){

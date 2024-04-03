@@ -71,12 +71,12 @@ export type Player = {
     /**
      * A list of roads held by the player.
      */
-    roads_owned: [];
+    roads_owned: [road_spaces];
 
     /**
      * A list of spots the player could build a road on.
      */
-    potential_roads: [];
+    potential_roads: [road_spaces];
 
     /**
      * A dictionary of this player's stats in all games.
