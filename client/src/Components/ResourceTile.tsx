@@ -39,9 +39,9 @@ const ResourceTile = (props: HexProp) => {
     
     const edgeLength = 10; // Adjust based on your actual hexagon size
     const lines = [];
-    const angles = [30,90,150,210, 270, 330]
+    const angles = [270, 330, 30,90,150, 210]
     for (let i = 0; i < 6; i++) {
-        const angleDeg = angles[i];  // 30, 60, 90, 150, 210, 330 degrees for flat-topped
+        const angleDeg = angles[i]; 
         const angleRad = Math.PI / 180 * angleDeg;
 
         const startX = edgeLength * Math.cos(angleRad);
@@ -52,9 +52,10 @@ const ResourceTile = (props: HexProp) => {
         lines.push({ startX, startY, endX, endY });
     }
 
-    const handleEdgeClick = (index: any, e: any) => {
+    const handleEdgeClick = (index: number, idx: number, e: any) => {
         e.stopPropagation(); 
-        console.log(`Edge ${index} clicked!`);
+        //todo send request to backend
+        console.log(`Tile ${index} clicked at position ${idx}`);
     };
 
 
@@ -76,9 +77,9 @@ const ResourceTile = (props: HexProp) => {
                     y1={line.startY}
                     x2={line.endX}
                     y2={line.endY}
-                    stroke="green"
+                    stroke="grey"
                     strokeWidth="1"
-                    onClick={(e) => handleEdgeClick(props.tile.number_roll, e)}
+                    onClick={(e) => handleEdgeClick(props.tile.number_roll, idx, e)}
                 />
             ))} 
         </Hexagon>
@@ -87,6 +88,4 @@ const ResourceTile = (props: HexProp) => {
 
 export default ResourceTile;
 
-//Need disabled / not disabled
-//need indexing to know what edges connect to what numbers 
-//need dynamic colors
+//todo: change color based on gameboard props
