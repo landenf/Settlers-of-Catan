@@ -18,7 +18,7 @@ const RollButton: React.FC<RollButtonProps> = ({ updateState }) => {
      */
     async function handleClick() {
         // call backend
-        const response = await fetch('http://localhost:5000/rollButtonClicked', {
+        const response = await fetch('http://localhost:5000/roll', {
             method: "POST",
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
