@@ -9,3 +9,24 @@
   background-size: cover;
   overflow: hidden;
 }
+
+.menu {
+  width: 40vw;
+  height: 100vh;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  background-color: #c3332b;
+}
+
+.catanTitle {
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  color: #fdfdfd;
+  font-size: 120px;
+  font-family: Inter;
+  font-weight: 400;
+  word-wrap: break-word;
+}

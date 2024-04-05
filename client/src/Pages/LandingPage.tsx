@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import "../Styles/LandingPage.css";
-import CreateRoomComponent from "../Components/CreateRoomComponent";
-import CreateRoomToggleComponent from "../Components/CreateRoomToggleComponent";
+import MenuToggleComponent from "../Components/MenuToggleComponent";
 
+/**
+ * Page where the user starts after logging in and sees their individual player stats.
+ * From here they can choose to create a game, join an online game, or join an already
+ *  existing game with a join code.
+ *
+ * @returns Landing page for the user.
+ */
 const LandingPage: React.FC = () => {
   const [isNotInGame, setisNotInGame] = useState(true);
 
@@ -10,7 +16,10 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="landing-page">
-      <CreateRoomToggleComponent />
+      <div className="menu">
+        <p className="catanTitle">CATAN</p>
+        <MenuToggleComponent />
+      </div>
     </div>
   );
 };
