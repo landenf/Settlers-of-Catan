@@ -1,6 +1,7 @@
 import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
 import { Tile } from '@shared/types';
+import { useEffect, useRef } from 'react';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.
@@ -35,6 +36,29 @@ const ResourceTile = (props: HexProp) => {
     const handleClick = () => {
     };
 
+    
+    const edgeLength = 10; // Adjust based on your actual hexagon size
+    const lines = [];
+    const angles = [270, 330, 30,90,150, 210]
+    for (let i = 0; i < 6; i++) {
+        const angleDeg = angles[i]; 
+        const angleRad = Math.PI / 180 * angleDeg;
+
+        const startX = edgeLength * Math.cos(angleRad);
+        const startY = edgeLength * Math.sin(angleRad);
+        const endX = edgeLength * Math.cos(angleRad + Math.PI / 3);
+        const endY = edgeLength * Math.sin(angleRad + Math.PI / 3);
+
+        lines.push({ startX, startY, endX, endY });
+    }
+
+    const handleEdgeClick = (index: number, idx: number, e: any) => {
+        e.stopPropagation(); 
+        //todo send request to backend
+        console.log(`Tile ${index} clicked at position ${idx}`);
+    };
+
+
     return (
         <Hexagon               
             onClick={() => handleClick()} 
@@ -46,8 +70,22 @@ const ResourceTile = (props: HexProp) => {
             >
             <circle cx="0" cy="0.5" r="3.5" fill="white" />
             <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }}>{props.tile.number_roll}</Text>  
+            {lines.map((line, idx) => (
+                <line
+                    key={idx}
+                    x1={line.startX}
+                    y1={line.startY}
+                    x2={line.endX}
+                    y2={line.endY}
+                    stroke="grey"
+                    strokeWidth="1"
+                    onClick={(e) => handleEdgeClick(props.tile.number_roll, idx, e)}
+                />
+            ))} 
         </Hexagon>
     );
 }
 
 export default ResourceTile;
+
+//todo: change color based on gameboard props
