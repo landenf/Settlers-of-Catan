@@ -6,7 +6,7 @@ import { InvalidResourceError } from "./errors";
  * here in this file, then must be passed via response to the frontend for rendering.
  */
 var current_game: GameState = {
-     diceNumber: 0,
+     diceNumber: {number1: 1, number2: 1},
      players: players,
      current_player: players[0],
      current_largest_army: "",
@@ -25,12 +25,12 @@ function handleDiceRoll() {
 
      // roll dice
      rollDice();
-     let numRolled: any;
-     numRolled = current_game.diceNumber
+     let numRolled = current_game.diceNumber
+     let trueNumber: any = numRolled.number1 + numRolled.number2;
 
      // handle resource distribution
-     if (numRolled != 7) {
-          distributeCards(numRolled)
+     if (trueNumber != 7) {
+          distributeCards(trueNumber)
      } 
      return getGamestate();
 }
@@ -65,7 +65,7 @@ function distributeCards(numRolled: ResourceGainKey) {
 function rollDice() {
      const dice1 = Math.floor(Math.random() * 6) + 1;
      const dice2 = Math.floor(Math.random() * 6) + 1;
-     current_game.diceNumber = dice1 + dice2;
+     current_game.diceNumber = {number1: dice1, number2: dice2}
 }
 
 function buyDevCard() {
