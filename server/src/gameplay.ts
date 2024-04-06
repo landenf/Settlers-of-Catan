@@ -1,4 +1,4 @@
-import { GameState } from "@shared/types";
+import { GameState, Player } from "@shared/types";
 import { players } from "../StaticData/PlayerData"
 import { InvalidResourceError } from "./errors";
 /**
@@ -68,6 +68,18 @@ function rollDice() {
      current_game.diceNumber = dice1 + dice2;
 }
 
+/**
+ * Determines if a player receives a knight or vp.
+ */
+function determineDevBenefit(player: Player) {
+     const probability = Math.floor(Math.random() * 10) + 1;
+     if (probability < 4) {
+          player.vp++;
+     } else {
+          player.hasKnight = true;
+     }
+}
+
 function buyDevCard() {
      // check to see if they have the needed resources
      var canBuy = true;
@@ -82,17 +94,61 @@ function buyDevCard() {
           canBuy = false;
      }
 
-     // if can buy, decrease counts buy one and buy dev card
+     // if can buy, decrease counts by one and buys dev card
      if(canBuy){
           player.hand["sheep"] = player.hand["sheep"] - 1;
           player.hand["wheat"] = player.hand["wheat"] - 1;
           player.hand["stone"] = player.hand["stone"] - 1;
 
-          // for now, buying dev card will give an additional VP.
-          //TODO: refactor to randomize vp vs army
-          player.vp += 1;
+          determineDevBenefit(player);
      }
      return current_game;
+}
+
+/**
+ * Handles the stealing part of the knight card.
+ * @param victimId the index of the player who's being stolen from
+ */
+function handleKnight(victimId: number) {
+     const victim = current_game.players[victimId]
+     const thief = current_game.current_player
+     const card_index_stolen = Math.floor(Math.random() * victim.resources);
+
+
+     // give all cards to the player hand
+     var player_hand = [];
+
+     for (let i = 0; i < victim.hand["wheat"]; i++) {
+          player_hand.push("wheat")
+     }
+
+     for (let i = 0; i < victim.hand["brick"]; i++) {
+          player_hand.push("brick")
+     }
+
+     for (let i = 0; i < victim.hand["sheep"]; i++) {
+          player_hand.push("sheep")
+     }
+
+     for (let i = 0; i < victim.hand["wood"]; i++) {
+          player_hand.push("wood")
+     }
+
+     for (let i = 0; i < victim.hand["stone"]; i++) {
+          player_hand.push("stone")
+     }
+
+     // select the resource from the hand and exchange it between players
+     const stolen_resource = translateToResourcesKey(player_hand[card_index_stolen])
+
+     victim.hand[stolen_resource]--;
+     thief.hand[stolen_resource]++;
+
+     thief.knightCards++;
+     thief.hasKnight = false;
+     
+     return getGamestate();
+
 }
 
 /**
@@ -150,7 +206,8 @@ function setGameState(gamestate: GameState) {
 }
 
 function getGamestate() {
+
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight }

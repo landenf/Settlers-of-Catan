@@ -1,7 +1,7 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
 import { GameState } from '@shared/types';
-import { BackendRequest } from '../Enums/requests';
+import { BackendRequest, StealRequest } from '../Enums/requests';
 
 /**
  * An interface that provides strong typing to props passed to the action bar.
@@ -40,11 +40,11 @@ const NullBody: BackendRequest = {
   state: state
 }
 
-  /**
-   * Function used to call the backend API given a particular action, like
-   * building settlements or roads.
-   * @param action the type of action, such as buyDevCard
-   */
+const KnightBody: StealRequest = {
+  state: state,
+  victim: 1
+}
+  
   const handleButtonClick = async (action: string, body: BackendRequest) => {
     // call back end
     const URL = 'http://localhost:5000/' + action;
@@ -75,7 +75,7 @@ const NullBody: BackendRequest = {
         <div className="line-thick"></div>
           <p className="button indented-text" onClick={() => setModal(true)}>Bank</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player One</p>
+          <p className="button indented-text" onClick={() => handleButtonClick('steal', KnightBody)}>Player One</p>
         <div className="line"></div>
           <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Two</p>
         <div className="line"></div>

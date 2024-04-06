@@ -96,7 +96,9 @@ const player1 = {
             sheep: 0,
             wood: 2
         }
-    }
+    },
+    hasKnight: false,
+    knightCards: 0
 };
 const player2 = {
     id: 2,
@@ -193,7 +195,9 @@ const player2 = {
             sheep: 0,
             wood: 0
         }
-    }
+    },
+    hasKnight: false,
+    knightCards: 0
 };
 const player3 = {
     id: 3,
@@ -290,6 +294,8 @@ const player3 = {
             sheep: 0,
             wood: 0
         }
-    }
+    },
+    hasKnight: false,
+    knightCards: 0
 };
 exports.players = [player1, player2, player3];
