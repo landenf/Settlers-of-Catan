@@ -200,7 +200,7 @@ const player3 = {
     name: "stevie",
     image: "empty-avatar",
     color: "green",
-    vp: 18,
+    vp: 7,
     resources: 52,
     hand: {
         wheat: 5,

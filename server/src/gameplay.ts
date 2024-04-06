@@ -1,4 +1,4 @@
-import { GameState } from "@shared/types";
+import { GameState, Player } from "@shared/types";
 import { players } from "../StaticData/PlayerData"
 import { InvalidResourceError } from "./errors";
 /**
@@ -92,7 +92,7 @@ function buyDevCard() {
           //TODO: refactor to randomize vp vs army
           player.vp += 1;
      }
-     return current_game;
+     return getGamestate();
 }
 
 /**
@@ -145,11 +145,26 @@ function translateToResourcesKey(toTranslate: string) {
      return translation
 }
 
+/**
+ * Checks each player's victory points and sets the game state's winner
+ * property accordingly.
+ */
+function checkWinState() {
+     var winner: Player | undefined = undefined;
+     current_game.players.forEach(player => {
+          if (player.vp >= 10) {
+               winner = player;
+          }
+     });
+     current_game.winner = winner;
+}
+
 function setGameState(gamestate: GameState) {
      current_game = gamestate;
 }
 
 function getGamestate() {
+     checkWinState()
      return current_game;
 }
 
