@@ -1,4 +1,4 @@
-import { GameState } from "@shared/types";
+import { GameState, Player } from "@shared/types";
 import { players } from "../StaticData/PlayerData"
 import { InvalidResourceError } from "./errors";
 /**
@@ -36,13 +36,26 @@ function handleDiceRoll() {
 }
 
 /**
+ * Given a player, recalculates their total resource count.
+ * @param player a user of Catan 
+ */
+function calculateTotalResources(player: Player) {
+     let resources = player.hand["wheat"] 
+                              + player.hand["brick"] 
+                              + player.hand["sheep"]
+                              + player.hand["stone"]
+                              + player.hand["wood"];
+     return resources
+}
+
+/**
  * Function for distributing resources to the players based on the number rolled.
  * NOTE: This function may have to change depending on what what data types is in the players function!
  * 
  * @param {ResourceGainKey} numRolled the number rolled
  */
 function distributeCards(numRolled: ResourceGainKey) {
-     for(let i = 0; i < current_game.players.length; i++){
+     for(let i = 0; i < current_game.players.length; i++) {
           const player = current_game.players[i];
           const map = player.resource_gain[numRolled];
           player.hand["wheat"] += map["wheat"];
@@ -50,11 +63,7 @@ function distributeCards(numRolled: ResourceGainKey) {
           player.hand["sheep"] += map["sheep"];
           player.hand["stone"] += map["stone"];
           player.hand["wood"] += map["wood"];
-          player.resources = player.hand["wheat"] 
-                              + player.hand["brick"] 
-                              + player.hand["sheep"]
-                              + player.hand["stone"]
-                              + player.hand["wood"];
+          player.resources = calculateTotalResources(player);
           
      }
 }
@@ -92,6 +101,9 @@ function buyDevCard() {
           //TODO: refactor to randomize vp vs army
           player.vp += 1;
      }
+
+     player.resources = calculateTotalResources(player);
+
      return current_game;
 }
 
@@ -111,6 +123,8 @@ function tradeWithBank(resourceOffer: string, resourceGain: string) {
           player.hand[translatedOffer] -= 3;
           player.hand[translatedGain]++;
      }
+
+     player.resources = calculateTotalResources(player);
 
      return getGamestate();
 
