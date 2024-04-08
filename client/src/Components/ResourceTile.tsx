@@ -2,6 +2,7 @@ import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
 import { Tile } from '@shared/types';
 import { useEffect, useRef } from 'react';
+import { tiles } from '../StaticData/GameBoardStatic';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.
@@ -21,6 +22,7 @@ interface HexProp {
      * The backend information related to this hexagonal tile.
      */
     tile: Tile;
+
 }
 
 /**
@@ -34,11 +36,12 @@ const ResourceTile = (props: HexProp) => {
      * TODO: To be used to build settlements or roads.
      */
     const handleClick = () => {
-    };
 
+    };
     
-    const edgeLength = 10; // Adjust based on your actual hexagon size
+    const edgeLength = 10; 
     const lines = [];
+    const circles = [];  
     const angles = [270, 330, 30,90,150, 210]
     for (let i = 0; i < 6; i++) {
         const angleDeg = angles[i]; 
@@ -49,6 +52,10 @@ const ResourceTile = (props: HexProp) => {
         const endX = edgeLength * Math.cos(angleRad + Math.PI / 3);
         const endY = edgeLength * Math.sin(angleRad + Math.PI / 3);
 
+        const communitySpaceLevel = props.tile.community_spaces[i]; //todo error with type??
+        if(communitySpaceLevel > 0){
+            circles.push({ x: startX, y: startY, level: communitySpaceLevel, color: 'blue'});  //todo find player color
+        }
         lines.push({ startX, startY, endX, endY });
     }
 
@@ -82,6 +89,26 @@ const ResourceTile = (props: HexProp) => {
                     onClick={(e) => handleEdgeClick(props.tile.number_roll, idx, e)}
                 />
             ))} 
+            {circles.map((circle, idx) => (
+                <React.Fragment key={idx}>
+                    <circle
+                        cx={circle.x}
+                        cy={circle.y}
+                        r="2"
+                        fill={circle.color}
+                    />
+                    <text
+                        x={circle.x}
+                        y={circle.y} 
+                        fill="white" 
+                        dominantBaseline="middle" 
+                        textAnchor="middle" 
+                        style={{ fontSize: '0.2rem' }} 
+                    >
+                        {circle.level}
+                    </text>
+                </React.Fragment>
+            ))}
         </Hexagon>
     );
 }
