@@ -36,6 +36,20 @@ function handleDiceRoll() {
 }
 
 /**
+ * Updates every player's resources counts.
+ */
+function updateResourceCounts() {
+     for(let i = 0; i < current_game.players.length; i++){
+          const player = current_game.players[i];
+          player.resources = player.hand["wheat"] 
+                              + player.hand["brick"] 
+                              + player.hand["sheep"]
+                              + player.hand["stone"]
+                              + player.hand["wood"];
+     }
+}
+
+/**
  * Function for distributing resources to the players based on the number rolled.
  * NOTE: This function may have to change depending on what what data types is in the players function!
  * 
@@ -50,13 +64,8 @@ function distributeCards(numRolled: ResourceGainKey) {
           player.hand["sheep"] += map["sheep"];
           player.hand["stone"] += map["stone"];
           player.hand["wood"] += map["wood"];
-          player.resources = player.hand["wheat"] 
-                              + player.hand["brick"] 
-                              + player.hand["sheep"]
-                              + player.hand["stone"]
-                              + player.hand["wood"];
-          
      }
+     updateResourceCounts();
 }
 
 /**
@@ -77,6 +86,7 @@ function determineDevBenefit(player: Player) {
           player.vp++;
      } else {
           player.hasKnight = true;
+          player.knightCards++;
      }
 }
 
@@ -101,6 +111,7 @@ function buyDevCard() {
           player.hand["stone"] = player.hand["stone"] - 1;
 
           determineDevBenefit(player);
+          updateResourceCounts();
      }
      return current_game;
 }
@@ -113,7 +124,6 @@ function handleKnight(victimId: number) {
      const victim = current_game.players[victimId]
      const thief = current_game.current_player
      const card_index_stolen = Math.floor(Math.random() * victim.resources);
-
 
      // give all cards to the player hand
      var player_hand = [];
@@ -144,11 +154,19 @@ function handleKnight(victimId: number) {
      victim.hand[stolen_resource]--;
      thief.hand[stolen_resource]++;
 
-     thief.knightCards++;
      thief.hasKnight = false;
      
      return getGamestate();
 
+}
+
+/**
+ * Updates the backend to reflect the user choosing to not steal
+ * from any players as a result of their development card.
+ */
+function cancelSteal() {
+     current_game.current_player.hasKnight = false;
+     return getGamestate();
 }
 
 /**
@@ -206,8 +224,8 @@ function setGameState(gamestate: GameState) {
 }
 
 function getGamestate() {
-
+     updateResourceCounts();
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal }

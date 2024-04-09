@@ -12,7 +12,13 @@ interface ActionsBarComponentProps {
    * Function to set the trading modal on or off.
    * @param newState "true" to display trading modal, "false" to not
    */
-  setModal: (newState: boolean) => void;
+  setTradeModal: (newState: boolean) => void;
+
+  /**
+   * Function to set the steal modal on or off.
+   * @param newState "true" to display steal modal, "false" to not
+   */
+  setStealModal: (newState: boolean) => void;
 
   /**
    * Function to update the frontend gamestate.
@@ -30,7 +36,7 @@ interface ActionsBarComponentProps {
  * The sidebar used to trade resources, build settlements, and buy development 
  * cards. Appears on a player's game turn.
  */
-const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setModal }) => {
+const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, setStealModal }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -56,8 +62,12 @@ const KnightBody: StealRequest = {
       }});
 
     // retrieve the new game state and update it in the frontend
-    let newState = await response.json();
+    let newState: GameState = await response.json();
     updateState(newState);
+
+    if (newState.current_player.hasKnight) {
+      setStealModal(true);
+    }
   };
 
   return (
@@ -73,7 +83,7 @@ const KnightBody: StealRequest = {
         <div className="line-thick"></div>
         <h1 className="text-bold">TRADE</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" onClick={() => setModal(true)}>Bank</p>
+          <p className="button indented-text" onClick={() => setTradeModal(true)}>Bank</p>
         <div className="line"></div>
           <p className="button indented-text" onClick={() => handleButtonClick('steal', KnightBody)}>Player One</p>
         <div className="line"></div>
