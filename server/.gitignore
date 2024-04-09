@@ -22,7 +22,7 @@
 
 # emitted js
 /src/gameplay.js
-/src/types.js
+/src/errors.js
 
 npm-debug.log*
 yarn-debug.log*

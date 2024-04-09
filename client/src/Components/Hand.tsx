@@ -4,9 +4,9 @@ import "../Styles/hand.css"
 import { GameState, Player } from "@shared/types";
 
 /**
- * An interface that provides strong typing to a game session's game state prop.
+ * An interface that provides strong typing to a game state prop.
  */
-export interface StateProp {
+interface StateProp {
   /**
    * The current game session's state.
    */
