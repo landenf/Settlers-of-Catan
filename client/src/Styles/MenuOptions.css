@@ -34,3 +34,20 @@
   grid-row-gap: 2vh;
   grid-template-rows: 33% 33% 33%;
 }
+
+@media (max-width: 1240px) {
+  .toggleButton {
+    height: 12vh;
+  }
+}
+
+@media (max-width: 715px) {
+  .toggleButton {
+    height: 15vh;
+  }
+}
+@media (max-height: 690px) {
+  .toggleButton {
+    width: 30vw;
+  }
+}

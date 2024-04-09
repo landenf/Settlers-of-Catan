@@ -20,7 +20,7 @@
 }
 
 .catanTitle {
-  top: 3%;
+  top: 3vh;
   left: 50%;
   transform: translateX(-50%);
   position: absolute;
@@ -29,4 +29,59 @@
   font-family: Inter;
   font-weight: 400;
   word-wrap: break-word;
+}
+
+@media (max-width: 1240px) {
+  .catanTitle {
+    font-size: 90px;
+  }
+}
+
+@media (max-width: 715px) {
+  .catanTitle {
+    font-size: 50px;
+  }
+}
+
+@media (max-height: 785px) {
+  .catanTitle {
+    font-size: 100px;
+  }
+}
+
+@media (max-height: 690px) {
+  .catanTitle {
+    font-size: 90px;
+  }
+}
+
+@media (max-height: 650px) {
+  .catanTitle {
+    font-size: 80px;
+  }
+}
+
+@media (max-height: 550px) {
+  .catanTitle {
+    top: 2vh;
+  }
+}
+
+@media (max-height: 510px) {
+  .catanTitle {
+    font-size: 70px;
+    top: 1vh;
+  }
+}
+
+@media (max-height: 425px) {
+  .catanTitle {
+    font-size: 60px;
+  }
+}
+
+@media (max-height: 380px) {
+  .catanTitle {
+    font-size: 50px;
+  }
 }
