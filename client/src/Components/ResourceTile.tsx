@@ -60,7 +60,8 @@ const ResourceTile = (props: HexProp) => {
         const endX = edgeLength * Math.cos(angleRad + Math.PI / 3);
         const endY = edgeLength * Math.sin(angleRad + Math.PI / 3);
 
-        const communitySpaceLevel = props.tile.community_spaces[translateToNumberKey(i)]; //todo error with type??
+        let key = translateToNumberKey(i);
+        let communitySpaceLevel = +props.tile.community_spaces[key];
         if(communitySpaceLevel > 0){
             circles.push({ x: startX, y: startY, level: communitySpaceLevel, color: 'blue'});  //todo find player color
         }
