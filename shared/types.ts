@@ -166,17 +166,17 @@ export type Tile = {
  */
 export type community_spaces = {
     /** top-left vertex */
-    "0": 0
+    0: 0
     /** top-right vertex */
-    "1": 0
+    1: 0
     /** mid-right vertex */
-    "2": 0
+    2: 0
     /** bottom-right vertex*/
-    "3": 0
+    3: 0
     /** bottom-left vertex */
-    "4": 0
+    4: 0
     /** mid-left vertex */
-    "5": 0
+    5: 0
 }
 
 /**
@@ -187,17 +187,17 @@ export type community_spaces = {
  */
 export type road_spaces = {
     /** top edge */
-    "0": 0
+    0: 0
     /** top-right edge */
-    "1": 0
+    1: 0
     /** bottom-right edge */
-    "2": 0
+    2: 0
     /** bottom edge*/
-    "3": 0
+    3: 0
     /** bottom-left edge */
-    "4": 0
+    4: 0
     /** top-left edge */
-    "5": 0
+    5: 0
 }
 
 /**

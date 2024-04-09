@@ -3,6 +3,7 @@ import React from 'react';
 import { Tile } from '@shared/types';
 import { useEffect, useRef } from 'react';
 import { tiles } from '../StaticData/GameBoardStatic';
+import { InvalidIndexError } from '../Enums/errors';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.
@@ -33,6 +34,11 @@ interface HexProp {
 const ResourceTile = (props: HexProp) => {
 
     /**
+     * Used to index the community space.
+     */
+    type numberKey = keyof typeof props.tile.community_spaces
+
+    /**
      * TODO: To be used to build settlements or roads.
      */
     const handleClick = () => {
@@ -43,7 +49,9 @@ const ResourceTile = (props: HexProp) => {
     const lines = [];
     const circles = [];  
     const angles = [270, 330, 30,90,150, 210]
+
     for (let i = 0; i < 6; i++) {
+
         const angleDeg = angles[i]; 
         const angleRad = Math.PI / 180 * angleDeg;
 
@@ -52,11 +60,43 @@ const ResourceTile = (props: HexProp) => {
         const endX = edgeLength * Math.cos(angleRad + Math.PI / 3);
         const endY = edgeLength * Math.sin(angleRad + Math.PI / 3);
 
-        const communitySpaceLevel = props.tile.community_spaces[i]; //todo error with type??
+        const communitySpaceLevel = props.tile.community_spaces[translateToNumberKey(i)]; //todo error with type??
         if(communitySpaceLevel > 0){
             circles.push({ x: startX, y: startY, level: communitySpaceLevel, color: 'blue'});  //todo find player color
         }
         lines.push({ startX, startY, endX, endY });
+    }
+
+    /**
+     * Translates a number into a community space or road space's index.
+     * @param toTranslate the index to translate to number key
+     * @returns a number key that provides strong 0-5 typing to the index.
+     */
+    function translateToNumberKey(toTranslate: number) {
+        var translation: numberKey
+        switch (toTranslate) {
+            case 0:
+                translation = 0;
+                break;
+            case 1:
+                translation = 1;
+                break;
+            case 2: 
+                translation = 2;
+                break;
+            case 3: 
+                translation = 3;
+                break;
+            case 4: 
+                translation = 4;
+                break;
+            case 5:
+                translation = 5;
+                break;
+            default:
+                throw new InvalidIndexError("Tried accessing an invalid index of a community space!")
+        }
+        return translation
     }
 
     const handleEdgeClick = (index: number, idx: number, e: any) => {
