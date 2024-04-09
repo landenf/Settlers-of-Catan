@@ -38,7 +38,7 @@
 
 .players {
     margin: auto;
-    margin-top: 2%;
+    margin-top: 4%;
     display: grid;
     grid-template-columns: 100%;
     width: 30%;
@@ -46,12 +46,12 @@
 }
 
 .two {
-    width: 50%;
+    width: 70%;
     grid-template-columns: 50% 50%;
 }
 
 .three {
-    width: 80%;
+    width: 90%;
     grid-template-columns: 33.33% 33.33% 33.33%;
 }
 
@@ -127,4 +127,34 @@
 
 .disabled {
     display: none;
+}
+
+@media (max-height: 750px) {
+    .players {
+        margin: auto;
+        margin-top: 2%;
+    }
+
+    .two {
+        width: 60%;
+    }
+    
+    .three {
+        width: 80%;
+    }
+}
+
+@media (max-height: 520px) {
+    .players {
+        margin: auto;
+        margin-top: 2%;
+    }
+
+    .two {
+        width: 50%;
+    }
+    
+    .three {
+        width: 80%;
+    }
 }

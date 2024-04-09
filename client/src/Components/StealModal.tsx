@@ -131,7 +131,7 @@ const StealModal: React.FC<StealModalProp> = ({stealModalState, setStealModal, g
                 })}
             </div>
             <div className="stealButtons">
-                <button className={"denySteal"} onClick={() => cancel_steal()}>Cancel Thievery</button>
+                <button className={"denySteal"} onClick={() => cancel_steal()}>Cancel</button>
                 <button className={"affirmSteal " + (isSelected ? "" : "dark")} disabled={!isSelected} onClick={() => handle_steal()}>Let's Steal!</button>
             </div>
         </div>
