@@ -61,22 +61,22 @@ export type Player = {
     /**
      * A list of communities held by the player. 
      */
-    communities_owned: community_spaces[];
+    communities_owned: community_meta_data[];
 
     /**
      * A list of spots the player could build a community on.
      */
-    potential_communities: community_spaces[];
+    potential_communities: community_meta_data[];
     
     /**
      * A list of roads held by the player.
      */
-    roads_owned: road_spaces[];
+    roads_owned: road_meta_data[];
 
     /**
      * A list of spots the player could build a road on.
      */
-    potential_roads: road_spaces[];
+    potential_roads: road_meta_data[];
 
     /**
      * A dictionary of this player's stats in all games.
@@ -181,6 +181,32 @@ export type community_spaces = {
 }
 
 /**
+ * Key for the community_spaces dictionary.
+ */
+export type community_keys = keyof community_spaces;
+
+/**
+ * Meta data about the community
+ */
+export type community_meta_data = {
+    /**
+     * A number corresponding to the tile's index.
+     */
+    tile_index: number;
+
+    /**
+     * A number that corresponds to which vertex it is on to.
+     */
+    vertex: number;
+
+    /**
+     * A number that corresponds to a community's level. This gets upgraded in time.
+     */
+    level: number;
+}
+
+
+/**
  * A list of spaces on a tile where roads are built or are already 
  * built. The first number represents the space: the second number 
  * represents the ownership. On each space, 0 = unbuilt, 
@@ -201,7 +227,28 @@ export type road_spaces = {
     5: 0;
 };
 
+/**
+ * Key for the road_spaces dictionary.
+ */
 export type road_keys = keyof road_spaces;
+
+/**
+ * Meta data that tells you which road and tile it corresponds to.
+ */
+export type road_meta_data = {
+    /**
+     * A number corresponding to one of the tile's index.
+     */
+    tile_index: number;
+
+    /**
+    * A number that corresponds to which edge it connects to on the first tile.
+    */
+    edge_tile: number;
+
+}
+
+
 /**
  * Represents a gameboard consisting of several hexagonal tiles.
  */
