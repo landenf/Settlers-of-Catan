@@ -37,9 +37,20 @@ export type Player = {
     hand: resource_counts;
 
     /**
+     * If a player just drew a knight card, this becomes true. This lets the
+     * player steal a resource card from another player.
+     */
+    hasKnight: boolean;
+
+    /**
      * Total resources held by a player.
      */
     resources: number;
+
+    /**
+     * Total knights played by a player.
+     */
+    knightCards: number;
 
     /**
      * Dictionary representing each resource type gained when a particular

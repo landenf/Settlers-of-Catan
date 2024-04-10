@@ -9,6 +9,7 @@ import "../Styles/GameSession.css";
 import { GameState } from "@shared/types";
 import RollButton from "../Components/RollButton";
 import TradeModal from "../Components/TradeModal";
+import StealModal from "../Components/StealModal";
 import Dice from "../Components/Dice";
 
 /**
@@ -23,21 +24,28 @@ export interface StateProp {
 
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
+  const [tradeModalEnabled, setTradeModal] = useState(false);
+  const [stealModalEnabled, setStealModal] = useState(false);
   const [modalEnabled, setModal] = useState(false);
 
   const updateState = (newState: GameState) => {
     setState(newState);
   }
 
-  const updateModal = (newState: boolean) => {
-    setModal(newState)
+  const updateTradeModal = (newState: boolean) => {
+    setTradeModal(newState)
+  }
+
+  const updateStealModal = (newState: boolean) => {
+    setStealModal(newState);
   }
 
   return (
   <div>
-    <TradeModal setModal={updateModal} modalState={modalEnabled} gamestate={state} setState={updateState}/>
+    <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} setState={updateState}/>
+    <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} setState={updateState}/>
       <div className="background-container">
-        <div className={"game-container " + (modalEnabled ? "in-background" : "")}>
+        <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={state.players}/></div>
             <div className="center-column">
                 <div className="game-board"><Dice numberRolled={state.diceNumber}/><GameBoard tiles={tiles}/></div>
@@ -47,7 +55,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                   <RollButton updateState={updateState}/>
                 </div>
             </div>
-            <div className="ActionsBarComponent"><ActionsBarComponent state={state} updateState={updateState} setModal={updateModal}/></div>
+            <div className="ActionsBarComponent"><ActionsBarComponent state={state} updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}/></div>
         </div>
       </div>   
     </div>

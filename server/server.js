@@ -84,3 +84,19 @@ app.post("/tradeBank", (req, res) =>  {
     const gamestate = gameplay.tradeWithBank(req.body.resourceOffered, req.body.resourceGained);
     res.json(gamestate)
 })
+
+// endpoint used to handle stealing from another player using the knight card
+app.post("/steal", (req, res) => {
+    const gamestate = gameplay.handleKnight(req.body.victim);
+    res.json(gamestate)
+})
+
+app.post("/cancelSteal", (req, res) => {
+    const gamestate = gameplay.cancelSteal();
+    res.json(gamestate)
+})
+
+// open app server.
+// TODO: Run API on online hosting.
+app.listen(5000, () => {console.log("Server Started")} )
+})

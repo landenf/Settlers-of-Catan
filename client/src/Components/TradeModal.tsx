@@ -13,12 +13,12 @@ export interface TradeModalProp {
     /**
      * Function to change the modal from being enabled or disabled.
      */
-    setModal: (newState: boolean) => void;
+    setTradeModal: (newState: boolean) => void;
 
     /**
      * Whether or not the modal is enabled.
      */
-    modalState: boolean
+    tradeModalState: boolean
 
     /**
      * The current gamestate.
@@ -36,7 +36,7 @@ export interface TradeModalProp {
  * A modal that pops out when trading. TODO: Work to include this with other forms of trading
  * besides the bank!
  */
-const TradeModalComponent: React.FC<TradeModalProp> = ({ setModal, modalState, gamestate, setState }) => {
+const TradeModalComponent: React.FC<TradeModalProp> = ({ setTradeModal, tradeModalState, gamestate, setState }) => {
 
     const [trade, setTrade] = useState({offer: "", gain: ""});
     const [tradeEmpty, setTradeEmpty] = useState(0);
@@ -81,14 +81,14 @@ const TradeModalComponent: React.FC<TradeModalProp> = ({ setModal, modalState, g
     }
 
     return (
-        <div className={"trade-modal " + (modalState ? "" : "disabled")}>
+        <div className={"trade-modal " + (tradeModalState ? "" : "disabled")}>
             <div className="header">TRADE</div>
             <div className="description">Please select a resource to trade from your hand:</div>
             <EmptyHand gamestate={gamestate} setTradeParams={updateTrade} tradeType={"offer"} tradeParameters={trade} setTradeEmpty={updateTradeEmpty} tradeEmpty={tradeEmpty}/>
             <div className="description">Please select a resource to receive:</div>
             <EmptyHand gamestate={gamestate} setTradeParams={updateTrade} tradeType={"gain"} tradeParameters={trade} setTradeEmpty={updateTradeEmpty} tradeEmpty={tradeEmpty}/>
             <div className="tradeButtons">
-                <button className="cancelTrade" onClick={() => setModal(false)}>Cancel</button>
+                <button className="cancelTrade" onClick={() => setTradeModal(false)}>Cancel</button>
                 <button className={"affirmTrade " + (tradeEmpty != 2 ? "dark" : "")} disabled={tradeEmpty != 2} onClick={() => handleButtonClick()}>Let's Trade!</button>
             </div>
             

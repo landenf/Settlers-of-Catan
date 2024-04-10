@@ -94,7 +94,9 @@ import { GameState, Player } from "@shared/types";
                 sheep: 0,
                 wood: 2
             }
-        }
+        },
+        hasKnight: false,
+        knightCards: 0
     };
     const player2: Player = {
         id: 2,
@@ -191,7 +193,9 @@ import { GameState, Player } from "@shared/types";
                 sheep: 0,
                 wood: 0
             }
-        }
+        },
+        hasKnight: false,
+        knightCards: 0
     };
     const player3: Player = {
         id: 3,
@@ -288,6 +292,8 @@ import { GameState, Player } from "@shared/types";
                 sheep: 0,
                 wood: 0
             }
-        }
+        },
+        hasKnight: false,
+        knightCards: 0
     };
     export const players = [player1, player2, player3]

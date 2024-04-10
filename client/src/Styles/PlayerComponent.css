@@ -14,6 +14,15 @@
     border-radius: 50%;
 }
 
+.modal-avatar {
+    width: 25%;
+    display: block;
+    position: relative;
+    text-align: center;
+    margin: auto;
+    border-radius: 50%;
+}
+
 .red {
     border: 5px solid red;
 }
