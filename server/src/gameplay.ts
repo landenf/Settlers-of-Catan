@@ -1,4 +1,4 @@
-import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys } from "../../shared/types";
+import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data } from "../../shared/types";
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
 /**
@@ -158,7 +158,7 @@ function buyRoad(tile: Tile, road: road_keys){
 }
 
 
-function buySettlement(tile: Tile, settlement: community_spaces){
+function buySettlement(settlement: community_meta_data){
      const player = current_game.current_player;
      // verify needed resources
      var canBuy = true;
