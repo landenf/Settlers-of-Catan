@@ -10,6 +10,7 @@ import { GameState } from "@shared/types";
 import RollButton from "../Components/RollButton";
 import TradeModal from "../Components/TradeModal";
 import StealModal from "../Components/StealModal";
+import Dice from "../Components/Dice";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
@@ -25,7 +26,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
-  
+  const [modalEnabled, setModal] = useState(false);
 
   const updateState = (newState: GameState) => {
     setState(newState);
@@ -47,7 +48,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={state.players}/></div>
             <div className="center-column">
-                <div className="game-board"><GameBoard tiles={tiles}/></div>
+                <div className="game-board"><Dice numberRolled={state.diceNumber}/><GameBoard tiles={tiles}/></div>
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.current_player.vp}/>
                   <Hand gamestate={state} />
