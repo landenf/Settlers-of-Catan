@@ -1,4 +1,4 @@
-import { GameState } from "@shared/types";
+import { GameState, Player } from "@shared/types";
 import { players } from "../StaticData/PlayerData"
 import { InvalidResourceError } from "./errors";
 /**
@@ -6,7 +6,7 @@ import { InvalidResourceError } from "./errors";
  * here in this file, then must be passed via response to the frontend for rendering.
  */
 var current_game: GameState = {
-     diceNumber: 0,
+     diceNumber: {number1: 1, number2: 1},
      players: players,
      current_player: players[0],
      current_largest_army: "",
@@ -25,14 +25,27 @@ function handleDiceRoll() {
 
      // roll dice
      rollDice();
-     let numRolled: any;
-     numRolled = current_game.diceNumber
+     let numRolled = current_game.diceNumber
+     let trueNumber: any = numRolled.number1 + numRolled.number2;
 
      // handle resource distribution
-     if (numRolled != 7) {
-          distributeCards(numRolled)
+     if (trueNumber != 7) {
+          distributeCards(trueNumber)
      } 
      return getGamestate();
+}
+
+/**
+ * Given a player, recalculates their total resource count.
+ * @param player a user of Catan 
+ */
+function calculateTotalResources(player: Player) {
+     let resources = player.hand["wheat"] 
+                              + player.hand["brick"] 
+                              + player.hand["sheep"]
+                              + player.hand["stone"]
+                              + player.hand["wood"];
+     return resources
 }
 
 /**
@@ -42,7 +55,7 @@ function handleDiceRoll() {
  * @param {ResourceGainKey} numRolled the number rolled
  */
 function distributeCards(numRolled: ResourceGainKey) {
-     for(let i = 0; i < current_game.players.length; i++){
+     for(let i = 0; i < current_game.players.length; i++) {
           const player = current_game.players[i];
           const map = player.resource_gain[numRolled];
           player.hand["wheat"] += map["wheat"];
@@ -50,11 +63,7 @@ function distributeCards(numRolled: ResourceGainKey) {
           player.hand["sheep"] += map["sheep"];
           player.hand["stone"] += map["stone"];
           player.hand["wood"] += map["wood"];
-          player.resources = player.hand["wheat"] 
-                              + player.hand["brick"] 
-                              + player.hand["sheep"]
-                              + player.hand["stone"]
-                              + player.hand["wood"];
+          player.resources = calculateTotalResources(player);
           
      }
 }
@@ -65,7 +74,7 @@ function distributeCards(numRolled: ResourceGainKey) {
 function rollDice() {
      const dice1 = Math.floor(Math.random() * 6) + 1;
      const dice2 = Math.floor(Math.random() * 6) + 1;
-     current_game.diceNumber = dice1 + dice2;
+     current_game.diceNumber = {number1: dice1, number2: dice2}
 }
 
 function buyDevCard() {
@@ -92,6 +101,9 @@ function buyDevCard() {
           //TODO: refactor to randomize vp vs army
           player.vp += 1;
      }
+
+     player.resources = calculateTotalResources(player);
+
      return current_game;
 }
 
@@ -111,6 +123,8 @@ function tradeWithBank(resourceOffer: string, resourceGain: string) {
           player.hand[translatedOffer] -= 3;
           player.hand[translatedGain]++;
      }
+
+     player.resources = calculateTotalResources(player);
 
      return getGamestate();
 
