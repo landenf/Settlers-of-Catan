@@ -104,7 +104,7 @@ function buyDevCard() {
 
      player.resources = calculateTotalResources(player);
 
-     return current_game;
+     return getGamestate();
 }
 
 /**
@@ -159,11 +159,26 @@ function translateToResourcesKey(toTranslate: string) {
      return translation
 }
 
+/**
+ * Checks each player's victory points and sets the game state's winner
+ * property accordingly.
+ */
+function checkWinState() {
+     var winner: Player | undefined = undefined;
+     current_game.players.forEach(player => {
+          if (player.vp >= 10) {
+               winner = player;
+          }
+     });
+     current_game.winner = winner;
+}
+
 function setGameState(gamestate: GameState) {
      current_game = gamestate;
 }
 
 function getGamestate() {
+     checkWinState()
      return current_game;
 }
 
