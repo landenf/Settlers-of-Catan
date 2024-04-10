@@ -1,5 +1,5 @@
-import { GameState, Player, community_spaces, community_spaces, resource_counts, road_spaces, road_spaces } from "../../shared/types";
-import { players } from "../StaticData/PlayerData"
+import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys } from "../../shared/types";
+import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
@@ -17,7 +17,31 @@ var current_game: GameState = {
 }
 type ResourceGainKey = keyof typeof current_game.current_player.resource_gain;
 type ResourcesKey = keyof typeof current_game.current_player.hand;
-
+/**
+ * Dictionary of the neighbors. Each index is correlated with the road space number 
+ * that that spot is in on the tile from the key.
+ */
+const neighbors = {
+     0: [3, 4, 1, null, null, null],
+     1: [4, 5, 2, null, null, 0],
+     2: [5, 6, null, null, null, 2],
+     3: [7, 8, 4, 1, null, null],
+     4: [8, 9, 5, 1, 0, 3],
+     5: [9, 10, 6, 3, 2, 4],
+     6: [10, 11, null, null, 2, 5],
+     7: [null, 12, 8, 3, null, null],
+     8: [12, 13, 9, 4, 3, 7],
+     9: [13, 14, 10, 5, 4, 8],
+     10: [14, 15, 11, 6, 5, 9],
+     11: [15, null, null, null, 6, 10],
+     12: [null, 16, 14, 8, 7, null],
+     13: [16, 17, 14, 9, 6, 12],
+     14: [17, 18, 15, 10, 9, 13],
+     15: [18, null, null, 11, 10, 14],
+     16: [null, null, 17, 13, 12, null],
+     17: [null, null, 18, 14, 13, 16],
+     18: [null, null, null, 15, 14, 18]
+}
 /**
  * Function to roll the dice and distribute resources based upon the result.
  */
@@ -95,7 +119,9 @@ function buyDevCard() {
      return current_game;
 }
 
-function buyRoad(road: road_spaces){
+
+
+function buyRoad(tile: Tile, road: road_keys){
      const player = current_game.current_player;
      // verify needed resources
      var canBuy = true;
@@ -107,7 +133,12 @@ function buyRoad(road: road_spaces){
           canBuy = false;
      }
 
-     if(!player.potential_roads.includes(road)){
+     // if(!player.potential_roads.includes(tile.road_spaces[road as keyof typeof road_spaces])){
+     //      canBuy = false;
+     // }
+
+     // TODO: verify road is not already taken
+     if(tile.road_spaces[road] != 0){
           canBuy = false;
      }
 
@@ -116,17 +147,18 @@ function buyRoad(road: road_spaces){
           //decrease counts buy one for brick and wood and add the road to the player's list
           player.hand["brick"] = player.hand["brick"] - 1;
           player.hand["wood"] = player.hand["wood"] - 1;
-          player.roads_owned.push(road);
+          //player.roads_owned.push(road);
 
           //update potential roads and potential communities
-          const index = player.potential_roads.indexOf(road);
-          player.potential_roads.splice(index, 1);
+          //const index = player.potential_roads.indexOf(road);
+          //player.potential_roads.splice(index, 1);
+
           //TODO: add the stuff
      }
 }
 
 
-function buySettlement(settlement: community_spaces){
+function buySettlement(tile: Tile, settlement: community_spaces){
      const player = current_game.current_player;
      // verify needed resources
      var canBuy = true;
@@ -166,76 +198,7 @@ function buySettlement(settlement: community_spaces){
      }
 }
 
-function buyRoad(road: road_spaces){
-     const player = current_game.current_player;
-     // verify needed resources
-     var canBuy = true;
-     if(player.hand["brick"] == 0){
-          canBuy = false;
-     }
 
-     if(player.hand["wood"] == 0){
-          canBuy = false;
-     }
-
-     if(!player.potential_roads.includes(road)){
-          canBuy = false;
-     }
-
-     // if can buy, do buying functionality
-     if(canBuy){
-          //decrease counts buy one for brick and wood and add the road to the player's list
-          player.hand["brick"] = player.hand["brick"] - 1;
-          player.hand["wood"] = player.hand["wood"] - 1;
-          player.roads_owned.push(road);
-
-          //update potential roads and potential communities
-          const index = player.potential_roads.indexOf(road);
-          player.potential_roads.splice(index, 1);
-          //TODO: add the stuff
-     }
-}
-
-
-function buySettlement(settlement: community_spaces){
-     const player = current_game.current_player;
-     // verify needed resources
-     var canBuy = true;
-     if(player.hand["brick"] == 0){
-          canBuy = false;
-     }
-
-     if(player.hand["wood"] == 0){
-          canBuy = false;
-     }
-
-     if(player.hand["sheep"] == 0){
-          canBuy = false;
-     }
-
-     if(player.hand["wheat"] == 0){
-          canBuy = false;
-     }
-
-     if(!player.potential_communities.includes(settlement)){
-          canBuy = false;
-     }
-
-     // if can buy, do buying functionality
-     if(canBuy){
-          //decrease counts buy one for brick and wood sheep and wheat and add the road to the player's list
-          player.hand["brick"] = player.hand["brick"] - 1;
-          player.hand["wood"] = player.hand["wood"] - 1;
-          player.hand["sheep"] = player.hand["sheep"] - 1;
-          player.hand["wheat"] = player.hand["wheat"] - 1;
-          player.communities_owned.push(settlement);
-          
-          //update potential communities
-          const index = player.potential_communities.indexOf(settlement);
-          player.potential_communities.splice(index, 1);
-          //TODO: add the stuff
-     }
-}
 
 /**
  * Handles trading between players and the bank.
@@ -295,4 +258,4 @@ function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, buyRoad, buySettlement }

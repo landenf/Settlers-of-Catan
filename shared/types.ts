@@ -61,22 +61,22 @@ export type Player = {
     /**
      * A list of communities held by the player. 
      */
-    communities_owned: [community_spaces];
+    communities_owned: community_spaces[];
 
     /**
      * A list of spots the player could build a community on.
      */
-    potential_communities: [community_spaces];
+    potential_communities: community_spaces[];
     
     /**
      * A list of roads held by the player.
      */
-    roads_owned: [road_spaces];
+    roads_owned: road_spaces[];
 
     /**
      * A list of spots the player could build a road on.
      */
-    potential_roads: [road_spaces];
+    potential_roads: road_spaces[];
 
     /**
      * A dictionary of this player's stats in all games.
@@ -156,6 +156,7 @@ export type Tile = {
      * The type of resource this tile represents.
      */
     type: string;
+
 }
 
 /**
@@ -166,17 +167,17 @@ export type Tile = {
  */
 export type community_spaces = {
     /** top-left vertex */
-    "0": 0
+    0: 0
     /** top-right vertex */
-    "1": 0
+    1: 0
     /** mid-right vertex */
-    "2": 0
+    2: 0
     /** bottom-right vertex*/
-    "3": 0
+    3: 0
     /** bottom-left vertex */
-    "4": 0
+    4: 0
     /** mid-left vertex */
-    "5": 0
+    5: 0
 }
 
 /**
@@ -187,19 +188,20 @@ export type community_spaces = {
  */
 export type road_spaces = {
     /** top edge */
-    "0": 0
+    0: 0;
     /** top-right edge */
-    "1": 0
+    1: 0;
     /** bottom-right edge */
-    "2": 0
+    2: 0;
     /** bottom edge*/
-    "3": 0
+    3: 0;
     /** bottom-left edge */
-    "4": 0
+    4: 0;
     /** top-left edge */
-    "5": 0
-}
+    5: 0;
+};
 
+export type road_keys = keyof road_spaces;
 /**
  * Represents a gameboard consisting of several hexagonal tiles.
  */
