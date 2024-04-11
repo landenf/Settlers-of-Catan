@@ -1,6 +1,8 @@
-import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data, road_meta_data } from "../../shared/types";
+import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data, road_meta_data } from "@shared/types";
+import { tiles } from "@shared/StaticBoardData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
+
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
  * here in this file, then must be passed via response to the frontend for rendering.
@@ -12,7 +14,7 @@ var current_game: GameState = {
      current_largest_army: "",
      current_longest_road: "",
      gameboard: {
-          tiles: []
+          tiles: tiles
      }
 }
 type ResourceGainKey = keyof typeof current_game.current_player.resource_gain;
@@ -124,10 +126,17 @@ function buyDevCard() {
 }
 
 
-
+/**
+ * Function that controls buying a road. Only one road_meta data is needed.
+ * Using the meta data from that road, we will find the neighbor necessary.
+ * 
+ * @param road the road the player is trying to buy
+ * @returns the updated gamestate
+ */
 function buyRoad(road: road_meta_data){
      const player = current_game.current_player;
-     // verify needed resources
+
+     // verify player has needed resources
      var canBuy = true;
      if(player.hand["brick"] == 0){
           canBuy = false;
@@ -203,8 +212,14 @@ function buyRoad(road: road_meta_data){
                }
           }
      }
+
+     return current_game;
 }
 
+/**
+ * Helper function to update potential roads from the roads that have been bought.
+ * @param road the road you are updating based on
+ */
 function potentialUpdatesRoad(road: road_meta_data){
      const player = current_game.current_player;
 
@@ -254,46 +269,6 @@ function potentialUpdatesRoad(road: road_meta_data){
 
 }
 
-
-function buySettlement(settlement: community_meta_data){
-     const player = current_game.current_player;
-     // verify needed resources
-     var canBuy = true;
-     if(player.hand["brick"] == 0){
-          canBuy = false;
-     }
-
-     if(player.hand["wood"] == 0){
-          canBuy = false;
-     }
-
-     if(player.hand["sheep"] == 0){
-          canBuy = false;
-     }
-
-     if(player.hand["wheat"] == 0){
-          canBuy = false;
-     }
-
-     if(!player.potential_communities.includes(settlement)){
-          canBuy = false;
-     }
-
-     // if can buy, do buying functionality
-     if(canBuy){
-          //decrease counts buy one for brick and wood sheep and wheat and add the road to the player's list
-          player.hand["brick"] = player.hand["brick"] - 1;
-          player.hand["wood"] = player.hand["wood"] - 1;
-          player.hand["sheep"] = player.hand["sheep"] - 1;
-          player.hand["wheat"] = player.hand["wheat"] - 1;
-          player.communities_owned.push(settlement);
-          
-          //update potential communities
-          const index = player.potential_communities.indexOf(settlement);
-          player.potential_communities.splice(index, 1);
-          //TODO: add the stuff
-     }
-}
 
 
 
@@ -355,4 +330,4 @@ function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, buyRoad, buySettlement }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, buyRoad }
