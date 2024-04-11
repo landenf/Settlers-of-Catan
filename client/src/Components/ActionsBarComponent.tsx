@@ -53,6 +53,11 @@ interface ActionsBarComponentProps {
    */
   isCurrentPlayer: boolean;
 
+  /**
+   * Resets action bar component to its initial state.
+   */
+  reset: () => void;
+
 }
 
 /**
@@ -60,7 +65,7 @@ interface ActionsBarComponentProps {
  * cards. Appears on a player's game turn.
  */
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, 
-  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer }) => {
+  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer, reset }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -99,6 +104,7 @@ const KnightBody: StealRequest = {
 
     if (action === "passTurn") {
       updateIsCurrentPlayer(newState.client.color === newState.current_player.color);
+      reset();
     }
   };
 

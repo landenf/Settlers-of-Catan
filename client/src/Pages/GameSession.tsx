@@ -56,6 +56,14 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   }
 
   /**
+   * Resets the action bar and roll button.
+   */
+  const resetTurn = () => {
+    setRolled(false);
+    setBoughtDev(false);
+  }
+
+  /**
    * Chooses only players that are not the client to render
    * on the side component.
    */
@@ -85,7 +93,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
             <div className={"ActionsBarComponent"}><ActionsBarComponent state={state} 
             updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
             updateBoughtDev={updateBoughtDev} boughtDev={boughtDev} updateIsCurrentPlayer={updateCurrentPlayer}
-            isCurrentPlayer={isCurrentPlayer}/></div>
+            isCurrentPlayer={isCurrentPlayer} reset={resetTurn}/></div>
         </div>
       </div>   
       <DevControls state={state} setState={updateState} updateIsCurrentPlayer={updateCurrentPlayer}/>
