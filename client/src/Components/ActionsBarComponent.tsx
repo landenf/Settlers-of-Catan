@@ -30,13 +30,23 @@ interface ActionsBarComponentProps {
    * The current representation of the gamestate.
    */
   state: GameState;
+
+  /**
+   * Updates whether or not a player has bought a dev card this turn.
+   */
+  updateBoughtDev: (newState: boolean) => void;
+
+  /**
+   * This is true if a player has purchased a dev card this turn, and false if not.
+   */
+  boughtDev: boolean;
 }
 
 /**
  * The sidebar used to trade resources, build settlements, and buy development 
  * cards. Appears on a player's game turn.
  */
-const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, setStealModal }) => {
+const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, setStealModal, updateBoughtDev, boughtDev }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -68,6 +78,10 @@ const KnightBody: StealRequest = {
     if (newState.current_player.hasKnight) {
       setStealModal(true);
     }
+
+    if (action === "buyDevCard") {
+      updateBoughtDev(true);
+    }
   };
 
   return (
@@ -91,7 +105,7 @@ const KnightBody: StealRequest = {
         <div className="line"></div>
           <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Three</p>
         <div className="line-thick"></div>
-        <h1 className="button text-bold" onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</h1>
+        <button className={"button text-bold " + (boughtDev ? "buy-dark" : "")} disabled={boughtDev} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
         <div className="line-thick"></div>
         <h1 className="button text-bold" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
         <div className="line-thick"></div>

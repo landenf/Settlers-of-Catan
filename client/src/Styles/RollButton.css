@@ -22,6 +22,16 @@
     background-color: #959595;
 }
 
+.roll-dark {
+    background-color: #383838;
+}
+
+.roll-dark:hover {
+    animation-duration: 0s;
+    background-color: #383838;
+    cursor: default;
+}
+
 @media (max-width: 1000px)  {
     .rollButton {
         font-size: 30px;

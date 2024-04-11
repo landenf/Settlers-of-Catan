@@ -26,6 +26,8 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
+  const [rolled, setRolled] = useState(false);
+  const [boughtDev, setBoughtDev] = useState(false);
 
   const updateState = (newState: GameState) => {
     setState(newState);
@@ -37,6 +39,14 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
 
   const updateStealModal = (newState: boolean) => {
     setStealModal(newState);
+  }
+
+  const updateRolled = (newState: boolean) => {
+    setRolled(newState);
+  }
+
+  const updateBoughtDev = (newState: boolean) => {
+    setBoughtDev(newState);
   }
 
   /**
@@ -62,10 +72,12 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.current_player.vp}/>
                   <Hand gamestate={state} />
-                  <RollButton updateState={updateState}/>
+                  <RollButton updateState={updateState} rolled={rolled} updateRolled={updateRolled} />
                 </div>
             </div>
-            <div className="ActionsBarComponent"><ActionsBarComponent state={state} updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}/></div>
+            <div className="ActionsBarComponent"><ActionsBarComponent state={state} 
+            updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
+            updateBoughtDev={updateBoughtDev} boughtDev={boughtDev}/></div>
         </div>
       </div>   
     </div>
