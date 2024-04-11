@@ -199,10 +199,6 @@ export type community_meta_data = {
      */
     vertex: number;
 
-    /**
-     * A number that corresponds to a community's level. This gets upgraded in time.
-     */
-    level: number;
 }
 
 
@@ -244,10 +240,9 @@ export type road_meta_data = {
     /**
     * A number that corresponds to which edge it connects to on the first tile.
     */
-    edge_tile: number;
+    edge: road_keys;
 
 }
-
 
 /**
  * Represents a gameboard consisting of several hexagonal tiles.
