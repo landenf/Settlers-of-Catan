@@ -4,8 +4,11 @@ import { InvalidResourceError } from "./errors";
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
  * here in this file, then must be passed via response to the frontend for rendering.
+ * TODO: Set up gamestate using information from the landing page / join page!
  */
 var current_game: GameState = {
+     id: 0,
+     client: players[0],
      diceNumber: {number1: 1, number2: 1},
      players: players,
      current_player: players[0],

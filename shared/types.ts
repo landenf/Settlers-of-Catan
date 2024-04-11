@@ -225,6 +225,20 @@ export type Board = {
  * Represents the game session's current state.
  */
 export type GameState = {
+
+    /**
+     * The game session ID. This marks which game session the players are
+     * playing in. This is decided before the game starts and shouldn't
+     * change throughout it.
+     */
+    id: number;
+
+    /**
+     * The user of this particular instance. Each client has a unique screen
+     * showing off their hand and victory points. 
+     */
+    client: Player;
+
     /**
      * The latest roll of the dice.
      */
