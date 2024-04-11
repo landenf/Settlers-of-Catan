@@ -3,14 +3,21 @@ import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from
 import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
 import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
-import { Board } from '@shared/types';
+import { Tile } from '@shared/types';
+import { GameState } from '@shared/types';
 
+interface GameBoardProp {
+  tiles: Tile[],
+  gamestate: GameState,
+  setState: (newState: GameState) => void;
+
+}
 /**
  * The gameboard where the magic happens. Rendered at the center of the screen,
  * it shows each individual tile, their resource type, and their number to roll.
  * @param props a boardstate often retrieved and modified in the backend
  */
-const GameBoard = (props: Board) => {
+const GameBoard: React.FC<GameBoardProp> = (props: GameBoardProp) => {
 
   // generate hexagonal grid
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
@@ -31,6 +38,8 @@ const GameBoard = (props: Board) => {
               hex={hex}
               index={i} 
               tile={props.tiles[i]}
+              gamestate={ props.gamestate }
+              setState={props.setState}
               />
           ))}
         </Layout>

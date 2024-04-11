@@ -17,7 +17,7 @@ const player1 = {
     },
     communities_owned: [],
     potential_communities: [],
-    roads_owned: [],
+    roads_owned: [{ tile_index: 0, edge: 3 }],
     potential_roads: [],
     player_stats: {
         total_wins: 0,

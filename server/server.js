@@ -46,7 +46,8 @@ app.post("/tradeBank", (req, res) =>  {
 })
 
 app.post("/buyRoad", (req, res) => {
-    const gamestate = gamestate.buyRoad(req.body.roadData);
+    console.log("hello!!!");
+    const gamestate = gameplay.buyRoad(req.body.roadData);
     res.json(gamestate);
 })
 

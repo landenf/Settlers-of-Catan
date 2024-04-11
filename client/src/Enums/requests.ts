@@ -1,4 +1,4 @@
-import { GameState } from '@shared/types';
+import { GameState, road_meta_data } from '@shared/types';
 
 /**
  * Wrapper type for all kinds of requests.
@@ -15,4 +15,7 @@ interface TradeRequest extends BackendRequest {
     resourceGained: string;
 }
 
-export {TradeRequest, BackendRequest}
+interface RoadRequest extends BackendRequest {
+    roadData: road_meta_data;
+}
+export {TradeRequest, BackendRequest, RoadRequest}

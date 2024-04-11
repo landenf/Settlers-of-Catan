@@ -1,7 +1,9 @@
 import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
-import { Tile } from '@shared/types';
+import { Tile, road_meta_data, road_spaces } from '@shared/types';
 import { useEffect, useRef } from 'react';
+import { BackendRequest, RoadRequest } from '../Enums/requests';
+import { GameState } from '@shared/types';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.
@@ -21,6 +23,10 @@ interface HexProp {
      * The backend information related to this hexagonal tile.
      */
     tile: Tile;
+
+    gamestate: GameState;
+
+    setState: (newState: GameState) => void;
 }
 
 /**
@@ -28,7 +34,7 @@ interface HexProp {
  * resource type and a number associated.
  * @param props information about the tile passed through, typically from the backend server.
  */
-const ResourceTile = (props: HexProp) => {
+const ResourceTile: React.FC<HexProp> = (props: HexProp) => {
 
     /**
      * TODO: To be used to build settlements or roads.
@@ -36,6 +42,7 @@ const ResourceTile = (props: HexProp) => {
     const handleClick = () => {
     };
 
+    const index = props.index;
     
     const edgeLength = 10; // Adjust based on your actual hexagon size
     const lines = [];
@@ -52,9 +59,27 @@ const ResourceTile = (props: HexProp) => {
         lines.push({ startX, startY, endX, endY });
     }
 
-    const handleEdgeClick = (index: number, idx: number, e: any) => {
+    const handleEdgeClick = async (idx: number, e: any) => {
         e.stopPropagation(); 
         //todo send request to backend
+        const road : road_meta_data = {
+            tile_index: index,
+            edge: idx as keyof road_spaces
+        }
+        const body: RoadRequest = {
+            roadData: road,
+            state: props.gamestate
+        }
+        console.log(body);
+        const response = await fetch('http://localhost:5000/buyRoad', {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+              }});
+        let newState = await response.json();
+        props.setState(newState);
+        console.log(newState);
         console.log(`Tile ${index} clicked at position ${idx}`);
     };
 
@@ -79,7 +104,7 @@ const ResourceTile = (props: HexProp) => {
                     y2={line.endY}
                     stroke="grey"
                     strokeWidth="1"
-                    onClick={(e) => handleEdgeClick(props.tile.number_roll, idx, e)}
+                    onClick={(e) => handleEdgeClick(idx, e)}
                 />
             ))} 
         </Hexagon>

@@ -1,6 +1,6 @@
 import { GameState } from "@shared/types";
 import { players } from "./PlayerData";
-import { tiles } from "@shared/StaticBoardData";
+import { tiles } from "../StaticData/GameBoardStatic";
 
 export const MockGameState: GameState = {
     diceNumber: 0,

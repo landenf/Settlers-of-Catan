@@ -1,5 +1,5 @@
 import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data, road_meta_data } from "@shared/types";
-import { tiles } from "@shared/StaticBoardData"
+import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
 
@@ -135,7 +135,7 @@ function buyDevCard() {
  */
 function buyRoad(road: road_meta_data){
      const player = current_game.current_player;
-
+     console.log("you've reached buy road!");
      // verify player has needed resources
      var canBuy = true;
      if(player.hand["brick"] == 0){
@@ -146,9 +146,9 @@ function buyRoad(road: road_meta_data){
           canBuy = false;
      }
 
-     if(!player.potential_roads.includes(road)){
-          canBuy = false;
-     }
+     // if(!player.potential_roads.includes(road)){
+     //      canBuy = false;
+     // }
 
      if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != 0){
           canBuy = false;
@@ -161,6 +161,7 @@ function buyRoad(road: road_meta_data){
           player.hand["wood"] = player.hand["wood"] - 1;
           player.roads_owned.push(road);
 
+          console.log("you can buy a road");
           potentialUpdatesRoad(road);
           const neighbor_index = neighbors[road.tile_index as NeighborsKey][road.edge];
           if(neighbor_index != -1 ){
@@ -172,6 +173,8 @@ function buyRoad(road: road_meta_data){
                potentialUpdatesRoad(neighbor_road)
 
           }
+
+          console.log("potential has been updated");
 
           // add potential communities
           if(road.edge == 0){
@@ -204,7 +207,7 @@ function buyRoad(road: road_meta_data){
 
                const community_two : community_meta_data = {
                     tile_index: road.tile_index,
-                    vertex: road.edge + 1,
+                    vertex: road.edge - 1,
                }
 
                if(player.potential_communities.indexOf(community_two) < 0) {
@@ -212,6 +215,7 @@ function buyRoad(road: road_meta_data){
                }
           }
      }
+     current_game.current_player = player;
 
      return current_game;
 }

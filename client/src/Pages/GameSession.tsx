@@ -41,7 +41,10 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
         <div className={"game-container " + (modalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={state.players}/></div>
             <div className="center-column">
-                <div className="game-board"><GameBoard tiles={tiles}/></div>
+                <div className="game-board"><GameBoard 
+                                            tiles={tiles}
+                                            gamestate={ props.gamestate }
+                                            setState={ updateState } /></div>
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.current_player.vp}/>
                   <Hand gamestate={state} />
