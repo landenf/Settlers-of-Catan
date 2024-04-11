@@ -11,6 +11,7 @@ import RollButton from "../Components/RollButton";
 import TradeModal from "../Components/TradeModal";
 import StealModal from "../Components/StealModal";
 import Dice from "../Components/Dice";
+import DevControls from "../Components/DevControls";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
@@ -28,6 +29,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [stealModalEnabled, setStealModal] = useState(false);
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
+  const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
 
   const updateState = (newState: GameState) => {
     setState(newState);
@@ -47,6 +49,10 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
 
   const updateBoughtDev = (newState: boolean) => {
     setBoughtDev(newState);
+  }
+
+  const updateCurrentPlayer = (newState: boolean) => {
+    setCurrentPlayer(newState)
   }
 
   /**
@@ -72,14 +78,17 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />
-                  <RollButton updateState={updateState} rolled={rolled} updateRolled={updateRolled} />
+                  <RollButton updateState={updateState} rolled={rolled} updateRolled={updateRolled} 
+                  isCurrentPlayer={isCurrentPlayer}/>
                 </div>
             </div>
-            <div className="ActionsBarComponent"><ActionsBarComponent state={state} 
+            <div className={"ActionsBarComponent"}><ActionsBarComponent state={state} 
             updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
-            updateBoughtDev={updateBoughtDev} boughtDev={boughtDev}/></div>
+            updateBoughtDev={updateBoughtDev} boughtDev={boughtDev} updateIsCurrentPlayer={updateCurrentPlayer}
+            isCurrentPlayer={isCurrentPlayer}/></div>
         </div>
       </div>   
+      <DevControls state={state} setState={updateState} updateIsCurrentPlayer={updateCurrentPlayer}/>
     </div>
   );
 };

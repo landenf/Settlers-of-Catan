@@ -262,6 +262,15 @@ function passTurn() {
 
 }
 
+/**
+ * Used to switch clients with the click of a button. Useful for 
+ * development tools, but we should regulate its use to dev tools.
+ */
+function switchClient(player_index: number) {
+     current_game.client = current_game.players[player_index]
+     return getGamestate();
+}
+
 function setGameState(gamestate: GameState) {
      current_game = gamestate;
 }
@@ -272,4 +281,4 @@ function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn, switchClient }

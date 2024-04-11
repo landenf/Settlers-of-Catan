@@ -101,6 +101,14 @@ app.post("/passTurn", (req, res) => {
     res.json(gamestate)
 })
 
+// NOTE: this is to be used by only development tools.
+// we have better and safer ways to switch client through
+// /passTurn
+app.post("/switchClient", (req, res) => {
+    const gamestate = gameplay.switchClient(req.body.player);
+    res.json(gamestate)
+})
+
 // open app server.
 // TODO: Run API on online hosting.
 app.listen(6000, () => {console.log("Server Started")} )

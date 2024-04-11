@@ -11,9 +11,10 @@ interface RollButtonProps {
     updateState: (newState: GameState) => void;
     rolled: boolean;
     updateRolled: (newState: boolean) => void;
+    isCurrentPlayer: boolean;
 }
 
-const RollButton: React.FC<RollButtonProps> = ({ updateState, rolled, updateRolled }) => {
+const RollButton: React.FC<RollButtonProps> = ({ updateState, rolled, updateRolled, isCurrentPlayer }) => {
     
     /**
      * Function used to call the backend to roll the dice and distribute resources.
@@ -34,7 +35,8 @@ const RollButton: React.FC<RollButtonProps> = ({ updateState, rolled, updateRoll
     }
 
     return (
-        <button className={'rollButton ' + (rolled ? "roll-dark" : "")} onClick={handleClick} disabled={rolled}>
+        <button className={'rollButton ' + (rolled ? "roll-dark " : " ") + (isCurrentPlayer ? "" : "disabled")} 
+        onClick={handleClick} disabled={rolled}>
             <FontAwesomeIcon icon={faDice} />
         </button>
 
