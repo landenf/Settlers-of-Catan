@@ -41,7 +41,9 @@ function handleDiceRoll() {
 function updateResourceCounts() {
      for(let i = 0; i < current_game.players.length; i++){
           const player = current_game.players[i];
-          player.resources = player.hand["wheat"] 
+          player.resources = player.hand["wheat"] +
+          player.hand["brick"] + player.hand["sheep"] +
+          player.hand["stone"] + player.hand["wood"]
      }
 }
 
@@ -109,8 +111,6 @@ function buyDevCard() {
           determineDevBenefit(player);
           updateResourceCounts();
      }
-
-     player.resources = calculateTotalResources(player);
 
      return getGamestate();
 }
@@ -185,7 +185,7 @@ function tradeWithBank(resourceOffer: string, resourceGain: string) {
           player.hand[translatedGain]++;
      }
 
-     player.resources = calculateTotalResources(player);
+     updateResourceCounts();
 
      return getGamestate();
 

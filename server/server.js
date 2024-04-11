@@ -39,7 +39,7 @@ app.use(cors("*"))
 
 // open app server.
 // TODO: Run API on online hosting.
-const server = app.listen(port, () => {console.log("Server Started")} )
+const server = app.listen(port, () => {console.log("Websocket Started")} )
 
 
 // setup for Websocket Server
@@ -98,5 +98,4 @@ app.post("/cancelSteal", (req, res) => {
 
 // open app server.
 // TODO: Run API on online hosting.
-app.listen(5000, () => {console.log("Server Started")} )
-})
+app.listen(6000, () => {console.log("Server Started")} )
