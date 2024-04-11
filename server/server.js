@@ -45,6 +45,11 @@ app.post("/tradeBank", (req, res) =>  {
     res.json(gamestate)
 })
 
+app.post("/buyRoad", (req, res) => {
+    const gamestate = gamestate.buyRoad(req.body.roadData);
+    res.json(gamestate);
+})
+
 // open app server.
 // TODO: Run API on online hosting.
 app.listen(5000, () => {console.log("Server Started")} )
