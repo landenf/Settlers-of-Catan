@@ -237,6 +237,31 @@ function checkWinState() {
      current_game.winner = winner;
 }
 
+/**
+ * Passes the turn to the next player. 
+ */
+function passTurn() {
+
+     let current_player_index = 0;
+     let current_player = current_game.current_player;
+     for (let i = 0; i < current_game.players.length; i++) {
+          if (current_player.color === current_game.players[i].color) {
+               current_player_index = i;
+          }
+     }
+
+     let next_player_index: number;
+     if (current_player_index == (current_game.players.length - 1)) {
+          next_player_index = 0;
+     } else {
+          next_player_index = current_player_index + 1;
+     }
+
+     current_game.current_player = current_game.players[next_player_index];
+     return getGamestate();
+
+}
+
 function setGameState(gamestate: GameState) {
      current_game = gamestate;
 }
@@ -247,4 +272,4 @@ function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn }

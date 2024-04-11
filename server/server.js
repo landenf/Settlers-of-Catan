@@ -96,6 +96,11 @@ app.post("/cancelSteal", (req, res) => {
     res.json(gamestate)
 })
 
+app.post("/passTurn", (req, res) => {
+    const gamestate = gameplay.passTurn();
+    res.json(gamestate)
+})
+
 // open app server.
 // TODO: Run API on online hosting.
 app.listen(6000, () => {console.log("Server Started")} )

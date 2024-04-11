@@ -70,7 +70,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
             <div className="center-column">
                 <div className="game-board"><Dice numberRolled={state.diceNumber}/><GameBoard tiles={tiles}/></div>
                 <div className="user-info">
-                  <VictoryPointsComponent vp={state.current_player.vp}/>
+                  <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />
                   <RollButton updateState={updateState} rolled={rolled} updateRolled={updateRolled} />
                 </div>
