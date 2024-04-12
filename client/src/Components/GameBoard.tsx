@@ -5,6 +5,7 @@ import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
 import { Tile } from '@shared/types';
 import { GameState } from '@shared/types';
+import Dice from './Dice';
 
 interface GameBoardProp {
   tiles: Tile[],

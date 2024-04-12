@@ -38,9 +38,11 @@ const PlayerBarComponent = (props: PlayerBarProp) => {
             potential_communities={[]}
             roads_owned={[]}
             potential_roads={[]}
-            player_stats={player.player_stats} 
-            resource_gain={player.resource_gain}        
-        />
+            player_stats={player.player_stats}
+            resource_gain={player.resource_gain}
+            hasKnight={player.hasKnight} 
+            knightCards={player.knightCards}        
+            />
 
     );
 

@@ -17,6 +17,15 @@ const app = express()
 const cors = require("cors");
 
 /**
+ * A constant for the port we are utilizing.
+ */
+const port = 5000;
+
+/**
+ * The WebSocket initialization. This allows us to utilize Websocket servers.
+ */
+const WebSocket = require('ws');
+/**
  * The gameplay module which modifies the backend representation of
  * the gameboard and sends it to the frontend.
  */
@@ -26,6 +35,37 @@ const gameplay = require("./src/gameplay")
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(cors("*"))
+
+
+// open app server.
+// TODO: Run API on online hosting.
+const server = app.listen(port, () => {console.log("Server Started")} )
+
+
+// setup for Websocket Server
+// this connects our wss to the server we are already using. This means we can run everything on the same 5000 port.
+const wss = new WebSocket.Server({ server: server});
+
+// initialize socket connection
+wss.on('connection', (ws, req) => {
+    ws.send("hello!");
+    console.log("successful ws connection!");
+    ws.on('message', (msg, isBinary) => {
+        // goes through each client and sends it
+        wss.clients.forEach((client) => {
+            // checks to see if it is a different client and if the cient is ready to send to everyone
+            // to include yourself, remove ws !== client
+            if(ws != client && client.readyState === WebSocket.OPEN) {
+                client.send(msg, {binary: isBinary });
+            }
+        });
+    });
+
+    // might need to include logic to close up the server
+    ws.on('close', () => {
+        console.log('Connection closed');
+    });
+});
 
 // endpoint used to buy development cards
 app.post("/buyDevCard", (req, res) => {
@@ -50,6 +90,31 @@ app.post("/buyRoad", (req, res) => {
     res.json(gamestate);
 })
 
-// open app server.
-// TODO: Run API on online hosting.
-app.listen(5000, () => {console.log("Server Started")} )
+app.post("/buyRoad", (req, res) => {
+    const gamestate = gameplay.buyRoad(req.body.roadData);
+    res.json(gamestate);
+})
+
+// endpoint used to handle stealing from another player using the knight card
+app.post("/steal", (req, res) => {
+    const gamestate = gameplay.handleKnight(req.body.victim);
+    res.json(gamestate)
+})
+
+app.post("/cancelSteal", (req, res) => {
+    const gamestate = gameplay.cancelSteal();
+    res.json(gamestate)
+})
+
+app.post("/passTurn", (req, res) => {
+    const gamestate = gameplay.passTurn();
+    res.json(gamestate)
+})
+
+// NOTE: this is to be used by only development tools.
+// we have better and safer ways to switch client through
+// /passTurn
+app.post("/switchClient", (req, res) => {
+    const gamestate = gameplay.switchClient(req.body.player);
+    res.json(gamestate)
+})

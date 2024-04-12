@@ -1,0 +1,53 @@
+/* Individual Menu buttons */
+.toggleButton {
+  width: 20vw;
+  height: 10vh;
+  border-radius: 20px;
+  border: none;
+  font-size: 30px;
+  font-family: Inter;
+  font-weight: 400;
+  word-wrap: break-word;
+  opacity: 0.9;
+  color: #4c4c4c;
+}
+.toggleButton:active {
+  color: black;
+  opacity: 1;
+  background-color: white;
+}
+.toggleButton:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  cursor: grab;
+}
+
+/* Menu Options Container Styles */
+.toggleButtonContainer {
+  position: relative;
+  width: fit-content;
+  top: 52%;
+  transform: translateY(-50%);
+  height: fit-content;
+  margin: auto;
+  display: grid;
+  grid-row-gap: 2vh;
+  grid-template-rows: 33% 33% 33%;
+}
+
+@media (max-width: 1240px) {
+  .toggleButton {
+    height: 12vh;
+  }
+}
+
+@media (max-width: 715px) {
+  .toggleButton {
+    height: 15vh;
+  }
+}
+@media (max-height: 690px) {
+  .toggleButton {
+    width: 30vw;
+  }
+}

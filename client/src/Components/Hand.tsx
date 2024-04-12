@@ -25,7 +25,7 @@ const Hand = (props: StateProp) => {
   /**
    *get player resources
    */
-  const hand = props.gamestate.current_player.hand;
+  const hand = props.gamestate.client.hand;
 
   /**
    * the set of resources this player holds
@@ -45,7 +45,7 @@ const Hand = (props: StateProp) => {
         return <ResourceCard type={resource.name} value={resource.value} />;
       })}
 
-      <ResourceCard type="developmentCard" value={0} />
+      <ResourceCard type="developmentCard" value={props.gamestate.client.knightCards} />
     </div>
   );
 };

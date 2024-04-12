@@ -37,9 +37,20 @@ export type Player = {
     hand: resource_counts;
 
     /**
+     * If a player just drew a knight card, this becomes true. This lets the
+     * player steal a resource card from another player.
+     */
+    hasKnight: boolean;
+
+    /**
      * Total resources held by a player.
      */
     resources: number;
+
+    /**
+     * Total knights played by a player.
+     */
+    knightCards: number;
 
     /**
      * Dictionary representing each resource type gained when a particular
@@ -168,6 +179,7 @@ export type Tile = {
 export type community_spaces = {
     /** top-left vertex */
     0: number
+    0: number
     /** top-right vertex */
     1: number
     /** mid-right vertex */
@@ -258,10 +270,27 @@ export type Board = {
  * Represents the game session's current state.
  */
 export type GameState = {
+
     /**
-     * The latest roll of the dice. This will be the two numbers added together;
+     * The game session ID. This marks which game session the players are
+     * playing in. This is decided before the game starts and shouldn't
+     * change throughout it.
      */
-    diceNumber: number;
+    id: number;
+
+    /**
+     * The user of this particular instance. Each client has a unique screen
+     * showing off their hand and victory points. 
+     */
+    client: Player;
+
+    /**
+     * The latest roll of the dice.
+     */
+    diceNumber: {
+        number1: number;
+        number2: number;
+    };
 
     /**
      * A list of players who are in this current game session.

@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import React from "react"
+import "../Styles/Dice.css"
+import SingleDie from "./SingleDie";
 
 /**
- * The dice component rendered in the center of the screen. It should
- * roll every turn.
+ * Interface providing strong typing to dice props.
  */
-const Dice = () => {
-    const [DiceState, setDiceState] = useState(1);
-    const imgUrl = `./images/dice/${DiceState}.png`;
+interface DiceProp {
+
+    /**
+     * The number rolled by the current player.
+     */
+    numberRolled: {number1: number, number2: number};
+}
+
+const Dice = (props: DiceProp) => {
+
+    var die1Number = props.numberRolled.number1;
+    var die2Number = props.numberRolled.number2;
 
     return (
-        <div id="dice">
-            <img src={imgUrl}></img>
+        <div className="dice">
+            <SingleDie displayNumber={die1Number}></SingleDie>
+            <div></div>
+            <SingleDie displayNumber={die2Number}></SingleDie>
         </div>
     );
-    
-};
+}; 
 export default Dice;
