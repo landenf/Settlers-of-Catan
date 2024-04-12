@@ -1,7 +1,7 @@
 import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
 import { Tile, road_keys, road_meta_data, road_spaces } from '@shared/types';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BackendRequest, RoadRequest } from '../Enums/requests';
 import { GameState } from '@shared/types';
 import { tiles } from '../StaticData/GameBoardStatic';
@@ -58,7 +58,8 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
         lines.push({ startX, startY, endX, endY });
     }
 
- 
+    const [colors, setColors] = useState(Object.values(gamestate.gameboard.tiles[index].road_spaces));
+
 
     const handleEdgeClick = async (idx: road_keys, e: any) => {
         e.stopPropagation(); 
@@ -79,6 +80,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
               }});
         let newState = await response.json();
         updateState(newState);
+        setColors(Object.values(newState.gameboard.tiles[index].road_spaces));
         console.log(`Tile ${index} clicked at position ${idx}`);
     };
 
@@ -101,7 +103,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                     y1={line.startY}
                     x2={line.endX}
                     y2={line.endY}
-                    stroke={gamestate.gameboard.tiles[index].road_spaces[idx as road_keys]}
+                    stroke={colors[idx]}
                     strokeWidth="1"
                     onClick={(e) => handleEdgeClick(idx as road_keys, e)}
                 />
