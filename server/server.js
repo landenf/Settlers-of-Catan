@@ -39,7 +39,7 @@ app.use(cors("*"))
 
 // open app server.
 // TODO: Run API on online hosting.
-const server = app.listen(port, () => {console.log("Websocket Started")} )
+const server = app.listen(port, () => {console.log("Server Started")} )
 
 
 // setup for Websocket Server
@@ -108,7 +108,3 @@ app.post("/switchClient", (req, res) => {
     const gamestate = gameplay.switchClient(req.body.player);
     res.json(gamestate)
 })
-
-// open app server.
-// TODO: Run API on online hosting.
-app.listen(6000, () => {console.log("Server Started")} )
