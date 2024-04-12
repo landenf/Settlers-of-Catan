@@ -15,7 +15,7 @@ import { GameState, Player } from "@shared/types";
         },
         communities_owned: [],
         potential_communities: [],
-        roads_owned: [{tile_index: 0, edge: 3}],
+        roads_owned: [],
         potential_roads: [],
         player_stats: {
             total_wins: 0,

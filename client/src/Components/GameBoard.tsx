@@ -9,7 +9,7 @@ import { GameState } from '@shared/types';
 interface GameBoardProp {
   tiles: Tile[],
   gamestate: GameState,
-  setState: (newState: GameState) => void;
+  updateState: (newState: GameState) => void;
 
 }
 /**
@@ -17,8 +17,7 @@ interface GameBoardProp {
  * it shows each individual tile, their resource type, and their number to roll.
  * @param props a boardstate often retrieved and modified in the backend
  */
-const GameBoard: React.FC<GameBoardProp> = (props: GameBoardProp) => {
-
+const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState }) => {
   // generate hexagonal grid
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
   const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
@@ -26,6 +25,7 @@ const GameBoard: React.FC<GameBoardProp> = (props: GameBoardProp) => {
   const [config, setConfig] = useState(GameBoardConfiguration);
   const layout = config.layout;
   const size = { x: layout.width, y: layout.height };
+
 
   return (
     <div id='GameBoard' style={{textAlign: 'center'}}>
@@ -37,9 +37,9 @@ const GameBoard: React.FC<GameBoardProp> = (props: GameBoardProp) => {
               key={`tile-${i}`}
               hex={hex}
               index={i} 
-              tile={props.tiles[i]}
-              gamestate={ props.gamestate }
-              setState={props.setState}
+              tile={tiles[i]}
+              gamestate={ gamestate }
+              updateState={updateState}
               />
           ))}
         </Layout>

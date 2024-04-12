@@ -54,12 +54,12 @@ exports.tiles = total_tiles.map((index) => ({
         5: 0
     },
     road_spaces: {
-        0: 0,
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
+        0: "grey",
+        1: "grey",
+        2: "grey",
+        3: "grey",
+        4: "grey",
+        5: "grey"
     },
     number_roll: Tile_Dice[index],
     type: Tile_Resources[index]

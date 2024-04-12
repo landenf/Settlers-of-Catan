@@ -167,17 +167,17 @@ export type Tile = {
  */
 export type community_spaces = {
     /** top-left vertex */
-    0: 0
+    0: number
     /** top-right vertex */
-    1: 0
+    1: number
     /** mid-right vertex */
-    2: 0
+    2: number
     /** bottom-right vertex*/
-    3: 0
+    3: number
     /** bottom-left vertex */
-    4: 0
+    4: number
     /** mid-left vertex */
-    5: 0
+    5: number
 }
 
 /**
@@ -206,21 +206,21 @@ export type community_meta_data = {
  * A list of spaces on a tile where roads are built or are already 
  * built. The first number represents the space: the second number 
  * represents the ownership. On each space, 0 = unbuilt, 
- * 1 = player 1 ownership, etc.
+ * any other number will correspond with the player's id.
  */
 export type road_spaces = {
     /** top edge */
-    0: 0;
+    0: string;
     /** top-right edge */
-    1: 0;
+    1: string;
     /** bottom-right edge */
-    2: 0;
+    2: string;
     /** bottom edge*/
-    3: 0;
+    3: string;
     /** bottom-left edge */
-    4: 0;
+    4: string;
     /** top-left edge */
-    5: 0;
+    5: string;
 };
 
 /**

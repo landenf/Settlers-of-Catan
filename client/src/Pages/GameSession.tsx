@@ -3,7 +3,7 @@ import PlayerBarComponent from "../Components/PlayerBarComponent";
 import ActionsBarComponent from "../Components/ActionsBarComponent";
 import Hand from "../Components/Hand"
 import VictoryPointsComponent from "../Components/victoryPointsComponent";
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
 import { GameState } from "@shared/types";
@@ -24,11 +24,14 @@ export interface StateProp {
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [modalEnabled, setModal] = useState(false);
-  
 
   const updateState = (newState: GameState) => {
-    setState(newState);
+    setState(newState);  
   }
+
+  useEffect(() => {
+    console.log("Updated state:,", state);
+  }, [state]);
 
   const updateModal = (newState: boolean) => {
     setModal(newState)
@@ -44,7 +47,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                 <div className="game-board"><GameBoard 
                                             tiles={tiles}
                                             gamestate={ props.gamestate }
-                                            setState={ updateState } /></div>
+                                            updateState={ updateState } /></div>
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.current_player.vp}/>
                   <Hand gamestate={state} />

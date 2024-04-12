@@ -29,7 +29,7 @@ export const neighbors = {
      0: [3, 4, 1, -1, -1, -1],
      1: [4, 5, 2, -1, -1, 0],
      2: [5, 6, -1, -1, -1, 2],
-     3: [7, 8, 4, 1, -1, -1],
+     3: [7, 8, 4, 0, -1, -1],
      4: [8, 9, 5, 1, 0, 3],
      5: [9, 10, 6, 3, 2, 4],
      6: [10, 11, -1, -1, 2, 5],
@@ -135,7 +135,6 @@ function buyDevCard() {
  */
 function buyRoad(road: road_meta_data){
      const player = current_game.current_player;
-     console.log("you've reached buy road!");
      // verify player has needed resources
      var canBuy = true;
      if(player.hand["brick"] == 0){
@@ -150,7 +149,7 @@ function buyRoad(road: road_meta_data){
      //      canBuy = false;
      // }
 
-     if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != 0){
+     if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "grey"){
           canBuy = false;
      }
 
@@ -160,8 +159,8 @@ function buyRoad(road: road_meta_data){
           player.hand["brick"] = player.hand["brick"] - 1;
           player.hand["wood"] = player.hand["wood"] - 1;
           player.roads_owned.push(road);
+          current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
-          console.log("you can buy a road");
           potentialUpdatesRoad(road);
           const neighbor_index = neighbors[road.tile_index as NeighborsKey][road.edge];
           if(neighbor_index != -1 ){
@@ -170,11 +169,13 @@ function buyRoad(road: road_meta_data){
                     tile_index: neighbor_index,
                     edge: neighbor_edge as road_keys
                }
+               console.log(neighbor_road);
+               current_game.gameboard.tiles[neighbor_road.tile_index].road_spaces[neighbor_road.edge] = player.color;
+               player.roads_owned.push(neighbor_road);
                potentialUpdatesRoad(neighbor_road)
 
           }
 
-          console.log("potential has been updated");
 
           // add potential communities
           if(road.edge == 0){
@@ -195,7 +196,25 @@ function buyRoad(road: road_meta_data){
                if(player.potential_communities.indexOf(community_two) < 0) {
                     player.potential_communities.push(community_two);
                }
-          } else {
+          } else if(road.edge == 5){
+               const community_one : community_meta_data = {
+                    tile_index: road.tile_index,
+                    vertex: 0,
+               }
+
+               if(player.potential_communities.indexOf(community_one) < 0) {
+                    player.potential_communities.push(community_one);
+               }
+
+               const community_two : community_meta_data = {
+                    tile_index: road.tile_index,
+                    vertex: road.edge,
+               }
+
+               if(player.potential_communities.indexOf(community_two) < 0) {
+                    player.potential_communities.push(community_two);
+               }
+          }else {
                const community_one : community_meta_data = {
                     tile_index: road.tile_index,
                     vertex: road.edge,
@@ -244,6 +263,23 @@ function potentialUpdatesRoad(road: road_meta_data){
           const road_two : road_meta_data = {
                tile_index: road.tile_index,
                edge: 1
+          }
+
+          if(player.potential_roads.indexOf(road_two) < 0){
+               player.potential_roads.push(road_two)
+          }
+     } else if(road.edge == 5){
+          const road_one : road_meta_data = {
+               tile_index: road.tile_index,
+               edge: road.edge - 1 as road_keys
+          }
+
+          if(player.potential_roads.indexOf(road_one) < 0){
+               player.potential_roads.push(road_one)
+          }
+          const road_two : road_meta_data = {
+               tile_index: road.tile_index,
+               edge: 0
           }
 
           if(player.potential_roads.indexOf(road_two) < 0){
