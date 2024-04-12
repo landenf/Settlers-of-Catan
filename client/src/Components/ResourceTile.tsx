@@ -4,6 +4,8 @@ import { Tile } from '@shared/types';
 import { useEffect, useRef } from 'react';
 import { tiles } from '../StaticData/GameBoardStatic';
 import { InvalidIndexError } from '../Enums/errors';
+import Dice from './Dice';
+import SingleDie from './SingleDie';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.
@@ -106,6 +108,7 @@ const ResourceTile = (props: HexProp) => {
         console.log(`Tile ${index} clicked at position ${idx}`);
     };
 
+    const number_roll = props.tile.number_roll
 
     return (
         <Hexagon               
@@ -116,8 +119,9 @@ const ResourceTile = (props: HexProp) => {
             s={props.hex.s} 
             fill={props.tile.type} 
             >
-            <circle cx="0" cy="0.5" r="3.5" fill="white" />
-            <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }}>{props.tile.number_roll}</Text>  
+            {number_roll != 0 && <circle cx="0" cy="0.5" r="3.5" fill="white" />}
+            {number_roll != 0 && <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }}>{props.tile.number_roll}</Text>}
+            
             {lines.map((line, idx) => (
                 <line
                     key={idx}

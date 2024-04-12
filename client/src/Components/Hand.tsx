@@ -45,7 +45,7 @@ const Hand = (props: StateProp) => {
         return <ResourceCard type={resource.name} value={resource.value} />;
       })}
 
-      <ResourceCard type="developmentCard" value={0} />
+      <ResourceCard type="developmentCard" value={props.gamestate.current_player.knightCards} />
     </div>
   );
 };

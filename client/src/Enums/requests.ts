@@ -1,4 +1,4 @@
-import { GameState } from '@shared/types';
+import { GameState, Player } from '@shared/types';
 
 /**
  * Wrapper type for all kinds of requests.
@@ -15,4 +15,12 @@ interface TradeRequest extends BackendRequest {
     resourceGained: string;
 }
 
-export {TradeRequest, BackendRequest}
+
+/**
+ * Format for sending a steal POST request.
+ */
+interface StealRequest extends BackendRequest {
+    victim: number;
+}
+
+export {TradeRequest, BackendRequest, StealRequest}

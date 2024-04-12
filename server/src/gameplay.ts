@@ -1,4 +1,4 @@
-import { GameState } from "@shared/types";
+import { GameState, Player } from "@shared/types";
 import { players } from "../StaticData/PlayerData"
 import { InvalidResourceError } from "./errors";
 /**
@@ -6,7 +6,7 @@ import { InvalidResourceError } from "./errors";
  * here in this file, then must be passed via response to the frontend for rendering.
  */
 var current_game: GameState = {
-     diceNumber: 0,
+     diceNumber: {number1: 1, number2: 1},
      players: players,
      current_player: players[0],
      current_largest_army: "",
@@ -25,14 +25,24 @@ function handleDiceRoll() {
 
      // roll dice
      rollDice();
-     let numRolled: any;
-     numRolled = current_game.diceNumber
+     let numRolled = current_game.diceNumber
+     let trueNumber: any = numRolled.number1 + numRolled.number2;
 
      // handle resource distribution
-     if (numRolled != 7) {
-          distributeCards(numRolled)
+     if (trueNumber != 7) {
+          distributeCards(trueNumber)
      } 
      return getGamestate();
+}
+
+/**
+ * Updates every player's resources counts.
+ */
+function updateResourceCounts() {
+     for(let i = 0; i < current_game.players.length; i++){
+          const player = current_game.players[i];
+          player.resources = player.hand["wheat"] 
+     }
 }
 
 /**
@@ -42,7 +52,7 @@ function handleDiceRoll() {
  * @param {ResourceGainKey} numRolled the number rolled
  */
 function distributeCards(numRolled: ResourceGainKey) {
-     for(let i = 0; i < current_game.players.length; i++){
+     for(let i = 0; i < current_game.players.length; i++) {
           const player = current_game.players[i];
           const map = player.resource_gain[numRolled];
           player.hand["wheat"] += map["wheat"];
@@ -50,13 +60,8 @@ function distributeCards(numRolled: ResourceGainKey) {
           player.hand["sheep"] += map["sheep"];
           player.hand["stone"] += map["stone"];
           player.hand["wood"] += map["wood"];
-          player.resources = player.hand["wheat"] 
-                              + player.hand["brick"] 
-                              + player.hand["sheep"]
-                              + player.hand["stone"]
-                              + player.hand["wood"];
-          
      }
+     updateResourceCounts();
 }
 
 /**
@@ -65,7 +70,20 @@ function distributeCards(numRolled: ResourceGainKey) {
 function rollDice() {
      const dice1 = Math.floor(Math.random() * 6) + 1;
      const dice2 = Math.floor(Math.random() * 6) + 1;
-     current_game.diceNumber = dice1 + dice2;
+     current_game.diceNumber = {number1: dice1, number2: dice2}
+}
+
+/**
+ * Determines if a player receives a knight or vp.
+ */
+function determineDevBenefit(player: Player) {
+     const probability = Math.floor(Math.random() * 10) + 1;
+     if (probability < 4) {
+          player.vp++;
+     } else {
+          player.hasKnight = true;
+          player.knightCards++;
+     }
 }
 
 function buyDevCard() {
@@ -82,17 +100,72 @@ function buyDevCard() {
           canBuy = false;
      }
 
-     // if can buy, decrease counts buy one and buy dev card
+     // if can buy, decrease counts by one and buys dev card
      if(canBuy){
           player.hand["sheep"] = player.hand["sheep"] - 1;
           player.hand["wheat"] = player.hand["wheat"] - 1;
           player.hand["stone"] = player.hand["stone"] - 1;
 
-          // for now, buying dev card will give an additional VP.
-          //TODO: refactor to randomize vp vs army
-          player.vp += 1;
+          determineDevBenefit(player);
+          updateResourceCounts();
      }
-     return current_game;
+
+     player.resources = calculateTotalResources(player);
+
+     return getGamestate();
+}
+
+/**
+ * Handles the stealing part of the knight card.
+ * @param victimId the index of the player who's being stolen from
+ */
+function handleKnight(victimId: number) {
+     const victim = current_game.players[victimId]
+     const thief = current_game.current_player
+     const card_index_stolen = Math.floor(Math.random() * victim.resources);
+
+     // give all cards to the player hand
+     var player_hand = [];
+
+     for (let i = 0; i < victim.hand["wheat"]; i++) {
+          player_hand.push("wheat")
+     }
+
+     for (let i = 0; i < victim.hand["brick"]; i++) {
+          player_hand.push("brick")
+     }
+
+     for (let i = 0; i < victim.hand["sheep"]; i++) {
+          player_hand.push("sheep")
+     }
+
+     for (let i = 0; i < victim.hand["wood"]; i++) {
+          player_hand.push("wood")
+     }
+
+     for (let i = 0; i < victim.hand["stone"]; i++) {
+          player_hand.push("stone")
+     }
+
+     // select the resource from the hand and exchange it between players
+     const stolen_resource = translateToResourcesKey(player_hand[card_index_stolen])
+
+     victim.hand[stolen_resource]--;
+     thief.hand[stolen_resource]++;
+
+     thief.hasKnight = false;
+     
+     return getGamestate();
+
+}
+
+/**
+ * Updates the backend to reflect the user choosing to not steal
+ * from any players as a result of their development card.
+ */
+function cancelSteal() {
+     current_game.current_player.hasKnight = false;
+     return getGamestate();
 }
 
 /**
@@ -111,6 +184,8 @@ function tradeWithBank(resourceOffer: string, resourceGain: string) {
           player.hand[translatedOffer] -= 3;
           player.hand[translatedGain]++;
      }
+
+     player.resources = calculateTotalResources(player);
 
      return getGamestate();
 
@@ -145,12 +220,28 @@ function translateToResourcesKey(toTranslate: string) {
      return translation
 }
 
+/**
+ * Checks each player's victory points and sets the game state's winner
+ * property accordingly.
+ */
+function checkWinState() {
+     var winner: Player | undefined = undefined;
+     current_game.players.forEach(player => {
+          if (player.vp >= 10) {
+               winner = player;
+          }
+     });
+     current_game.winner = winner;
+}
+
 function setGameState(gamestate: GameState) {
      current_game = gamestate;
 }
 
 function getGamestate() {
+     updateResourceCounts();
+     checkWinState()
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal }
