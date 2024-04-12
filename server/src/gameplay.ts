@@ -39,7 +39,7 @@ export const neighbors = {
      10: [14, 15, 11, 6, 5, 9],
      11: [15, -1, -1, -1, 6, 10],
      12: [-1, 16, 13, 8, 7, -1],
-     13: [16, 17, 14, 9, 6, 12],
+     13: [16, 17, 14, 9, 8, 12],
      14: [17, 18, 15, 10, 9, 13],
      15: [18, -1, -1, 11, 10, 14],
      16: [-1, -1, 17, 13, 12, -1],
@@ -145,9 +145,9 @@ function buyRoad(road: road_meta_data){
           canBuy = false;
      }
 
-     if(!player.potential_roads.includes(road)){
-          canBuy = false;
-     }
+     // if(!player.potential_roads.includes(road)){
+     //      canBuy = false;
+     // }
 
      if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "grey"){
           canBuy = false;
