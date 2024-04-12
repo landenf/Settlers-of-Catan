@@ -179,7 +179,6 @@ export type Tile = {
 export type community_spaces = {
     /** top-left vertex */
     0: number
-    0: number
     /** top-right vertex */
     1: number
     /** mid-right vertex */

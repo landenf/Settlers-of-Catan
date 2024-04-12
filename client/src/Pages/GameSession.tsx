@@ -90,11 +90,12 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={players_to_render}/></div>
             <div className="center-column">
-                <div className="game-board"><Dice numberRolled={state.diceNumber}/>
-            <GameBoard 
-                                            tiles={tiles}
-                                            gamestate={ props.gamestate }
-                                            updateState={ updateState } /></div>
+                <div className="game-board">
+                  <Dice numberRolled={state.diceNumber}/>
+                      <GameBoard 
+                          tiles={tiles}
+                          gamestate={ props.gamestate }
+                          updateState={ updateState } /></div>
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />

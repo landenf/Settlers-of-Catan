@@ -76,37 +76,6 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
         lines.push({ startX, startY, endX, endY });
     }
 
-    /**
-     * Translates a number into a community space or road space's index.
-     * @param toTranslate the index to translate to number key
-     * @returns a number key that provides strong 0-5 typing to the index.
-     */
-    function translateToNumberKey(toTranslate: number) {
-        var translation: numberKey
-        switch (toTranslate) {
-            case 0:
-                translation = 0;
-                break;
-            case 1:
-                translation = 1;
-                break;
-            case 2: 
-                translation = 2;
-                break;
-            case 3: 
-                translation = 3;
-                break;
-            case 4: 
-                translation = 4;
-                break;
-            case 5:
-                translation = 5;
-                break;
-            default:
-                throw new InvalidIndexError("Tried accessing an invalid index of a community space!")
-        }
-        return translation
-    }
 
     /**
      * Translates a number into a community space or road space's index.
@@ -178,7 +147,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
             fill={tile.type} 
             >
             <circle cx="0" cy="0.5" r="3.5" fill="white" />
-            <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }}>{props.tile.number_roll}</Text>  
+            <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }}>{tile.number_roll}</Text>  
             {lines.map((line, idx) => (
                 <line
                     key={idx}
