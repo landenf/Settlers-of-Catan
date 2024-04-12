@@ -1,7 +1,9 @@
 import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
-import { Tile } from '@shared/types';
-import { useEffect, useRef } from 'react';
+import { Tile, road_keys, road_meta_data, road_spaces } from '@shared/types';
+import { useEffect, useRef, useState } from 'react';
+import { BackendRequest, RoadRequest } from '../Enums/requests';
+import { GameState } from '@shared/types';
 import { tiles } from '../StaticData/GameBoardStatic';
 import { InvalidIndexError } from '../Enums/errors';
 import Dice from './Dice';
@@ -26,6 +28,10 @@ interface HexProp {
      */
     tile: Tile;
 
+    gamestate: GameState;
+
+    updateState: (newState: GameState) => void;
+
 }
 
 /**
@@ -33,12 +39,12 @@ interface HexProp {
  * resource type and a number associated.
  * @param props information about the tile passed through, typically from the backend server.
  */
-const ResourceTile = (props: HexProp) => {
+const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateState }) => {
 
     /**
      * Used to index the community space.
      */
-    type numberKey = keyof typeof props.tile.community_spaces
+    type numberKey = keyof typeof tile.community_spaces
 
     /**
      * TODO: To be used to build settlements or roads.
@@ -63,12 +69,13 @@ const ResourceTile = (props: HexProp) => {
         const endY = edgeLength * Math.sin(angleRad + Math.PI / 3);
 
         let key = translateToNumberKey(i);
-        let communitySpaceLevel = +props.tile.community_spaces[key];
+        let communitySpaceLevel = +tile.community_spaces[key];
         if(communitySpaceLevel > 0){
             circles.push({ x: startX, y: startY, level: communitySpaceLevel, color: 'blue'});  //todo find player color
         }
         lines.push({ startX, startY, endX, endY });
     }
+
 
     /**
      * Translates a number into a community space or road space's index.
@@ -102,26 +109,45 @@ const ResourceTile = (props: HexProp) => {
         return translation
     }
 
-    const handleEdgeClick = (index: number, idx: number, e: any) => {
+    const [colors, setColors] = useState(Object.values(gamestate.gameboard.tiles[index].road_spaces));
+
+
+    const handleEdgeClick = async (idx: road_keys, e: any) => {
         e.stopPropagation(); 
-        //todo send request to backend
+
+        const road : road_meta_data = {
+            tile_index: index,
+            edge: idx
+        }
+        const body: RoadRequest = {
+            roadData: road,
+            state: gamestate
+        }
+        const response = await fetch('http://localhost:5000/buyRoad', {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+              }});
+        let newState = await response.json();
+        updateState(newState);
+        setColors(Object.values(newState.gameboard.tiles[index].road_spaces));
         console.log(`Tile ${index} clicked at position ${idx}`);
     };
 
-    const number_roll = props.tile.number_roll
+    const number_roll = tile.number_roll
 
     return (
         <Hexagon               
             onClick={() => handleClick()} 
-            key={props.index} 
-            q={props.hex.q} 
-            r={props.hex.r} 
-            s={props.hex.s} 
-            fill={props.tile.type} 
+            key={index} 
+            q={hex.q} 
+            r={hex.r} 
+            s={hex.s} 
+            fill={tile.type} 
             >
-            {number_roll != 0 && <circle cx="0" cy="0.5" r="3.5" fill="white" />}
-            {number_roll != 0 && <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }}>{props.tile.number_roll}</Text>}
-            
+            <circle cx="0" cy="0.5" r="3.5" fill="white" />
+            <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }}>{tile.number_roll}</Text>  
             {lines.map((line, idx) => (
                 <line
                     key={idx}
@@ -129,9 +155,9 @@ const ResourceTile = (props: HexProp) => {
                     y1={line.startY}
                     x2={line.endX}
                     y2={line.endY}
-                    stroke="grey"
+                    stroke={colors[idx]}
                     strokeWidth="1"
-                    onClick={(e) => handleEdgeClick(props.tile.number_roll, idx, e)}
+                    onClick={(e) => handleEdgeClick(idx as road_keys, e)}
                 />
             ))} 
             {circles.map((circle, idx) => (
@@ -159,5 +185,3 @@ const ResourceTile = (props: HexProp) => {
 }
 
 export default ResourceTile;
-
-//todo: change color based on gameboard props

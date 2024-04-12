@@ -72,22 +72,22 @@ export type Player = {
     /**
      * A list of communities held by the player. 
      */
-    communities_owned: [];
+    communities_owned: community_meta_data[];
 
     /**
      * A list of spots the player could build a community on.
      */
-    potential_communities: [];
+    potential_communities: community_meta_data[];
     
     /**
      * A list of roads held by the player.
      */
-    roads_owned: [];
+    roads_owned: road_meta_data[];
 
     /**
      * A list of spots the player could build a road on.
      */
-    potential_roads: [];
+    potential_roads: road_meta_data[];
 
     /**
      * A dictionary of this player's stats in all games.
@@ -167,6 +167,7 @@ export type Tile = {
      * The type of resource this tile represents.
      */
     type: string;
+
 }
 
 /**
@@ -191,24 +192,67 @@ export type community_spaces = {
 }
 
 /**
+ * Key for the community_spaces dictionary.
+ */
+export type community_keys = keyof community_spaces;
+
+/**
+ * Meta data about the community
+ */
+export type community_meta_data = {
+    /**
+     * A number corresponding to the tile's index.
+     */
+    tile_index: number;
+
+    /**
+     * A number that corresponds to which vertex it is on to.
+     */
+    vertex: number;
+
+}
+
+
+/**
  * A list of spaces on a tile where roads are built or are already 
  * built. The first number represents the space: the second number 
  * represents the ownership. On each space, 0 = unbuilt, 
- * 1 = player 1 ownership, etc.
+ * any other number will correspond with the player's id.
  */
 export type road_spaces = {
     /** top edge */
-    0: number
+    0: string;
     /** top-right edge */
-    1: number
+    1: string;
     /** bottom-right edge */
-    2: number
+    2: string;
     /** bottom edge*/
-    3: number
+    3: string;
     /** bottom-left edge */
-    4: number
+    4: string;
     /** top-left edge */
-    5: number
+    5: string;
+};
+
+/**
+ * Key for the road_spaces dictionary.
+ */
+export type road_keys = keyof road_spaces;
+
+/**
+ * Meta data that tells you which road and tile it corresponds to.
+ */
+export type road_meta_data = {
+    /**
+     * A number corresponding to one of the tile's index.
+     */
+    tile_index: number;
+
+    /**
+    * A number that corresponds to which edge it connects to on the first tile.
+    */
+    edge: road_keys;
+
 }
 
 /**

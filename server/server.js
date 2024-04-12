@@ -85,6 +85,16 @@ app.post("/tradeBank", (req, res) =>  {
     res.json(gamestate)
 })
 
+app.post("/buyRoad", (req, res) => {
+    const gamestate = gameplay.buyRoad(req.body.roadData);
+    res.json(gamestate);
+})
+
+app.post("/buyRoad", (req, res) => {
+    const gamestate = gameplay.buyRoad(req.body.roadData);
+    res.json(gamestate);
+})
+
 // endpoint used to handle stealing from another player using the knight card
 app.post("/steal", (req, res) => {
     const gamestate = gameplay.handleKnight(req.body.victim);

@@ -3,7 +3,7 @@ import PlayerBarComponent from "../Components/PlayerBarComponent";
 import ActionsBarComponent from "../Components/ActionsBarComponent";
 import Hand from "../Components/Hand"
 import VictoryPointsComponent from "../Components/victoryPointsComponent";
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
 import { GameState, Player } from "@shared/types";
@@ -32,8 +32,16 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
 
   const updateState = (newState: GameState) => {
-    setState(newState);
+    setState(newState);  
   }
+
+  useEffect(() => {
+    console.log("Updated state:,", state);
+  }, [state]);
+
+  useEffect(() => {
+    console.log("Updated state:,", state);
+  }, [state]);
 
   const updateTradeModal = (newState: boolean) => {
     setTradeModal(newState)
@@ -82,7 +90,12 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={players_to_render}/></div>
             <div className="center-column">
-                <div className="game-board"><Dice numberRolled={state.diceNumber}/><GameBoard tiles={tiles}/></div>
+                <div className="game-board">
+                  <Dice numberRolled={state.diceNumber}/>
+                      <GameBoard 
+                          tiles={tiles}
+                          gamestate={ props.gamestate }
+                          updateState={ updateState } /></div>
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />
