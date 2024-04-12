@@ -9,9 +9,12 @@ import { faDice } from "@fortawesome/free-solid-svg-icons";
 */
 interface RollButtonProps {
     updateState: (newState: GameState) => void;
+    rolled: boolean;
+    updateRolled: (newState: boolean) => void;
+    isCurrentPlayer: boolean;
 }
 
-const RollButton: React.FC<RollButtonProps> = ({ updateState }) => {
+const RollButton: React.FC<RollButtonProps> = ({ updateState, rolled, updateRolled, isCurrentPlayer }) => {
     
     /**
      * Function used to call the backend to roll the dice and distribute resources.
@@ -28,10 +31,12 @@ const RollButton: React.FC<RollButtonProps> = ({ updateState }) => {
         // interpret the new gamestate and update the frontend rendering
         let newState = await response.json();
         updateState(newState);
+        updateRolled(true)
     }
 
     return (
-        <button className='button rollButton' onClick={handleClick}>
+        <button className={'rollButton ' + (rolled ? "roll-dark " : " ") + (isCurrentPlayer ? "" : "disabled")} 
+        onClick={handleClick} disabled={rolled}>
             <FontAwesomeIcon icon={faDice} />
         </button>
 

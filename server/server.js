@@ -95,3 +95,16 @@ app.post("/cancelSteal", (req, res) => {
     const gamestate = gameplay.cancelSteal();
     res.json(gamestate)
 })
+
+app.post("/passTurn", (req, res) => {
+    const gamestate = gameplay.passTurn();
+    res.json(gamestate)
+})
+
+// NOTE: this is to be used by only development tools.
+// we have better and safer ways to switch client through
+// /passTurn
+app.post("/switchClient", (req, res) => {
+    const gamestate = gameplay.switchClient(req.body.player);
+    res.json(gamestate)
+})

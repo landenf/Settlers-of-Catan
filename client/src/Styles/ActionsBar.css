@@ -59,10 +59,26 @@
     margin: 0;
 }
 
+.button {
+    background-color: hsla(0, 0%, 100%, 0.0);
+    border: none;
+}
+
 .button:hover {
     animation-name: onActionHover;
     animation-duration: .1s;
     animation-timing-function: linear;
     background: hsla(0, 0%, 50%, 0.3);
     cursor: pointer;
+}
+
+.buy-dark {
+    background: hsla(0, 0%, 50%, 0.3);
+    color: hsla(0, 0%, 18%, 0.3)
+}
+
+.buy-dark:hover {
+    animation-duration: 0s;
+    background: hsla(0, 0%, 50%, 0.3);
+    cursor: default;
 }

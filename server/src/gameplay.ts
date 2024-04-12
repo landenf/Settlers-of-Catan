@@ -4,8 +4,11 @@ import { InvalidResourceError } from "./errors";
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
  * here in this file, then must be passed via response to the frontend for rendering.
+ * TODO: Set up gamestate using information from the landing page / join page!
  */
 var current_game: GameState = {
+     id: 0,
+     client: players[0],
      diceNumber: {number1: 1, number2: 1},
      players: players,
      current_player: players[0],
@@ -234,6 +237,40 @@ function checkWinState() {
      current_game.winner = winner;
 }
 
+/**
+ * Passes the turn to the next player. 
+ */
+function passTurn() {
+
+     let current_player_index = 0;
+     let current_player = current_game.current_player;
+     for (let i = 0; i < current_game.players.length; i++) {
+          if (current_player.color === current_game.players[i].color) {
+               current_player_index = i;
+          }
+     }
+
+     let next_player_index: number;
+     if (current_player_index == (current_game.players.length - 1)) {
+          next_player_index = 0;
+     } else {
+          next_player_index = current_player_index + 1;
+     }
+
+     current_game.current_player = current_game.players[next_player_index];
+     return getGamestate();
+
+}
+
+/**
+ * Used to switch clients with the click of a button. Useful for 
+ * development tools, but we should regulate its use to dev tools.
+ */
+function switchClient(player_index: number) {
+     current_game.client = current_game.players[player_index]
+     return getGamestate();
+}
+
 function setGameState(gamestate: GameState) {
      current_game = gamestate;
 }
@@ -244,4 +281,4 @@ function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn, switchClient }
