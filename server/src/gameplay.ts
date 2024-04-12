@@ -145,9 +145,9 @@ function buyRoad(road: road_meta_data){
           canBuy = false;
      }
 
-     // if(!player.potential_roads.includes(road)){
-     //      canBuy = false;
-     // }
+     if(!player.potential_roads.includes(road)){
+          canBuy = false;
+     }
 
      if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "grey"){
           canBuy = false;
