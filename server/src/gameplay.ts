@@ -201,6 +201,19 @@ function cancelSteal() {
      return getGamestate();
 }
 
+function findPotentialRoads(){
+     let roads = current_game.current_player.potential_roads;
+     const board = current_game.gameboard.tiles;
+
+     for (let i = 0; i < roads.length; i++){
+          const curr_tile = board[roads[i].tile_index];
+          if(curr_tile.road_spaces[roads[i].edge] != "grey") {
+               roads.splice(i, 1);
+          }
+     }
+
+     return roads;
+}
 
 /**
  * Function that controls buying a road. Only one road_meta data is needed.
@@ -498,4 +511,4 @@ function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn, switchClient, buyRoad }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn, switchClient, buyRoad, findPotentialRoads }

@@ -90,9 +90,10 @@ app.post("/buyRoad", (req, res) => {
     res.json(gamestate);
 })
 
-app.post("/buyRoad", (req, res) => {
-    const gamestate = gameplay.buyRoad(req.body.roadData);
-    res.json(gamestate);
+app.post("/buildRoad", (req, res) => {
+    const potential_roads = gameplay.findPotentialRoads();
+
+    res.json(potential_roads);
 })
 
 // endpoint used to handle stealing from another player using the knight card
