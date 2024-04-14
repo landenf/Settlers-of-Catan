@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/TradeModal.css";
 import EmptyHand from "./EmptyHand";
-import { GameState } from "@shared/types";
+import { LimitedSession } from "@shared/types";
 import { TradeParams } from "../Enums/tradebody";
 import { BackendRequest, TradeRequest } from "../Enums/requests";
 
@@ -23,12 +23,12 @@ export interface TradeModalProp {
     /**
      * The current gamestate.
      */
-    gamestate: GameState
+    gamestate: LimitedSession
 
     /**
      * Function to set the gamestate.
      */
-    setState: (newState: GameState) => void;
+    setState: (newState: LimitedSession) => void;
 
   }
 

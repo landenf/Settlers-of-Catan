@@ -1,9 +1,9 @@
-import { GameState } from "@shared/types";
+import { LimitedSession } from "@shared/types";
 import React from "react";
 
 interface DevProps {
-    state: GameState;
-    setState: (newState: GameState) => void;
+    state: LimitedSession;
+    setState: (newState: LimitedSession) => void;
     updateIsCurrentPlayer: (newState: boolean) => void;
 }
 
@@ -23,7 +23,7 @@ const DevControls: React.FC<DevProps> = ({state, setState, updateIsCurrentPlayer
             }});
 
         // retrieve the new game state and update it in the frontend
-        let newState: GameState = await response.json();
+        let newState: LimitedSession = await response.json();
         setState(newState)
         updateIsCurrentPlayer(newState.client.color === newState.current_player.color);
     }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/StealModal.css";
 import "../Styles/PlayerComponent.css"
-import { GameState, Player } from "@shared/types";
+import { LimitedSession, LimitedPlayer } from "@shared/types";
 import AvatarComponent from "./AvatarComponent";
 import { BackendRequest, StealRequest } from "../Enums/requests";
 
@@ -23,12 +23,12 @@ interface StealModalProp {
      /**
       * The current gamestate.
       */
-     gamestate: GameState
+     gamestate: LimitedSession
 
      /**
       * Function to update the gamestate whenever a player steals something.
       */
-     setState: (newState: GameState) => void;
+     setState: (newState: LimitedSession) => void;
 
 }
 
@@ -102,7 +102,7 @@ const StealModal: React.FC<StealModalProp> = ({stealModalState, setStealModal, g
         setStealModal(false);
     }
 
-    var players_to_steal: Player[] = []
+    var players_to_steal: LimitedPlayer[] = []
     gamestate.players.forEach(player => {
         if (player.color != gamestate.current_player.color && player.resources != 0) {
             players_to_steal.push(player)

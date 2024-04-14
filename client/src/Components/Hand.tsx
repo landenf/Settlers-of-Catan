@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ResourceCard from "./ResourceCard";
 import "../Styles/hand.css"
-import { GameState, Player } from "@shared/types";
+import { LimitedSession, Player } from "@shared/types";
 
 /**
  * An interface that provides strong typing to a game state prop.
@@ -10,7 +10,7 @@ interface StateProp {
   /**
    * The current game session's state.
    */
-  gamestate: GameState
+  gamestate: LimitedSession
 }
 
 /**

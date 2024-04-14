@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
-import { GameState } from '@shared/types';
+import { LimitedSession } from '@shared/types';
 import { BackendRequest, StealRequest } from '../Enums/requests';
 
 /**
@@ -24,12 +24,12 @@ interface ActionsBarComponentProps {
    * Function to update the frontend gamestate.
    * @param newState the new gamestate to update to
    */
-  updateState: (newState: GameState) => void;
+  updateState: (newState: LimitedSession) => void;
 
   /**
    * The current representation of the gamestate.
    */
-  state: GameState;
+  state: LimitedSession;
 
   /**
    * Updates whether or not a player has bought a dev card this turn.
@@ -91,10 +91,10 @@ const KnightBody: StealRequest = {
       }});
 
     // retrieve the new game state and update it in the frontend
-    let newState: GameState = await response.json();
+    let newState: LimitedSession = await response.json();
     updateState(newState);
 
-    if (newState.current_player.hasKnight) {
+    if (newState.client.hasKnight) {
       setStealModal(true);
     }
 

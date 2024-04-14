@@ -6,7 +6,7 @@ import VictoryPointsComponent from "../Components/victoryPointsComponent";
 import React, { Component, useEffect, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
-import { GameState, Player } from "@shared/types";
+import { LimitedPlayer, LimitedSession, Player } from "@shared/types";
 import RollButton from "../Components/RollButton";
 import TradeModal from "../Components/TradeModal";
 import StealModal from "../Components/StealModal";
@@ -20,7 +20,7 @@ export interface StateProp {
   /**
    * The current game session's state.
    */
-  gamestate: GameState
+  gamestate: LimitedSession
 }
 
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
@@ -31,7 +31,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
 
-  const updateState = (newState: GameState) => {
+  const updateState = (newState: LimitedSession) => {
     setState(newState);  
   }
 
@@ -75,7 +75,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
    * Chooses only players that are not the client to render
    * on the side component.
    */
-  const players_to_render: Player[] = []
+  const players_to_render: LimitedPlayer[] = []
   state.players.forEach(player => {
     if (player.color != state.client.color) {
       players_to_render.push(player)

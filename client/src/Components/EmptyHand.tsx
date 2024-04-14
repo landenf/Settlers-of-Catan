@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../Styles/hand.css"
-import { GameState } from "@shared/types";
+import { LimitedSession } from "@shared/types";
 import EmptyResourceCard from "./EmptyResourceCard";
 import { TradeParams } from "../Enums/tradebody";
 
@@ -11,7 +11,7 @@ interface EmptyHandProps {
   /**
    * The current game session's state.
    */
-  gamestate: GameState
+  gamestate: LimitedSession
 
   /**
    * The current trade parameters.
@@ -56,7 +56,7 @@ const EmptyHand: React.FC<EmptyHandProps> = ({ gamestate, tradeParameters, setTr
   /**
    *get player resources
    */
-  const hand = gamestate.current_player.hand;
+  const hand = gamestate.client.hand;
 
   /**
    * the set of resources this player holds
