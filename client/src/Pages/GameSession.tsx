@@ -12,6 +12,7 @@ import TradeModal from "../Components/TradeModal";
 import StealModal from "../Components/StealModal";
 import Dice from "../Components/Dice";
 import DevControls from "../Components/DevControls";
+import { BackendRequest } from "../Enums/requests";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
@@ -23,12 +24,7 @@ export interface StateProp {
   gamestate: LimitedSession
 }
 
-/**
-   * Websocket used to update backend and retrieve the gamestate.
-   */
-const backend = new WebSocket(
-  "ws://localhost:5000",
-);
+const backend = new WebSocket("ws://localhost:5000")
 
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
@@ -62,16 +58,51 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
     setBoughtDev(newState);
   }
 
-  const updateCurrentPlayer = (newState: boolean) => {
-    setCurrentPlayer(newState)
-  }
-
   /**
    * Resets the action bar and roll button.
    */
   const resetTurn = () => {
     setRolled(false);
     setBoughtDev(false);
+  }
+
+  /**
+   * Used to update the rendering of the client's screen when we
+   * receive the gamestate from the backend.
+   */
+  backend.addEventListener("message", (msg) => {
+    const newState: LimitedSession = JSON.parse(msg.data)
+    updateState(newState)
+    
+    if (newState.client.hasKnight) {
+      setStealModal(true);
+    }
+
+    setCurrentPlayer(newState.client.color === newState.current_player.color);
+  });
+
+
+  /**
+   * Uses the websocket to send information to the backend and 
+   * retrieve the current game session.
+   * @param type the "endpoint" to hit (/roll or /buyDevCard for example) 
+   * @param body any payload information to send to the backend
+   */
+  const callBackend = (type: string, body: BackendRequest) => {
+    const message = {
+      endpoint: type,
+      body: body
+    }
+
+    backend.send(JSON.stringify(message))
+
+    if (type === "buyDevCard") {
+      updateBoughtDev(true);
+    }
+
+    if (type === "passTurn") {
+      resetTurn();
+    }
   }
 
   /**
@@ -87,8 +118,8 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
 
   return (
   <div>
-    <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} setState={updateState}/>
-    <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} setState={updateState}/>
+    <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} callBackend={callBackend}/>
+    <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} callBackend={callBackend}/>
       <div className="background-container">
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={players_to_render}/></div>
@@ -102,17 +133,16 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />
-                  <RollButton updateState={updateState} rolled={rolled} updateRolled={updateRolled} 
+                  <RollButton callBackend={callBackend} state={state} rolled={rolled} updateRolled={updateRolled} 
                   isCurrentPlayer={isCurrentPlayer}/>
                 </div>
             </div>
             <div className={"ActionsBarComponent"}><ActionsBarComponent state={state} 
-            updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
-            updateBoughtDev={updateBoughtDev} boughtDev={boughtDev} updateIsCurrentPlayer={updateCurrentPlayer}
+            callBackend={callBackend} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
+            updateBoughtDev={updateBoughtDev} boughtDev={boughtDev}
             isCurrentPlayer={isCurrentPlayer} reset={resetTurn}/></div>
         </div>
       </div>   
-      <DevControls state={state} setState={updateState} updateIsCurrentPlayer={updateCurrentPlayer}/>
     </div>
   );
 };

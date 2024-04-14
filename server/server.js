@@ -91,25 +91,6 @@ function handleRequest(request, body) {
     updateFrontend();
 }
 
-// initialize socket connection
-wss.on('connection', (ws, req) => {
-    ws.send("connected!");
-    console.log("connection opened!")
-    ws.id = client_id;
-    client_id++;
-    
-    ws.on('message', message => {
-        let request = JSON.parse(message)
-        console.log(request.endpoint)
-        handleRequest(request.endpoint, request.body)
-      });    
-
-    // might need to include logic to close up the server
-    ws.on('close', () => {
-        console.log('Connection closed');
-    });
-});
-
 /**
  * Function used to send a limited gamestate to every client
  * using the websocket.
@@ -122,3 +103,20 @@ function updateFrontend() {
         }
     });
 }
+
+// initialize socket connection
+wss.on('connection', (ws, req) => {
+    ws.id = client_id;
+    client_id++;
+
+    updateFrontend();
+    
+    ws.on('message', message => {
+        let request = JSON.parse(message)
+        handleRequest(request.endpoint, request.body)
+      });    
+
+    // might need to include logic to close up the server
+    ws.on('close', () => {
+    });
+});

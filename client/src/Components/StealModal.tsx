@@ -26,9 +26,9 @@ interface StealModalProp {
      gamestate: LimitedSession
 
      /**
-      * Function to update the gamestate whenever a player steals something.
-      */
-     setState: (newState: LimitedSession) => void;
+     * Function to call the backend through the main websocket.
+     */
+    callBackend: (type: string, body: BackendRequest) => void;
 
 }
 
@@ -36,29 +36,10 @@ interface StealModalProp {
  * Component used to ask the player who they want to steal resources from.
  * Activated when the player receives a knight card.
  */
-const StealModal: React.FC<StealModalProp> = ({stealModalState, setStealModal, gamestate, setState}) => {
+const StealModal: React.FC<StealModalProp> = ({stealModalState, setStealModal, gamestate, callBackend}) => {
 
     const [isSelected, updateSelection] = useState(false)
     const [playerSelected, updatePlayerSelection] = useState("")
-
-    /**
-     * Method to call the backend for trading purposes.
-     * @param type the type of trade to conduct
-     * @param body the payload information, such as resources or gamestate
-     */
-    const callBackend = async (type: string, body: BackendRequest) => {
-        const URL = 'http://localhost:5000/' + type;
-        const response = await fetch(URL, {
-          method: "POST",
-          body: JSON.stringify(body),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8"
-          }});
-        
-        // retrieve the new game state and update it in the frontend
-        let newState = await response.json();
-        setState(newState);
-    }
 
     /**
      * Function to sort through the gamestate to find the player that matches
