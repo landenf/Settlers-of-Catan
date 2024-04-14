@@ -15,12 +15,6 @@ interface ActionsBarComponentProps {
   setTradeModal: (newState: boolean) => void;
 
   /**
-   * Function to set the steal modal on or off.
-   * @param newState "true" to display steal modal, "false" to not
-   */
-  setStealModal: (newState: boolean) => void;
-
-  /**
      * Function to call the backend through the main websocket.
      */
   callBackend: (type: string, body: BackendRequest) => void;
@@ -29,11 +23,6 @@ interface ActionsBarComponentProps {
    * The current representation of the gamestate.
    */
   state: LimitedSession;
-
-  /**
-   * Updates whether or not a player has bought a dev card this turn.
-   */
-  updateBoughtDev: (newState: boolean) => void;
 
   /**
    * This is true if a player has purchased a dev card this turn, and false if not.
@@ -46,11 +35,6 @@ interface ActionsBarComponentProps {
    */
   isCurrentPlayer: boolean;
 
-  /**
-   * Resets action bar component to its initial state.
-   */
-  reset: () => void;
-
 }
 
 /**
@@ -58,7 +42,7 @@ interface ActionsBarComponentProps {
  * cards. Appears on a player's game turn.
  */
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, callBackend, setTradeModal, 
-  setStealModal, updateBoughtDev, boughtDev, isCurrentPlayer, reset }) => {
+  boughtDev, isCurrentPlayer }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before

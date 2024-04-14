@@ -1,14 +1,12 @@
-import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer } from "@shared/types";
+import { GameState, Player, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer } from "@shared/types";
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
 
 /**
- * This is the gamestate as currently represented in the backend. It is manipulated
- * here in this file, then must be passed via response to the frontend for rendering.
- * TODO: Set up gamestate using information from the landing page / join page!
+ * This is the example game. 
  */
-var current_game: GameState = {
+var example_game: GameState = {
      id: 0,
      client: players[0],
      diceNumber: {number1: 1, number2: 1},
@@ -20,8 +18,16 @@ var current_game: GameState = {
           tiles: tiles
      }
 }
-type ResourceGainKey = keyof typeof current_game.current_player.resource_gain;
-type ResourcesKey = keyof typeof current_game.current_player.hand;
+
+/**
+ * List of all games currently being played.
+ * TODO: Replace example game with games from the landing page / join page!
+ */
+var all_games: GameState[] = [example_game]
+
+
+type ResourceGainKey = keyof typeof example_game.current_player.resource_gain;
+type ResourcesKey = keyof typeof example_game.current_player.hand;
 
 /**
  * Dictionary of the neighbors. Each index is correlated with the road space number 
@@ -50,28 +56,48 @@ export const neighbors = {
      18: [-1, -1, -1, 15, 14, 18]
  }
  export type NeighborsKey = keyof typeof neighbors;
+
+/**
+ * Finds a game's index in the all_games list by its session ID.
+ * @param sessionId session ID assigned to each unique game
+ */
+function findGameIndexById(sessionId: number) {
+     let index = 0;
+     for (let i = 0; i < all_games.length; i++) {
+          if (sessionId == all_games[i].id) {
+               index = i;
+          }
+     }
+     return index;
+}
  
 /**
  * Function to roll the dice and distribute resources based upon the result.
  */
-function handleDiceRoll() {
+function handleDiceRoll(sessionId: number) {
+
+     // get current game
+     const current_game = all_games[findGameIndexById(sessionId)]
 
      // roll dice
-     rollDice();
+     rollDice(sessionId);
      let numRolled = current_game.diceNumber
      let trueNumber: any = numRolled.number1 + numRolled.number2;
 
      // handle resource distribution
      if (trueNumber != 7) {
-          distributeCards(trueNumber)
+          distributeCards(trueNumber, sessionId)
      } 
-     return getGamestate();
+     return getGamestate(sessionId);
 }
 
 /**
  * Updates every player's resources counts.
  */
-function updateResourceCounts() {
+function updateResourceCounts(sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      for(let i = 0; i < current_game.players.length; i++){
           const player = current_game.players[i];
           player.resources = player.hand["wheat"] +
@@ -86,7 +112,10 @@ function updateResourceCounts() {
  * 
  * @param {ResourceGainKey} numRolled the number rolled
  */
-function distributeCards(numRolled: ResourceGainKey) {
+function distributeCards(numRolled: ResourceGainKey, sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      for(let i = 0; i < current_game.players.length; i++) {
           const player = current_game.players[i];
           const map = player.resource_gain[numRolled];
@@ -96,13 +125,16 @@ function distributeCards(numRolled: ResourceGainKey) {
           player.hand["stone"] += map["stone"];
           player.hand["wood"] += map["wood"];
      }
-     updateResourceCounts();
+     updateResourceCounts(sessionId);
 }
 
 /**
  * Rolls two dice and updates it in the current_game.
  */
-function rollDice() {
+function rollDice(sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      const dice1 = Math.floor(Math.random() * 6) + 1;
      const dice2 = Math.floor(Math.random() * 6) + 1;
      current_game.diceNumber = {number1: dice1, number2: dice2}
@@ -121,7 +153,10 @@ function determineDevBenefit(player: Player) {
      }
 }
 
-function buyDevCard() {
+function buyDevCard(sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      // check to see if they have the needed resources
      var canBuy = true;
      const player = current_game.current_player;
@@ -142,17 +177,20 @@ function buyDevCard() {
           player.hand["stone"] = player.hand["stone"] - 1;
 
           determineDevBenefit(player);
-          updateResourceCounts();
+          updateResourceCounts(sessionId);
      }
 
-     return getGamestate();
+     return getGamestate(sessionId);
 }
 
 /**
  * Handles the stealing part of the knight card.
  * @param victimId the index of the player who's being stolen from
  */
-function handleKnight(victimId: number) {
+function handleKnight(victimId: number, sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      const victim = current_game.players[victimId]
      const thief = current_game.current_player
      const card_index_stolen = Math.floor(Math.random() * victim.resources);
@@ -188,7 +226,7 @@ function handleKnight(victimId: number) {
 
      thief.hasKnight = false;
      
-     return getGamestate();
+     return getGamestate(sessionId);
 
 }
 
@@ -196,9 +234,12 @@ function handleKnight(victimId: number) {
  * Updates the backend to reflect the user choosing to not steal
  * from any players as a result of their development card.
  */
-function cancelSteal() {
+function cancelSteal(sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      current_game.current_player.hasKnight = false;
-     return getGamestate();
+     return getGamestate(sessionId);
 }
 
 
@@ -209,7 +250,10 @@ function cancelSteal() {
  * @param road the road the player is trying to buy
  * @returns the updated gamestate
  */
-function buyRoad(road: road_meta_data){
+function buyRoad(road: road_meta_data, sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      const player = current_game.current_player;
      // verify player has needed resources
      var canBuy = true;
@@ -237,7 +281,7 @@ function buyRoad(road: road_meta_data){
           player.roads_owned.push(road);
           current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
-          potentialUpdatesRoad(road);
+          potentialUpdatesRoad(road, sessionId);
           const neighbor_index = neighbors[road.tile_index as NeighborsKey][road.edge];
           if(neighbor_index != -1 ){
                const neighbor_edge = neighbors[neighbor_index as NeighborsKey].indexOf(road.tile_index);
@@ -248,7 +292,7 @@ function buyRoad(road: road_meta_data){
                console.log(neighbor_road);
                current_game.gameboard.tiles[neighbor_road.tile_index].road_spaces[neighbor_road.edge] = player.color;
                player.roads_owned.push(neighbor_road);
-               potentialUpdatesRoad(neighbor_road)
+               potentialUpdatesRoad(neighbor_road, sessionId)
 
           }
 
@@ -319,7 +363,9 @@ function buyRoad(road: road_meta_data){
  * Helper function to update potential roads from the roads that have been bought.
  * @param road the road you are updating based on
  */
-function potentialUpdatesRoad(road: road_meta_data){
+function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
      const player = current_game.current_player;
 
      // remove bought from potential road
@@ -393,7 +439,9 @@ function potentialUpdatesRoad(road: road_meta_data){
  * @param resourceOffer the resource the player is offering
  * @param resourceGain the resource the player is receiving
  */
-function tradeWithBank(resourceOffer: string, resourceGain: string) {
+function tradeWithBank(resourceOffer: string, resourceGain: string, sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
 
      const player = current_game.current_player;
 
@@ -405,9 +453,9 @@ function tradeWithBank(resourceOffer: string, resourceGain: string) {
           player.hand[translatedGain]++;
      }
 
-     updateResourceCounts();
+     updateResourceCounts(sessionId);
 
-     return getGamestate();
+     return getGamestate(sessionId);
 
 }
 
@@ -444,7 +492,10 @@ function translateToResourcesKey(toTranslate: string) {
  * Checks each player's victory points and sets the game state's winner
  * property accordingly.
  */
-function checkWinState() {
+function checkWinState(sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      var winner: Player | undefined = undefined;
      current_game.players.forEach(player => {
           if (player.vp >= 10) {
@@ -457,7 +508,9 @@ function checkWinState() {
 /**
  * Passes the turn to the next player. 
  */
-function passTurn() {
+function passTurn(sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
 
      let current_player_index = 0;
      let current_player = current_game.current_player;
@@ -475,15 +528,17 @@ function passTurn() {
      }
 
      current_game.current_player = current_game.players[next_player_index];
-     return getGamestate();
+     return getGamestate(sessionId);
 
 }
 
 /**
- * Used to switch clients with the click of a button. Useful for 
- * development tools, but we should regulate its use to dev tools.
+ * Used to switch clients. 
  */
-function switchClient(player_id: number) {
+function switchClient(player_id: number, sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
      let player_index = 0;
      for (let i = 0; i < current_game.players.length; i++) {
           if (player_id == current_game.players[i].id) {
@@ -491,13 +546,15 @@ function switchClient(player_id: number) {
           }
      }
      current_game.client = current_game.players[player_index]
-     return getGamestate();
+     return getGamestate(sessionId);
 }
 
 /**
  * Translates current game to a limited state object.
  */
-function translateToLimitedState() {
+function translateToLimitedState(sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
 
      var limited_players: LimitedPlayer[] = []
      current_game.players.forEach(player => {
@@ -535,14 +592,10 @@ function translateToLimitedState() {
      
 }
 
-function setGameState(gamestate: GameState) {
-     current_game = gamestate;
+function getGamestate(sessionId: number) {
+     updateResourceCounts(sessionId);
+     checkWinState(sessionId)
+     return translateToLimitedState(sessionId);
 }
 
-function getGamestate() {
-     updateResourceCounts();
-     checkWinState()
-     return translateToLimitedState();
-}
-
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn, switchClient, buyRoad }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, passTurn, switchClient, buyRoad }

@@ -11,7 +11,6 @@ import RollButton from "../Components/RollButton";
 import TradeModal from "../Components/TradeModal";
 import StealModal from "../Components/StealModal";
 import Dice from "../Components/Dice";
-import DevControls from "../Components/DevControls";
 import { BackendRequest } from "../Enums/requests";
 
 /**
@@ -38,9 +37,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
     setState(newState);  
   }
 
-  useEffect(() => {
-    
-  }, [state]);
+  useEffect(() => {}, [state]);
 
   const updateTradeModal = (newState: boolean) => {
     setTradeModal(newState)
@@ -137,10 +134,10 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                   isCurrentPlayer={isCurrentPlayer}/>
                 </div>
             </div>
-            <div className={"ActionsBarComponent"}><ActionsBarComponent state={state} 
-            callBackend={callBackend} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
-            updateBoughtDev={updateBoughtDev} boughtDev={boughtDev}
-            isCurrentPlayer={isCurrentPlayer} reset={resetTurn}/></div>
+            <div className={"ActionsBarComponent"}>
+              <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
+              boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer}/>
+            </div>
         </div>
       </div>   
     </div>

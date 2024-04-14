@@ -9,13 +9,32 @@ import { BackendRequest } from "../Enums/requests";
 * An interface that provides strong typing to a gamestate passed to the roll
 */
 interface RollButtonProps {
+
     /**
      * Function to call the backend through the main websocket.
      */
     callBackend: (type: string, body: BackendRequest) => void;
+
+    /**
+     * Determines if the player has rolled this turn or not.
+     */
     rolled: boolean;
+
+    /**
+     * Updates whenever the player rolls. Prevents the player from
+     * rolling twice in a single turn.
+     */
     updateRolled: (newState: boolean) => void;
+
+    /**
+     * Determines if the client is the current player. If not,
+     * the roll button shouldn't show up.
+     */
     isCurrentPlayer: boolean;
+
+    /**
+     * Sent to the backend as metadata.
+     */
     state: LimitedSession
 }
 

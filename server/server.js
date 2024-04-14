@@ -49,11 +49,14 @@ const server = app.listen(port, () => {console.log("Server Started")} )
 // this connects our wss to the server we are already using. This means we can run everything on the same 5000 port.
 const wss = new WebSocket.Server({ server: server});
 
-// should increment for each additional client that joins.
+// should increment for each additional client that joins. TODO: get this when we set up landing page and game start!
 var client_id = 1;
 
 // objects representing all players. TODO: get this when we set up the landing page and game start!
 const clients = player_data.players
+
+// should increment for each additional game running. TODO: get this when we set up landing page and game start!
+var session_id = 0;
 
 /**
  * Handles a frontend request to update the gamestate.
@@ -61,29 +64,28 @@ const clients = player_data.players
 function handleRequest(request, body) {
     switch (request) {
         case "buyDevCard":
-            gameplay.buyDevCard();
-            updateFrontend();
+            gameplay.buyDevCard(session_id);
             break;
         case "roll":
-            gameplay.handleDiceRoll();
+            gameplay.handleDiceRoll(session_id);
             break;
         case "tradeBank":
-            gameplay.tradeWithBank(body.resourceOffered, body.resourceGained);
+            gameplay.tradeWithBank(body.resourceOffered, body.resourceGained, session_id);
             break;
         case "buyRoad":
-            gameplay.buyRoad(body.roadData);
+            gameplay.buyRoad(body.roadData, session_id);
             break;
         case "steal":
-            gameplay.handleKnight(body.victim);
+            gameplay.handleKnight(body.victim, session_id);
             break;
         case "cancelSteal":
-            gameplay.cancelSteal();
+            gameplay.cancelSteal(session_id);
             break;
         case "passTurn":
-            gameplay.passTurn();
+            gameplay.passTurn(session_id);
             break;
         case "switchClient":
-            gameplay.switchClient(body.player);
+            gameplay.switchClient(body.player, session_id);
             break;
         default:
             throw new InvalidEndpointError("That endpoint is not valid!");
@@ -98,7 +100,7 @@ function handleRequest(request, body) {
 function updateFrontend() {
     wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
-            let state = gameplay.switchClient(client.id)
+            let state = gameplay.switchClient(client.id, session_id)
             client.send(JSON.stringify(state))
         }
     });
