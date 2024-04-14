@@ -31,6 +31,8 @@ const WebSocket = require('ws');
  */
 const gameplay = require("./src/gameplay")
 
+const player_data = require("./StaticData/PlayerData")
+
 // setup middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
@@ -46,10 +48,17 @@ const server = app.listen(port, () => {console.log("Server Started")} )
 // this connects our wss to the server we are already using. This means we can run everything on the same 5000 port.
 const wss = new WebSocket.Server({ server: server});
 
+// should increment for each additional client that joins.
+var client_id = 1;
+
+// objects representing all players. TODO: get this when we set up the landing page and game start!
+const clients = player_data.players
+
 // initialize socket connection
 wss.on('connection', (ws, req) => {
-    ws.send("hello!");
-    console.log("successful ws connection!");
+    ws.send("connected!");
+    ws.id = client_id;
+    client_id++;
     ws.on('message', (msg, isBinary) => {
         // goes through each client and sends it
         wss.clients.forEach((client) => {
@@ -67,9 +76,23 @@ wss.on('connection', (ws, req) => {
     });
 });
 
+/**
+ * Function used to send a limited gamestate to every client
+ * using the websocket.
+ */
+function updateFrontend() {
+    wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+            let state = gameplay.switchClient(client.id)
+            client.send(JSON.stringify(state))
+        }
+    });
+}
+
 // endpoint used to buy development cards
 app.post("/buyDevCard", (req, res) => {
     const gamestate = gameplay.buyDevCard(req.body);
+    updateFrontend();
     res.json(gamestate);
 })
 

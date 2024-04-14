@@ -1,4 +1,4 @@
-import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data, road_meta_data } from "@shared/types";
+import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer } from "@shared/types";
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
@@ -483,9 +483,56 @@ function passTurn() {
  * Used to switch clients with the click of a button. Useful for 
  * development tools, but we should regulate its use to dev tools.
  */
-function switchClient(player_index: number) {
+function switchClient(player_id: number) {
+     let player_index = 0;
+     for (let i = 0; i < current_game.players.length; i++) {
+          if (player_id == current_game.players[i].id) {
+               player_index = i;
+          }
+     }
      current_game.client = current_game.players[player_index]
      return getGamestate();
+}
+
+/**
+ * Translates current game to a limited state object.
+ */
+function translateToLimitedState() {
+
+     var limited_players: LimitedPlayer[] = []
+     current_game.players.forEach(player => {
+          limited_players.push({
+               id: player.id,
+               name: player.name,
+               image: player.image,
+               color: player.color,
+               vp: player.vp,
+               resources: player.resources
+          })
+     });
+
+     var current_limited_player: LimitedPlayer = {
+          id: current_game.current_player.id,
+          name: current_game.current_player.name,
+          image: current_game.current_player.image,
+          color: current_game.current_player.color,
+          vp: current_game.current_player.vp,
+          resources: current_game.current_player.resources
+     }
+
+     var limited_state: LimitedSession = {
+          id: current_game.id,
+          client: current_game.client,
+          diceNumber: current_game.diceNumber,
+          players: limited_players,
+          current_player: current_limited_player,
+          current_largest_army: current_game.current_largest_army,
+          current_longest_road: current_game.current_longest_road,
+          gameboard: current_game.gameboard
+     }
+
+     return limited_state
+     
 }
 
 function setGameState(gamestate: GameState) {
@@ -495,7 +542,7 @@ function setGameState(gamestate: GameState) {
 function getGamestate() {
      updateResourceCounts();
      checkWinState()
-     return current_game;
+     return translateToLimitedState();
 }
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn, switchClient, buyRoad }

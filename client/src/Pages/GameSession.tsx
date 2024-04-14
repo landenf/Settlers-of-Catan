@@ -36,11 +36,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   }
 
   useEffect(() => {
-    console.log("Updated state:,", state);
-  }, [state]);
-
-  useEffect(() => {
-    console.log("Updated state:,", state);
+    
   }, [state]);
 
   const updateTradeModal = (newState: boolean) => {

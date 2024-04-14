@@ -32,9 +32,9 @@ const DevControls: React.FC<DevProps> = ({state, setState, updateIsCurrentPlayer
         <div>
             <h1>Dev Controls</h1>
             <div>
-                <button onClick={() => handleClick(0)}>Switch to Player 1 View</button>
-                <button onClick={() => handleClick(1)}>Switch to Player 2 View</button>
-                <button onClick={() => handleClick(2)}>Switch to Player 3 View</button>
+                <button onClick={() => handleClick(1)}>Switch to Player 1 View</button>
+                <button onClick={() => handleClick(2)}>Switch to Player 2 View</button>
+                <button onClick={() => handleClick(3)}>Switch to Player 3 View</button>
             </div>
         </div>
     )};
