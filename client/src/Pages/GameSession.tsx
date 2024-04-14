@@ -23,6 +23,13 @@ export interface StateProp {
   gamestate: LimitedSession
 }
 
+/**
+   * Websocket used to update backend and retrieve the gamestate.
+   */
+const backend = new WebSocket(
+  "ws://localhost:5000",
+);
+
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [tradeModalEnabled, setTradeModal] = useState(false);

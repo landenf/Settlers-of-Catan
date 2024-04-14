@@ -31,7 +31,8 @@ const WebSocket = require('ws');
  */
 const gameplay = require("./src/gameplay")
 
-const player_data = require("./StaticData/PlayerData")
+const player_data = require("./StaticData/PlayerData");
+const { InvalidEndpointError } = require('./src/errors');
 
 // setup middleware
 app.use(express.json())
@@ -54,21 +55,54 @@ var client_id = 1;
 // objects representing all players. TODO: get this when we set up the landing page and game start!
 const clients = player_data.players
 
+/**
+ * Handles a frontend request to update the gamestate.
+ */
+function handleRequest(request, body) {
+    switch (request) {
+        case "buyDevCard":
+            gameplay.buyDevCard();
+            updateFrontend();
+            break;
+        case "roll":
+            gameplay.handleDiceRoll();
+            break;
+        case "tradeBank":
+            gameplay.tradeWithBank(body.resourceOffered, body.resourceGained);
+            break;
+        case "buyRoad":
+            gameplay.buyRoad(body.roadData);
+            break;
+        case "steal":
+            gameplay.handleKnight(body.victim);
+            break;
+        case "cancelSteal":
+            gameplay.cancelSteal();
+            break;
+        case "passTurn":
+            gameplay.passTurn();
+            break;
+        case "switchClient":
+            gameplay.switchClient(body.player);
+            break;
+        default:
+            throw new InvalidEndpointError("That endpoint is not valid!");
+    }
+    updateFrontend();
+}
+
 // initialize socket connection
 wss.on('connection', (ws, req) => {
     ws.send("connected!");
+    console.log("connection opened!")
     ws.id = client_id;
     client_id++;
-    ws.on('message', (msg, isBinary) => {
-        // goes through each client and sends it
-        wss.clients.forEach((client) => {
-            // checks to see if it is a different client and if the cient is ready to send to everyone
-            // to include yourself, remove ws !== client
-            if(ws != client && client.readyState === WebSocket.OPEN) {
-                client.send(msg, {binary: isBinary });
-            }
-        });
-    });
+    
+    ws.on('message', message => {
+        let request = JSON.parse(message)
+        console.log(request.endpoint)
+        handleRequest(request.endpoint, request.body)
+      });    
 
     // might need to include logic to close up the server
     ws.on('close', () => {
@@ -88,56 +122,3 @@ function updateFrontend() {
         }
     });
 }
-
-// endpoint used to buy development cards
-app.post("/buyDevCard", (req, res) => {
-    const gamestate = gameplay.buyDevCard(req.body);
-    updateFrontend();
-    res.json(gamestate);
-})
-
-// endpoint used to handle dice rolling
-app.post("/roll", (req, res) => {
-    const gamestate = gameplay.handleDiceRoll();
-    res.json(gamestate)
-
-})
-
-app.post("/tradeBank", (req, res) =>  {
-    const gamestate = gameplay.tradeWithBank(req.body.resourceOffered, req.body.resourceGained);
-    res.json(gamestate)
-})
-
-app.post("/buyRoad", (req, res) => {
-    const gamestate = gameplay.buyRoad(req.body.roadData);
-    res.json(gamestate);
-})
-
-app.post("/buyRoad", (req, res) => {
-    const gamestate = gameplay.buyRoad(req.body.roadData);
-    res.json(gamestate);
-})
-
-// endpoint used to handle stealing from another player using the knight card
-app.post("/steal", (req, res) => {
-    const gamestate = gameplay.handleKnight(req.body.victim);
-    res.json(gamestate)
-})
-
-app.post("/cancelSteal", (req, res) => {
-    const gamestate = gameplay.cancelSteal();
-    res.json(gamestate)
-})
-
-app.post("/passTurn", (req, res) => {
-    const gamestate = gameplay.passTurn();
-    res.json(gamestate)
-})
-
-// NOTE: this is to be used by only development tools.
-// we have better and safer ways to switch client through
-// /passTurn
-app.post("/switchClient", (req, res) => {
-    const gamestate = gameplay.switchClient(req.body.player);
-    res.json(gamestate)
-})
