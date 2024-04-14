@@ -116,6 +116,43 @@ export type Player = {
 }
 
 /**
+ * A player with limited information. Used to render necessary player information
+ * in the frontend.
+ */
+export type LimitedPlayer = {
+    
+    /**
+     * A unique user ID.
+     */
+    id: number;
+
+    /**
+     * The player's screen name.
+     */
+    name: string;
+
+    /**
+     * The player's avatar URL. TODO: Connect to a database of user images.
+     */
+    image: string;
+
+    /**
+     * The player's in-game color.
+     */
+    color: string;
+
+    /**
+     * The player's total count of victory points.
+     */
+    vp: number;
+
+    /**
+     * Total resources held by a player.
+     */
+    resources: number;
+}
+
+/**
  * Dictionary representing a count of each resource.
  */
 export type resource_counts = {
@@ -305,6 +342,64 @@ export type GameState = {
      * The player who is currently playing through their turn.
      */
     current_player: Player
+
+    /**
+     * The player who currently holds the largest army card.
+     */
+    current_largest_army: string
+
+    /**
+     * The player who currently holds the longest road card.
+     */
+    current_longest_road: string
+
+    /**
+     * The current gameboard with its representations of player buildings
+     * and resource tiles.
+     */
+    gameboard: Board
+}
+
+/**
+ * A game session with limited information. It helps to limit information
+ * leaks if we pass that information to the frontend using this limited type.
+ */
+export type LimitedSession = {
+    /**
+     * The game session ID. This marks which game session the players are
+     * playing in. This is decided before the game starts and shouldn't
+     * change throughout it.
+     */
+    id: number;
+
+    /**
+     * The user of this particular instance. Each client has a unique screen
+     * showing off their hand and victory points. 
+     */
+    client: Player;
+
+    /**
+     * The latest roll of the dice.
+     */
+    diceNumber: {
+        number1: number;
+        number2: number;
+    };
+
+    /**
+     * A list of players who are in this current game session.
+     */
+    players: LimitedPlayer[]
+
+    /**
+     * The winner of this game. If there is no winner, it is set to undefined.
+     */
+    winner?: LimitedPlayer
+
+    /**
+     * The player who is currently playing through their turn.
+     */
+    current_player: LimitedPlayer
 
     /**
      * The player who currently holds the largest army card.
