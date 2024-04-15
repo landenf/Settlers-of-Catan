@@ -208,7 +208,7 @@ export type community_meta_data = {
     /**
      * A number that corresponds to which vertex it is on to.
      */
-    vertex: number;
+    vertex: community_keys;
 
 }
 

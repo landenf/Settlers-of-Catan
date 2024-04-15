@@ -1,4 +1,4 @@
-import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data, road_meta_data } from "@shared/types";
+import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces, road_keys, community_meta_data, road_meta_data, community_keys } from "@shared/types";
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
@@ -476,12 +476,30 @@ function buySettlement(settlement: community_meta_data){
           player.hand["wood"] = player.hand["wood"] - 1;
           player.hand["sheep"] = player.hand["sheep"] - 1;
           player.hand["wheat"] = player.hand["wheat"] - 1;
-          player.communities_owned.push(settlement);
+          player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
           
-          //update potential communities
+          //remove from potential communities
           const index = player.potential_communities.indexOf(settlement);
           player.potential_communities.splice(index, 1);
-          //TODO: add the stuff
+
+          //increase level of the settlement
+          current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex]++;
+
+          //find neighbor(s)
+          for(let i = -1; i < 1; i++) { //refactor?
+               const neighbor_index = neighbors[settlement.tile_index as NeighborsKey][settlement.vertex + i]; // i is -1 and 0 need to get both neighbors
+               if(neighbor_index != -1 ){
+                    const neighbor_vertex = neighbors[neighbor_index as NeighborsKey].indexOf(settlement.tile_index);
+                    const neighbor_settlement: community_meta_data = {
+                         tile_index: neighbor_index,
+                         vertex: neighbor_vertex as community_keys
+                    }
+                    console.log(neighbor_settlement);
+                    //update neighbor settlement level as well.
+                    current_game.gameboard.tiles[neighbor_settlement.tile_index].community_spaces[neighbor_settlement.vertex]++;
+               }
+               break;
+          }
      }
 }
 
