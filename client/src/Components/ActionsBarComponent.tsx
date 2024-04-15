@@ -30,13 +30,42 @@ interface ActionsBarComponentProps {
    * The current representation of the gamestate.
    */
   state: GameState;
+
+  /**
+   * Updates whether or not a player has bought a dev card this turn.
+   */
+  updateBoughtDev: (newState: boolean) => void;
+
+  /**
+   * This is true if a player has purchased a dev card this turn, and false if not.
+   */
+  boughtDev: boolean;
+
+  /**
+   * Updates whether or not this component is being rendered on the current
+   * player's screen.
+   */
+  updateIsCurrentPlayer: (newState: boolean) => void;
+
+  /**
+   * Determines whether or not this component is being rendered on the current
+   * player's screen.
+   */
+  isCurrentPlayer: boolean;
+
+  /**
+   * Resets action bar component to its initial state.
+   */
+  reset: () => void;
+
 }
 
 /**
  * The sidebar used to trade resources, build settlements, and buy development 
  * cards. Appears on a player's game turn.
  */
-const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, setStealModal }) => {
+const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, 
+  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer, reset }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -68,10 +97,19 @@ const KnightBody: StealRequest = {
     if (newState.current_player.hasKnight) {
       setStealModal(true);
     }
+
+    if (action === "buyDevCard") {
+      updateBoughtDev(true);
+    }
+
+    if (action === "passTurn") {
+      updateIsCurrentPlayer(newState.client.color === newState.current_player.color);
+      reset();
+    }
   };
 
   return (
-    <div className="absolute-container">
+    <div className={("absolute-container " + (isCurrentPlayer ? "" : "disabled"))}>
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
@@ -91,7 +129,7 @@ const KnightBody: StealRequest = {
         <div className="line"></div>
           <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Three</p>
         <div className="line-thick"></div>
-        <h1 className="button text-bold" onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</h1>
+        <button className={"button text-bold " + (boughtDev ? "buy-dark" : "")} disabled={boughtDev} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
         <div className="line-thick"></div>
         <h1 className="button text-bold" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
         <div className="line-thick"></div>

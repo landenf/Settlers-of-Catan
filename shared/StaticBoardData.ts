@@ -1,4 +1,4 @@
-import { Tile } from "@shared/types";
+import { Tile } from "./types"
 
 const Tile_Resources: {[index: number]:any} = {
     0: "wheat",
@@ -57,23 +57,14 @@ export const tiles: Tile[] = total_tiles.map((index) => (
       5: 0
     },
     road_spaces: {
-      0: "grey",
-      1: "grey",
-      2: "grey",
-      3: "grey",
-      4: "grey",
-      5: "grey"
+      0: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0
     },
     number_roll: Tile_Dice[index],
     type: Tile_Resources[index]
   })
 )
-  
-export const GameBoardConfiguration =  {
-    "width": "100%",
-    "height": "70vh",
-    "layout": { "width": 9, "height": 9, "flat": false, "spacing": 1.1 },
-    "origin": { "x": 0, "y": 0 },
-    "map": "hexagon",
-    "mapProps": [ 2 ]
-  };

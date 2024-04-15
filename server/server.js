@@ -85,6 +85,16 @@ app.post("/tradeBank", (req, res) =>  {
     res.json(gamestate)
 })
 
+app.post("/buyRoad", (req, res) => {
+    const gamestate = gameplay.buyRoad(req.body.roadData);
+    res.json(gamestate);
+})
+
+app.post("/buyRoad", (req, res) => {
+    const gamestate = gameplay.buyRoad(req.body.roadData);
+    res.json(gamestate);
+})
+
 // endpoint used to handle stealing from another player using the knight card
 app.post("/steal", (req, res) => {
     const gamestate = gameplay.handleKnight(req.body.victim);
@@ -96,7 +106,15 @@ app.post("/cancelSteal", (req, res) => {
     res.json(gamestate)
 })
 
-// open app server.
-// TODO: Run API on online hosting.
-app.listen(5000, () => {console.log("Server Started")} )
+app.post("/passTurn", (req, res) => {
+    const gamestate = gameplay.passTurn();
+    res.json(gamestate)
+})
+
+// NOTE: this is to be used by only development tools.
+// we have better and safer ways to switch client through
+// /passTurn
+app.post("/switchClient", (req, res) => {
+    const gamestate = gameplay.switchClient(req.body.player);
+    res.json(gamestate)
 })
