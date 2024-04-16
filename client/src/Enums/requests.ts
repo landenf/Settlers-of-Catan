@@ -1,4 +1,4 @@
-import { GameState, road_meta_data, Player } from '@shared/types';
+import { GameState, road_meta_data, Player, community_meta_data } from '@shared/types';
 
 /**
  * Wrapper type for all kinds of requests.
@@ -26,4 +26,9 @@ interface StealRequest extends BackendRequest {
 interface RoadRequest extends BackendRequest {
     roadData: road_meta_data;
 }
-export {TradeRequest, BackendRequest, RoadRequest, StealRequest}
+
+interface SettlementRequest extends BackendRequest {
+    settlementData: community_meta_data;
+}
+
+export {TradeRequest, BackendRequest, RoadRequest, StealRequest, SettlementRequest}

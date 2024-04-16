@@ -5,20 +5,21 @@ import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
 import { Tile } from '@shared/types';
 import { GameState } from '@shared/types';
-import Dice from './Dice';
+import { GameBoardActionsDisplay } from '../Pages/GameSession';
 
 interface GameBoardProp {
   tiles: Tile[],
   gamestate: GameState,
   updateState: (newState: GameState) => void;
-
+  showPotentials: GameBoardActionsDisplay;
 }
+
 /**
  * The gameboard where the magic happens. Rendered at the center of the screen,
  * it shows each individual tile, their resource type, and their number to roll.
  * @param props a boardstate often retrieved and modified in the backend
  */
-const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState }) => {
+const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, showPotentials }) => {
   // generate hexagonal grid
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
   const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
@@ -41,6 +42,7 @@ const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState }) =
               tile={tiles[i]}
               gamestate={ gamestate }
               updateState={updateState}
+              showPotenials={showPotentials}
               />
           ))}
         </Layout>

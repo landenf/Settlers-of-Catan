@@ -95,6 +95,12 @@ app.post("/buyRoad", (req, res) => {
     res.json(gamestate);
 })
 
+app.post("/buySettlement", (req, res) => {
+    console.log('here')
+    const gamestate = gameplay.buySettlement(req.body.settlementData);
+    res.json(gamestate);
+})
+
 // endpoint used to handle stealing from another player using the knight card
 app.post("/steal", (req, res) => {
     const gamestate = gameplay.handleKnight(req.body.victim);
@@ -110,6 +116,8 @@ app.post("/passTurn", (req, res) => {
     const gamestate = gameplay.passTurn();
     res.json(gamestate)
 })
+
+
 
 // NOTE: this is to be used by only development tools.
 // we have better and safer ways to switch client through

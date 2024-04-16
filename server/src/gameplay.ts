@@ -225,7 +225,7 @@ function buyRoad(road: road_meta_data){
           canBuy = false;
      }
 
-     if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "grey"){
+     if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "white"){
           canBuy = false;
      }
 
@@ -302,8 +302,8 @@ function buyRoad(road: road_meta_data){
 
                const community_two : community_meta_data = {
                     tile_index: road.tile_index,
-                    vertex: road.edge - 1,
-               }
+                    vertex: road.edge - 1 as community_keys,
+                }
 
                if(player.potential_communities.indexOf(community_two) < 0) {
                     player.potential_communities.push(community_two);
@@ -312,7 +312,7 @@ function buyRoad(road: road_meta_data){
      }
      current_game.current_player = player;
 
-     return current_game;
+     return current_game; //todo update return
 }
 
 /**
@@ -483,24 +483,26 @@ function buySettlement(settlement: community_meta_data){
           player.potential_communities.splice(index, 1);
 
           //increase level of the settlement
-          current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex]++;
+          let current = current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex];
+          current.level++;
+          current.color = player.color;
 
           //find neighbor(s)
-          for(let i = -1; i < 1; i++) { //refactor?
+          for(let i = -1; i < 1; i++) { 
                const neighbor_index = neighbors[settlement.tile_index as NeighborsKey][settlement.vertex + i]; // i is -1 and 0 need to get both neighbors
-               if(neighbor_index != -1 ){
-                    const neighbor_vertex = neighbors[neighbor_index as NeighborsKey].indexOf(settlement.tile_index);
+               if(neighbor_index > -1 ){
+                    const neighbor_vertex = neighbors[neighbor_index as NeighborsKey].indexOf(settlement.tile_index) + (1 + i); // offset vertex's
                     const neighbor_settlement: community_meta_data = {
                          tile_index: neighbor_index,
                          vertex: neighbor_vertex as community_keys
                     }
-                    console.log(neighbor_settlement);
-                    //update neighbor settlement level as well.
-                    current_game.gameboard.tiles[neighbor_settlement.tile_index].community_spaces[neighbor_settlement.vertex]++;
+                    let current = current_game.gameboard.tiles[neighbor_settlement.tile_index].community_spaces[neighbor_settlement.vertex]
+                    current.level++;
+                    current.color = player.color;
                }
-               break;
           }
      }
+     return getGamestate();
 }
 
 /**
@@ -561,4 +563,4 @@ function getGamestate() {
      return current_game;
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn, switchClient, buyRoad }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, setGameState, handleKnight, cancelSteal, passTurn, switchClient, buyRoad, buySettlement }

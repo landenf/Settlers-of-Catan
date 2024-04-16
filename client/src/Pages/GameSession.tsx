@@ -23,10 +23,16 @@ export interface StateProp {
   gamestate: GameState
 }
 
+export interface GameBoardActionsDisplay {
+  roads: boolean,
+  settlements: boolean
+}
+
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
+  const [showPotenials, setShowPotentials] = useState<GameBoardActionsDisplay>({roads: false, settlements: false})
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
@@ -50,6 +56,20 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const updateStealModal = (newState: boolean) => {
     setStealModal(newState);
   }
+  
+  const updatePotentialSettlements = (selected: string) => {
+    if (selected === 'settlements') {
+      setShowPotentials(prevState => ({
+        roads: false,  
+        settlements: !prevState.settlements  // Toggle settlements
+      }));
+    } else if (selected === 'roads') {
+      setShowPotentials(prevState => ({
+        roads: !prevState.roads,  // Toggle roads
+        settlements: false  
+      }));
+    }
+  };
 
   const updateRolled = (newState: boolean) => {
     setRolled(newState);
@@ -94,8 +114,11 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                   <Dice numberRolled={state.diceNumber}/>
                       <GameBoard 
                           tiles={tiles}
-                          gamestate={ props.gamestate }
-                          updateState={ updateState } /></div>
+                          gamestate={ state }
+                          updateState={ updateState } 
+                          showPotentials={showPotenials}  
+                        />
+                </div>
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />
@@ -106,7 +129,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
             <div className={"ActionsBarComponent"}><ActionsBarComponent state={state} 
             updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
             updateBoughtDev={updateBoughtDev} boughtDev={boughtDev} updateIsCurrentPlayer={updateCurrentPlayer}
-            isCurrentPlayer={isCurrentPlayer} reset={resetTurn}/></div>
+            isCurrentPlayer={isCurrentPlayer} reset={resetTurn} updatePotentialSettlements={updatePotentialSettlements}/></div>
         </div>
       </div>   
       <DevControls state={state} setState={updateState} updateIsCurrentPlayer={updateCurrentPlayer}/>

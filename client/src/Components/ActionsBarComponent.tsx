@@ -53,6 +53,11 @@ interface ActionsBarComponentProps {
    */
   isCurrentPlayer: boolean;
 
+    /**
+   * Updates whether or not potential settlements or roads should be displayed.
+   */
+  updatePotentialSettlements: (selected: string) => void;
+
   /**
    * Resets action bar component to its initial state.
    */
@@ -65,7 +70,7 @@ interface ActionsBarComponentProps {
  * cards. Appears on a player's game turn.
  */
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, 
-  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer, reset }) => {
+  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer, reset, updatePotentialSettlements }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -113,9 +118,9 @@ const KnightBody: StealRequest = {
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('buildRoad', NullBody)}>Road</p>
+          <p className="button indented-text" onClick={() => updatePotentialSettlements('roads')}>Road</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('buildSettlement', NullBody)}>Settlement</p>
+          <p className="button indented-text" onClick={() => updatePotentialSettlements('settlements')}>Settlement</p>
         <div className="line"></div>
           <p className="button indented-text" onClick={() => handleButtonClick('buildCity', NullBody)}>City</p>
         <div className="line-thick"></div>
