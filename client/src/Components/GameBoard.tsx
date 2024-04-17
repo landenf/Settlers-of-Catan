@@ -11,7 +11,7 @@ interface GameBoardProp {
   tiles: Tile[],
   gamestate: GameState,
   updateState: (newState: GameState) => void;
-  showPotentials: GameBoardActionsDisplay;
+  showPotenialBuildOptions: GameBoardActionsDisplay;
 }
 
 /**
@@ -19,7 +19,7 @@ interface GameBoardProp {
  * it shows each individual tile, their resource type, and their number to roll.
  * @param props a boardstate often retrieved and modified in the backend
  */
-const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, showPotentials }) => {
+const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, showPotenialBuildOptions }) => {
   // generate hexagonal grid
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
   const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
@@ -42,7 +42,7 @@ const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, sho
               tile={tiles[i]}
               gamestate={ gamestate }
               updateState={updateState}
-              showPotenials={showPotentials}
+              showPotenialBuildOptions={showPotenialBuildOptions}
               />
           ))}
         </Layout>

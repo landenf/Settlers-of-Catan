@@ -1,11 +1,12 @@
 import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
 import { Tile, community_keys, community_meta_data, road_keys, road_meta_data, road_spaces } from '@shared/types';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RoadRequest, SettlementRequest } from '../Enums/requests';
 import { GameState } from '@shared/types';
 import { InvalidIndexError } from '../Enums/errors';
 import { GameBoardActionsDisplay } from '../Pages/GameSession';
+import { players } from '../StaticData/PlayerData';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.
@@ -26,12 +27,36 @@ interface HexProp {
      */
     tile: Tile;
 
+    /**
+     * The backend information related to the game state.
+     */
     gamestate: GameState;
 
+    /**
+     * The function to update the gamestate from this component.
+     */
     updateState: (newState: GameState) => void;
 
-    showPotenials: GameBoardActionsDisplay;
+    /**
+     * Boolean to show or hide potential build options.
+     */
+    showPotenialBuildOptions: GameBoardActionsDisplay;
 
+}
+
+interface Road_Display_Data {
+    startX: number;
+    startY: number;
+    endX: number;
+    endY: number;
+    color: string;
+}
+interface Settlement_Display_Data {
+    x: number, 
+    y: number, 
+    level: number, 
+    color: string,
+    vertex: number
 }
 
 /**
@@ -39,38 +64,23 @@ interface HexProp {
  * resource type and a number associated.
  * @param props information about the tile passed through, typically from the backend server.
  */
-const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateState, showPotenials }) => {
+const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateState, showPotenialBuildOptions }) => {
 
-    interface Line {
-        startX: number;
-        startY: number;
-        endX: number;
-        endY: number;
-    }
-    interface Circle {
-        x: number, 
-        y: number, 
-        level: number, 
-        color: string,
-        vertex: number
-    }
+
     /**
      * Used to index the community space.
      */
     type numberKey = keyof typeof tile.community_spaces
 
-    const handleCircleClick = () => {
-        console.log('true');
-    };
-    
     const edgeLength = 10;
     const angles = [270, 330, 30, 90, 150, 210];
-    const [lines, setLines] = useState<Line[]>([]);
-    const [circles, setCircles] = useState<Circle[]>([]);
+    const [roads, setRoads] = useState<Road_Display_Data[]>([]);
+    const [settlements, setSettlements] = useState<Settlement_Display_Data[]>([]);
+    const [colors, setColors] = useState(Object.values(gamestate.gameboard.tiles[index].road_spaces));
 
     useEffect(() => {
-        let newLines = [];
-        let newCircles = [];
+        let newRoads = [];
+        let newSettlements = [];
 
         for (let i = 0; i < 6; i++) {
             const angleDeg = angles[i]; 
@@ -88,26 +98,49 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 tile_index: 5,
                 vertex: 3,
            }
-            gamestate.client.potential_communities.push(community_two);
+           const road_one : road_meta_data = {
+            tile_index: 6,
+            edge: 5,
+            }
+            const road_two : road_meta_data = {
+                tile_index: 4,
+                edge: 4,
+        }
+            //gamestate.client.potential_communities.push(community_two);
+            //gamestate.client.potential_roads.push(road_one);
+            gamestate.current_player.potential_communities.push(community_two);
+            gamestate.current_player.potential_roads.push(road_one);
+            gamestate.current_player.potential_roads.push(road_two);
 
-            let isValidCommunityVertex = gamestate.client.potential_communities.some(community => 
+            let isValidPotientialCommunityVertex = gamestate.current_player.potential_communities.some(community => 
                 community.tile_index === index && community.vertex === i);
 
-            if (communitySpaceData.level > 0 || (showPotenials.settlements && isValidCommunityVertex)) {
-                newCircles.push({
+            //if there is a potential road
+            if ((showPotenialBuildOptions.settlements && isValidPotientialCommunityVertex)) {
+                 newSettlements.push({
                     x: startX, 
                     y: startY, 
                     level: communitySpaceData.level, 
-                    color: showPotenials.settlements ? 'grey' : communitySpaceData.color,
+                    color: showPotenialBuildOptions.settlements ? 'grey' : communitySpaceData.color,
                     vertex: i
                 });
             }
-            newLines.push({ startX, startY, endX, endY });
+
+            let isValidPotientialRoadEdge = gamestate.current_player.potential_roads.some(road => 
+                road.tile_index === index && road.edge === i);
+
+            newRoads.push({
+                startX: startX, 
+                startY: startY, 
+                endX: endX, 
+                endY: endY,
+                color:  (showPotenialBuildOptions.roads && isValidPotientialRoadEdge) ? 'grey' : colors[i]
+            })
         }
 
-        setLines(newLines);
-        setCircles(newCircles);
-    }, [gamestate, showPotenials.settlements]); 
+        setRoads(newRoads);
+        setSettlements(newSettlements);
+    }, [gamestate, showPotenialBuildOptions.settlements, showPotenialBuildOptions.roads]); 
 
 
     /**
@@ -142,8 +175,6 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
         return translation
     }
 
-    const [colors, setColors] = useState(Object.values(gamestate.gameboard.tiles[index].road_spaces));
-
 
     //handle buying a road
     const handleEdgeClick = async (idx: road_keys, e: any) => {
@@ -172,7 +203,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
      //handle buying a settlement
      const handleVertexClick = async (idx: community_keys, e: any) => {
         e.stopPropagation(); 
-        if(showPotenials.settlements){ // were in 'buy' mode
+        if(showPotenialBuildOptions.settlements){ // were in 'buy' mode
             const settlement : community_meta_data = {
                 tile_index: index,
                 vertex: idx
@@ -181,7 +212,6 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 settlementData: settlement,
                 state: gamestate
             }
-            console.log("request")
             const response = await fetch('http://localhost:5000/buySettlement', {
                 method: "POST",
                 body: JSON.stringify(body),
@@ -199,48 +229,47 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
 
     return (
         <Hexagon               
-            onClick={() => {handleCircleClick}} 
             key={index} 
             q={hex.q} 
             r={hex.r} 
             s={hex.s} 
             fill={tile.type} 
             >
-            {lines.map((line, idx) => (
+            {roads.map((road, idx) => (
                 <line
                     key={idx}
-                    x1={line.startX}
-                    y1={line.startY}
-                    x2={line.endX}
-                    y2={line.endY}
-                    stroke={colors[idx]}
+                    x1={road.startX}
+                    y1={road.startY}
+                    x2={road.endX}
+                    y2={road.endY}
+                    stroke={road.color}
                     strokeWidth="1"
                     onClick={(e) => handleEdgeClick(idx as road_keys, e)}
                 />
             ))} 
-            {circles.map((circle, idx) => (
+            {settlements.map((settlement, idx) => (
                 <React.Fragment key={idx} >
                     <circle
-                        cx={circle.x}
-                        cy={circle.y}
+                        cx={settlement.x}
+                        cy={settlement.y}
                         r="2"
-                        fill={circle.color}
+                        fill={settlement.color}
                     />
                     <text
-                        x={circle.x}
-                        y={circle.y} 
+                        x={settlement.x}
+                        y={settlement.y} 
                         fill="white" 
                         dominantBaseline="middle" 
                         textAnchor="middle" 
-                        style={{ fontSize: '0.2rem', cursor: circle.level === 0 ? 'pointer' : 'default'  }} 
-                        onClick={(e) => handleVertexClick(circle.vertex as community_keys, e)}
+                        style={{ fontSize: '0.2rem', cursor: settlement.level === 0 ? 'pointer' : 'default'  }} 
+                        onClick={(e) => handleVertexClick(settlement.vertex as community_keys, e)}
                     >
-                        {circle.level}
+                        {settlement.level}
                     </text>
                 </React.Fragment>
             ))}
             <circle cx="0" cy="0.5" r="3.5" fill="white"  />
-            <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }} onClick={handleCircleClick}>{tile.number_roll}</Text>  
+            <Text style={{ fontSize: '0.3rem', dominantBaseline: "middle", textAnchor: "middle" }}>{tile.number_roll}</Text>  
         </Hexagon>
     );
 }

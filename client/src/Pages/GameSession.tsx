@@ -32,7 +32,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
-  const [showPotenials, setShowPotentials] = useState<GameBoardActionsDisplay>({roads: false, settlements: false})
+  const [showPotenialBuildOptions, setshowPotenialBuildOptions] = useState<GameBoardActionsDisplay>({roads: false, settlements: false})
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
@@ -59,12 +59,12 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   
   const updatePotentialSettlements = (selected: string) => {
     if (selected === 'settlements') {
-      setShowPotentials(prevState => ({
+      setshowPotenialBuildOptions(prevState => ({
         roads: false,  
         settlements: !prevState.settlements  // Toggle settlements
       }));
     } else if (selected === 'roads') {
-      setShowPotentials(prevState => ({
+      setshowPotenialBuildOptions(prevState => ({
         roads: !prevState.roads,  // Toggle roads
         settlements: false  
       }));
@@ -116,7 +116,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                           tiles={tiles}
                           gamestate={ state }
                           updateState={ updateState } 
-                          showPotentials={showPotenials}  
+                          showPotenialBuildOptions={showPotenialBuildOptions}  
                         />
                 </div>
                 <div className="user-info">

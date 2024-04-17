@@ -221,16 +221,17 @@ function buyRoad(road: road_meta_data){
           canBuy = false;
      }
 
-     if(!player.potential_roads.includes(road)){
-          canBuy = false;
-     }
+     // if(!player.potential_roads.includes(road)){
+     //      canBuy = false;
+     // }
 
      if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "white"){
           canBuy = false;
      }
-
+     console.log(canBuy);
      // if can buy, do buying functionality
      if(canBuy){
+          console.log('buying');
           //decrease counts buy one for brick and wood and add the road to the player's list
           player.hand["brick"] = player.hand["brick"] - 1;
           player.hand["wood"] = player.hand["wood"] - 1;
@@ -253,8 +254,8 @@ function buyRoad(road: road_meta_data){
           }
 
 
-          // add potential communities
-          if(road.edge == 0){
+          // add potential communities //todo fix this 
+          if(road.edge == 0){ 
                const community_one : community_meta_data = {
                     tile_index: road.tile_index,
                     vertex: 5,
@@ -465,9 +466,9 @@ function buySettlement(settlement: community_meta_data){
           canBuy = false;
      }
 
-     if(!player.potential_communities.includes(settlement)){
-          canBuy = false;
-     }
+     // if(!player.potential_communities.includes(settlement)){
+     //      canBuy = false;
+     // }
 
      // if can buy, do buying functionality
      if(canBuy){
