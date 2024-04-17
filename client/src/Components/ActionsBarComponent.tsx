@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
-import { GameState } from '@shared/types';
+import { LimitedSession } from '@shared/types';
 import { BackendRequest, StealRequest } from '../Enums/requests';
 
 /**
@@ -15,26 +15,14 @@ interface ActionsBarComponentProps {
   setTradeModal: (newState: boolean) => void;
 
   /**
-   * Function to set the steal modal on or off.
-   * @param newState "true" to display steal modal, "false" to not
-   */
-  setStealModal: (newState: boolean) => void;
-
-  /**
-   * Function to update the frontend gamestate.
-   * @param newState the new gamestate to update to
-   */
-  updateState: (newState: GameState) => void;
+     * Function to call the backend through the main websocket.
+     */
+  callBackend: (type: string, body: BackendRequest) => void;
 
   /**
    * The current representation of the gamestate.
    */
-  state: GameState;
-
-  /**
-   * Updates whether or not a player has bought a dev card this turn.
-   */
-  updateBoughtDev: (newState: boolean) => void;
+  state: LimitedSession;
 
   /**
    * This is true if a player has purchased a dev card this turn, and false if not.
@@ -42,21 +30,10 @@ interface ActionsBarComponentProps {
   boughtDev: boolean;
 
   /**
-   * Updates whether or not this component is being rendered on the current
-   * player's screen.
-   */
-  updateIsCurrentPlayer: (newState: boolean) => void;
-
-  /**
    * Determines whether or not this component is being rendered on the current
    * player's screen.
    */
   isCurrentPlayer: boolean;
-
-  /**
-   * Resets action bar component to its initial state.
-   */
-  reset: () => void;
 
 }
 
@@ -64,8 +41,8 @@ interface ActionsBarComponentProps {
  * The sidebar used to trade resources, build settlements, and buy development 
  * cards. Appears on a player's game turn.
  */
-const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, 
-  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer, reset }) => {
+const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, callBackend, setTradeModal, 
+  boughtDev, isCurrentPlayer }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -81,31 +58,8 @@ const KnightBody: StealRequest = {
 }
   
   const handleButtonClick = async (action: string, body: BackendRequest) => {
-    // call back end
-    const URL = 'http://localhost:5000/' + action;
-    const response = await fetch('http://localhost:5000/' + action, {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      }});
 
-    // retrieve the new game state and update it in the frontend
-    let newState: GameState = await response.json();
-    updateState(newState);
-
-    if (newState.current_player.hasKnight) {
-      setStealModal(true);
-    }
-
-    if (action === "buyDevCard") {
-      updateBoughtDev(true);
-    }
-
-    if (action === "passTurn") {
-      updateIsCurrentPlayer(newState.client.color === newState.current_player.color);
-      reset();
-    }
+    callBackend(action, body)
   };
 
   return (

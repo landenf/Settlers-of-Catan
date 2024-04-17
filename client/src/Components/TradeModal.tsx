@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/TradeModal.css";
 import EmptyHand from "./EmptyHand";
-import { GameState } from "@shared/types";
+import { LimitedSession } from "@shared/types";
 import { TradeParams } from "../Enums/tradebody";
 import { BackendRequest, TradeRequest } from "../Enums/requests";
 
@@ -23,12 +23,12 @@ export interface TradeModalProp {
     /**
      * The current gamestate.
      */
-    gamestate: GameState
+    gamestate: LimitedSession
 
     /**
-     * Function to set the gamestate.
+     * Function to call the backend through the main websocket.
      */
-    setState: (newState: GameState) => void;
+    callBackend: (type: string, body: BackendRequest) => void;
 
   }
 
@@ -36,7 +36,7 @@ export interface TradeModalProp {
  * A modal that pops out when trading. TODO: Work to include this with other forms of trading
  * besides the bank!
  */
-const TradeModalComponent: React.FC<TradeModalProp> = ({ setTradeModal, tradeModalState, gamestate, setState }) => {
+const TradeModalComponent: React.FC<TradeModalProp> = ({ setTradeModal, tradeModalState, gamestate, callBackend }) => {
 
     const [trade, setTrade] = useState({offer: "", gain: ""});
     const [tradeEmpty, setTradeEmpty] = useState(0);
@@ -50,25 +50,6 @@ const TradeModalComponent: React.FC<TradeModalProp> = ({ setTradeModal, tradeMod
     }
 
     /**
-     * Method to call the backend for trading purposes.
-     * @param type the type of trade to conduct
-     * @param body the payload information, such as resources or gamestate
-     */
-    const callBackend = async (type: string, body: BackendRequest) => {
-        const URL = 'http://localhost:5000/trade' + type;
-        const response = await fetch(URL, {
-          method: "POST",
-          body: JSON.stringify(body),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8"
-          }});
-        
-        // retrieve the new game state and update it in the frontend
-        let newState = await response.json();
-        setState(newState);
-    }
-
-    /**
      * Sets the new trade parameters, given the card type.
      */
     const handleButtonClick = () => {
@@ -77,7 +58,7 @@ const TradeModalComponent: React.FC<TradeModalProp> = ({ setTradeModal, tradeMod
             resourceGained: trade.gain,
             state: gamestate
         }
-        callBackend("Bank", body)
+        callBackend("tradeBank", body)
     }
 
     return (

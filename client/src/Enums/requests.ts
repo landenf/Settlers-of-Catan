@@ -1,10 +1,10 @@
-import { GameState, road_meta_data, Player } from '@shared/types';
+import { LimitedSession, road_meta_data, Player } from '@shared/types';
 
 /**
  * Wrapper type for all kinds of requests.
  */
 interface BackendRequest {
-    state: GameState;
+    state: LimitedSession;
 }
 
 /**
