@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/LandingPage.css";
 import MenuToggleComponent from "../Components/MenuToggleComponent";
+import JoinRoomWithCodeComponent from "../Components/JoinRoomWithCodeComponent";
 
 /**
  * Page where the user starts after logging in and sees their individual player stats.
@@ -20,6 +21,7 @@ const LandingPage: React.FC = () => {
         <p className="catanTitle">CATAN</p>
         <MenuToggleComponent />
       </div>
+      <JoinRoomWithCodeComponent />
     </div>
   );
 };

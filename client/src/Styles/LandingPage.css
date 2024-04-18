@@ -3,7 +3,7 @@
   height: 100vh;
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   background-image: url("../../public/images/background-image.jpg");
   background-size: cover;

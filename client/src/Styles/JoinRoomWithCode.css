@@ -1,0 +1,57 @@
+.join-room-with-code {
+  left: 40vw;
+  top: 0px;
+  width: 60vw;
+  height: 100vh;
+  float: right;
+}
+
+.header-box {
+  top: 10vh;
+  width: 40vw;
+  height: 15vh;
+  background: #c3332b;
+  border-radius: 129px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header-text {
+  color: #fdfdfd;
+  position: absolute;
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 70px;
+  text-align: center;
+  font-family: Inter;
+  font-weight: 375;
+  word-wrap: break-word;
+}
+
+.main-content-box {
+  top: 20vh;
+  width: 40vw;
+  height: 55vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #c3332b;
+  border-radius: 129px;
+  margin: 0 auto;
+}
+
+.players-in-room {
+  color: #fdfdfd;
+  position: absolute;
+  margin: 0 auto;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 50px;
+  text-align: center;
+  font-family: Inter;
+  font-weight: 375;
+  word-wrap: break-word;
+}
