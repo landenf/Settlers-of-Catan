@@ -221,11 +221,11 @@ function buyRoad(road: road_meta_data){
           canBuy = false;
      }
 
-     // if(!player.potential_roads.includes(road)){
-     //      canBuy = false;
-     // }
+     if(!player.potential_roads.includes(road)){
+          canBuy = false;
+     }
 
-     if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "white"){
+     if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "white"){// check
           canBuy = false;
      }
      console.log(canBuy);
@@ -337,6 +337,9 @@ function potentialUpdatesRoad(road: road_meta_data){
           if(player.potential_roads.indexOf(road_one) < 0){
                player.potential_roads.push(road_one)
           }
+
+          checkForNeighborPotentialRoad(road_one);
+
           const road_two : road_meta_data = {
                tile_index: road.tile_index,
                edge: 1
@@ -345,6 +348,9 @@ function potentialUpdatesRoad(road: road_meta_data){
           if(player.potential_roads.indexOf(road_two) < 0){
                player.potential_roads.push(road_two)
           }
+
+          checkForNeighborPotentialRoad(road_two);
+
      } else if(road.edge == 5){
           const road_one : road_meta_data = {
                tile_index: road.tile_index,
@@ -354,6 +360,9 @@ function potentialUpdatesRoad(road: road_meta_data){
           if(player.potential_roads.indexOf(road_one) < 0){
                player.potential_roads.push(road_one)
           }
+
+          checkForNeighborPotentialRoad(road_one);
+
           const road_two : road_meta_data = {
                tile_index: road.tile_index,
                edge: 0
@@ -362,6 +371,9 @@ function potentialUpdatesRoad(road: road_meta_data){
           if(player.potential_roads.indexOf(road_two) < 0){
                player.potential_roads.push(road_two)
           }
+
+          checkForNeighborPotentialRoad(road_two);
+
      } else {
           const new_edge_one = road.edge - 1;
           const road_one : road_meta_data = {
@@ -373,6 +385,8 @@ function potentialUpdatesRoad(road: road_meta_data){
                player.potential_roads.push(road_one)
           }
 
+          checkForNeighborPotentialRoad(road_one);
+
           const new_edge_two = road.edge + 1;
           const road_two : road_meta_data = {
                tile_index: road.tile_index,
@@ -382,10 +396,29 @@ function potentialUpdatesRoad(road: road_meta_data){
           if(player.potential_roads.indexOf(road_two) < 0){
                player.potential_roads.push(road_two)
           }  
-     }
 
+          checkForNeighborPotentialRoad(road_two);
+     }
 }
 
+
+/**
+ * Helper function to deal with adding potential roads to neighbors.
+ * @param road
+ */
+function checkForNeighborPotentialRoad (road: road_meta_data){
+     const player = current_game.current_player;
+     //if there is a neighbor 
+     let neighbor = neighbors[road.tile_index as road_keys][road.edge];
+     if(neighbor != -1){
+          let newEdge = (road.edge + 3) % 6; // This will ensure the edge wraps around within 0 to 5
+          let neighborPotentialRoad : road_meta_data = {
+               tile_index: neighbor,
+               edge: newEdge as road_keys
+          }
+          player.potential_roads.push(neighborPotentialRoad)
+     }
+}
 
 
 
