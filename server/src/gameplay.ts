@@ -2,6 +2,7 @@ import { GameState, Player, Tile, community_spaces, resource_counts, road_spaces
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
+import { toUSVString } from "util";
 
 /**
  * This is the gamestate as currently represented in the backend. It is manipulated
@@ -238,6 +239,7 @@ function buyRoad(road: road_meta_data){
           player.roads_owned.push(road);
           current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
+          //add all potential roads and neighboring potential roads
           potentialUpdatesRoad(road);
           const neighbor_index = neighbors[road.tile_index as NeighborsKey][road.edge];
           if(neighbor_index != -1 ){
@@ -254,62 +256,9 @@ function buyRoad(road: road_meta_data){
           }
 
 
-          // add potential communities //todo fix this 
-          if(road.edge == 0){ 
-               const community_one : community_meta_data = {
-                    tile_index: road.tile_index,
-                    vertex: 5,
-               }
-
-               if(player.potential_communities.indexOf(community_one) < 0) {
-                    player.potential_communities.push(community_one);
-               }
-
-               const community_two : community_meta_data = {
-                    tile_index: road.tile_index,
-                    vertex: road.edge,
-               }
-
-               if(player.potential_communities.indexOf(community_two) < 0) {
-                    player.potential_communities.push(community_two);
-               }
-          } else if(road.edge == 5){
-               const community_one : community_meta_data = {
-                    tile_index: road.tile_index,
-                    vertex: 0,
-               }
-
-               if(player.potential_communities.indexOf(community_one) < 0) {
-                    player.potential_communities.push(community_one);
-               }
-
-               const community_two : community_meta_data = {
-                    tile_index: road.tile_index,
-                    vertex: road.edge,
-               }
-
-               if(player.potential_communities.indexOf(community_two) < 0) {
-                    player.potential_communities.push(community_two);
-               }
-          }else {
-               const community_one : community_meta_data = {
-                    tile_index: road.tile_index,
-                    vertex: road.edge,
-               }
-
-               if(player.potential_communities.indexOf(community_one) < 0) {
-                    player.potential_communities.push(community_one);
-               }
-
-               const community_two : community_meta_data = {
-                    tile_index: road.tile_index,
-                    vertex: road.edge - 1 as community_keys,
-                }
-
-               if(player.potential_communities.indexOf(community_two) < 0) {
-                    player.potential_communities.push(community_two);
-               }
-          }
+          // add potential communities 
+          let builtRoad = road;
+          let 
      }
      current_game.current_player = player;
 
@@ -360,6 +309,9 @@ function potentialUpdatesRoad(road: road_meta_data){
           if(player.potential_roads.indexOf(road_one) < 0){
                player.potential_roads.push(road_one)
           }
+
+
+
 
           checkForNeighborPotentialRoad(road_one);
 
@@ -420,6 +372,65 @@ function checkForNeighborPotentialRoad (road: road_meta_data){
      }
 }
 
+function checkForPotentialSettlements(builtRoad: road_meta_data, potentialRoads: road_meta_data[]) {
+
+     let newPotentialSettlements: community_meta_data[] = []
+     let noSurroundingSettlement = true;
+
+     //for each potential road leg
+     potentialRoads.forEach(currentRoad => {
+          let centerVertex = Math.max(builtRoad.edge, currentRoad.edge);
+          let twoEdgeVertices = [currentRoad.edge, (currentRoad.edge + 1) % 6]; 
+          let otherVertex = twoEdgeVertices.find(vertex => vertex !== centerVertex);
+          check(currentRoad, centerVertex, otherVertex);
+     })
+
+     //for the built road leg
+     let centerVertex = Math.max(builtRoad.edge, potentialRoads.filter(road => road.tile_index == builtRoad.tile_index)[0].edge);
+     let twoEdgeVertices = [builtRoad.edge, (builtRoad.edge + 1) % 6]; 
+     let otherVertex = twoEdgeVertices.find(vertex => vertex !== centerVertex);
+     check(builtRoad, centerVertex, otherVertex);
+
+     function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
+           
+           // get all communtiies on the tile
+           let allRelevantVertexes = players.flatMap(player => { // check if any player has a settlement on that tile
+                return player.communities_owned
+                .filter(community => community.tile_index === builtRoad.tile_index)
+                .map(community => community.vertex);  
+           });
+           
+           //if there is no settlement vertex by any player on that other vertex it passes
+           if (!allRelevantVertexes.includes(otherVertex as community_keys)) {
+                let potentialCommunity: community_meta_data = {
+                     tile_index: currentRoad.tile_index, 
+                     vertex: centerVertex as community_keys  
+                 };
+                 newPotentialSettlements.push(potentialCommunity);
+ 
+           }else{
+               noSurroundingSettlement = false;
+           }
+     }
+
+
+     //if there is a third tile, find it, and add to its vertex to the potential roads. 
+     let thirdTile = neighbors[potentialRoads[0].tile_index as road_keys][potentialRoads[0].edge];
+     if(thirdTile != -1){
+          let thirdVertex = Math.max(potentialRoads[0].edge, potentialRoads[1].edge);
+          let potentialCommunity: community_meta_data = {
+               tile_index: thirdTile, 
+               vertex: thirdVertex as community_keys
+           };
+           newPotentialSettlements.push(potentialCommunity);
+     }
+
+     //Add potential Settlement if all three legs pass!
+     if(noSurroundingSettlement){
+          current_game.current_player.potential_communities.push(...newPotentialSettlements);
+     }
+    
+}
 
 
 /**
