@@ -6,7 +6,7 @@ import VictoryPointsComponent from "../Components/victoryPointsComponent";
 import React, { Component, useEffect, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
-import { GameState, Player } from "@shared/types";
+import { GameState, Player, road_meta_data } from "@shared/types";
 import RollButton from "../Components/RollButton";
 import TradeModal from "../Components/TradeModal";
 import StealModal from "../Components/StealModal";
@@ -63,6 +63,10 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
     setCurrentPlayer(newState)
   }
 
+  const highlightPotentialRoads = (potentialRoads: road_meta_data) => {
+
+  }
+
   /**
    * Resets the action bar and roll button.
    */
@@ -106,7 +110,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
             <div className={"ActionsBarComponent"}><ActionsBarComponent state={state} 
             updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
             updateBoughtDev={updateBoughtDev} boughtDev={boughtDev} updateIsCurrentPlayer={updateCurrentPlayer}
-            isCurrentPlayer={isCurrentPlayer} reset={resetTurn}/></div>
+            isCurrentPlayer={isCurrentPlayer} highlightPotentialRoads={highlightPotentialRoads} reset={resetTurn}/></div>
         </div>
       </div>   
       <DevControls state={state} setState={updateState} updateIsCurrentPlayer={updateCurrentPlayer}/>

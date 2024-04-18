@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
-import { GameState } from '@shared/types';
+import { GameState, road_meta_data } from '@shared/types';
 import { BackendRequest, StealRequest } from '../Enums/requests';
 
 /**
@@ -54,6 +54,11 @@ interface ActionsBarComponentProps {
   isCurrentPlayer: boolean;
 
   /**
+   * Highlights the roads that the user can potentially build on.
+   */
+  highlightPotentialRoads: (potentialRoads: road_meta_data) => void;
+
+  /**
    * Resets action bar component to its initial state.
    */
   reset: () => void;
@@ -65,7 +70,7 @@ interface ActionsBarComponentProps {
  * cards. Appears on a player's game turn.
  */
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, 
-  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer, reset }) => {
+  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer, highlightPotentialRoads, reset }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
