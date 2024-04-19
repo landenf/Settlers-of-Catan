@@ -1,17 +1,12 @@
 import { render, screen } from "@testing-library/react";
-import App from "./App";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import GameSession from "../Pages/GameSession";
-
-test("renders learn react link", () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+import { MockGameState } from "../StaticData/GameStateStatic";
 
 it("The Roll button should be enabled on turn", async () => {
-  render(<GameSession />);
+  mockGame = new MockGameState();
+  render(<GameSession gamestate={mockGame} />);
 
   // designate player turn
 
@@ -19,8 +14,8 @@ it("The Roll button should be enabled on turn", async () => {
 });
 
 it("The Roll button should be disabled once clicked", async () => {
-  render(<GameSession />);
-
+  mockGame = new MockGameState();
+  render(<GameSession gamestate={mockGame} />);
   // designate player turn
 
   await userEvent.click(screen.getByLabelText("rollButton"));
@@ -29,94 +24,51 @@ it("The Roll button should be disabled once clicked", async () => {
 });
 
 it("The Roll button should be disabled on other players' turns", async () => {
-  render(<GameSession />);
-
-  // designate player turn
+  mockGame = new MockGameState();
+  render(<GameSession gamestate={mockGame} />);
+  mockGame.client = mockGame.players[1];
 
   expect(screen.getByLabelText("Submit Comment")).toBeDisabled();
 });
 
 it("The Roll button should change colors when hovered over", async () => {
-  render(<GameSession />);
-
-  // designate player turn
+  mockGame = new MockGameState();
+  render(<GameSession gamestate={mockGame} />);
 
   await userEvent.hover(screen.getByLabelText("rollButton"));
 
-  // is this the correct way to access background color
   expect(screen.getByLabelText("Submit Comment")).toHaveStyle(
     "background-color: 100%"
   );
 });
 
-it("The Roll button once clicked should change the number of resource cards when their turn", async () => {
-  render(<GameSession />);
-  // designate player turn
-
-  // setting up player resource numbers
-
-  // setting up player settlements
-  await userEvent.click(screen.getByLabelText("rollButton"));
-
-  // expected player resource numbers
-
-  expect();
-});
-
-it("The Roll button once clicked should change the number of resource cards when not their turn", async () => {
-  render(<GameSession />);
-  // designate player turn
-
-  // setting up player resource numbers
-
-  // setting up player settlements
-  await userEvent.click(screen.getByLabelText("rollButton"));
-
-  // expected player resource numbers
-
-  expect();
-});
-
-it("The Roll button once clicked should not change the number of resource cards when their turn", async () => {
-  render(<GameSession />);
-  // designate player turn
-
-  // setting up player resource numbers
-
-  // setting up player settlements
-  await userEvent.click(screen.getByLabelText("rollButton"));
-
-  // expected player resource numbers
-
-  expect();
-});
-
-it("The Roll button once clicked should not change the number of resource cards when not their turn", async () => {
-  render(<GameSession />);
-  // designate player turn
-
-  // setting up player resource numbers
-
-  // setting up player settlements
-  await userEvent.click(screen.getByLabelText("rollButton"));
-
-  // expected player resource numbers
-
-  expect();
-});
-
-it("The Roll button once clicked should change the dice images", async () => {
-  render(<GameSession />);
-  // set initial dice image
+it("The Roll button once clicked should change the number the dice rolled", async () => {
+  mockGame = new MockGameState();
+  render(<GameSession gamestate={mockGame} />);
 
   await userEvent.click(screen.getByLabelText("rollButton"));
 
-  // check the dice image change
-  expect();
+  expect(mockGame.diceNumber.number1 != 1);
+  expect(mockGame.diceNumber.number2 != 1);
 });
 
-// backend tests
+it("The Roll button should be enabled for player 2 after player 1 passes their turn", async () => {
+  mockGame = new MockGameState();
+  render(<GameSession gamestate={mockGame} />);
+  await userEvent.click(screen.getByLabelText("rollButton"));
+  await userEvent.click(screen.getByText("PASS TURN"));
 
-// test handleDiceRoll
+  mockGame.client = mockGame.players[1];
 
-// test rollDice
+  expect(screen.getByLabelText("Submit Comment")).toBeEnabled();
+});
+
+it("The Roll button should be disabled for player 2 after player 1 rolls but does not yet pass their turn", async () => {
+  mockGame = new MockGameState();
+  render(<GameSession gamestate={mockGame} />);
+  await userEvent.click(screen.getByLabelText("rollButton"));
+
+  mockGame.client = mockGame.players[1];
+
+  expect(screen.getByLabelText("Submit Comment")).toBeDisabled();
+});
