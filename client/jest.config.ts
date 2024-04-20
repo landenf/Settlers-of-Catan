@@ -9,7 +9,7 @@ const config: Config.InitialOptions = {
   maxWorkers: 1,
   testEnvironment: "jsdom",
   moduleNameMapper: {
-    '\\.(css|less)$': '../Tests/styleMock.js',
+    '\\.(css|less)$': '../Tests/__mocking__/styleMock.js',
   }
 };
 

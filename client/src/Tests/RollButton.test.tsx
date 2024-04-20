@@ -1,11 +1,13 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
-import GameSession from "../Pages/GameSession";
 import { MockGameState, MockLimitedGameState } from "../StaticData/GameStateStatic";
 import React from "react";
 import userEvent from "@testing-library/user-event";
+import MockGameSession from "./__mocking__/mockGameSession";
 import "@testing-library/jest-dom";
-import MockGameSession from "./mockGameSession";
 
+/**
+ * A mock game state that's reset after every test.
+ */
 var mockGame = MockLimitedGameState
 
 beforeEach(() => {mockGame = MockLimitedGameState})
@@ -13,8 +15,6 @@ beforeEach(() => {mockGame = MockLimitedGameState})
 describe("In the roll button", () => {
   it("The Roll button should be enabled on turn", async () => {
     render(<MockGameSession state={mockGame}/> );
-  
-    // designate player turn
     
     expect(screen.getByLabelText("rollButton")).toBeEnabled();
   });
@@ -22,7 +22,6 @@ describe("In the roll button", () => {
   it("The Roll button should be disabled once clicked", async () => {
 
     render(<MockGameSession state={MockGameState}/>);
-    // designate player turn
 
     await act(async () => {
       await userEvent.click(screen.getByLabelText("rollButton"));
