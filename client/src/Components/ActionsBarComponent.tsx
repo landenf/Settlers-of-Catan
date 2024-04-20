@@ -85,7 +85,7 @@ const KnightBody: StealRequest = {
         <div className="line-thick"></div>
         <button className={"button text-bold " + (boughtDev ? "buy-dark" : "")} disabled={boughtDev} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
         <div className="line-thick"></div>
-        <h1 className="button text-bold" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
+        <h1 className="button text-bold" aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
         <div className="line-thick"></div>
         </div>
     </div>
