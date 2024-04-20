@@ -21,14 +21,13 @@ describe("In the roll button", () => {
   
   it("The Roll button should be disabled once clicked", async () => {
 
-    render(<MockGameSession state={MockGameState}/>);
+    render(<MockGameSession state={mockGame}/>);
 
     await act(async () => {
       await userEvent.click(screen.getByLabelText("rollButton"));
     });
     
     expect(screen.getByLabelText("rollButton")).toBeDisabled();
-
 
   });
   
