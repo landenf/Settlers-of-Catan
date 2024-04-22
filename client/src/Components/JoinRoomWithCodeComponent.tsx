@@ -19,10 +19,16 @@ const JoinRoomWithCodeComponent = () => {
         {players.map((player) => {
           return (
             <p className="players-in-room">
-              P{players.indexOf(player) + 1} {player}
+              P{players.indexOf(player) + 1}: {player}
             </p>
           );
         })}
+        <p></p>
+        <p></p>
+        <div className="buttons">
+          <button className="leave-button">Leave</button>
+          <button className="ready-button">Ready</button>
+        </div>
       </div>
     </div>
   );

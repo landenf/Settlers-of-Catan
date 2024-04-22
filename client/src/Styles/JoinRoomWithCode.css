@@ -18,14 +18,12 @@
 
 .header-text {
   color: #fdfdfd;
-  position: absolute;
   margin: 0 auto;
-  top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(+50%);
   font-size: 70px;
   text-align: center;
   font-family: Inter;
-  font-weight: 375;
+  font-weight: 400;
   word-wrap: break-word;
 }
 
@@ -45,13 +43,37 @@
 
 .players-in-room {
   color: #fdfdfd;
-  position: absolute;
   margin: 0 auto;
-  top: 50%;
-  transform: translateY(-50%);
   font-size: 50px;
   text-align: center;
   font-family: Inter;
   font-weight: 375;
   word-wrap: break-word;
+  line-height: 10vh;
+}
+
+.buttons {
+  width: 85%;
+  display: flex;
+}
+.leave-button,
+.ready-button {
+  width: 9vw;
+  height: 6vh;
+  margin: 0 auto;
+  display: inline;
+  border-radius: 10px;
+  font-size: 30px;
+  font-family: Inter;
+  border: none;
+  color: white;
+  font-weight: 700;
+}
+
+.leave-button {
+  background-color: #636363;
+}
+
+.ready-button {
+  background-color: #f7c84f;
 }
