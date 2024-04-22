@@ -49,8 +49,9 @@ const RollButton: React.FC<RollButtonProps> = ({ callBackend, rolled, updateRoll
     }
 
     return (
-        <button className={'rollButton ' + (rolled ? "roll-dark " : " ") + (isCurrentPlayer ? "" : "disabled")} 
-        onClick={handleClick} disabled={rolled}>
+
+        <button aria-label={"rollButton"} className={'rollButton ' + (rolled ? "roll-dark " : " ") + 
+            (isCurrentPlayer ? "" : "disabled")} onClick={handleClick} disabled={rolled}>
             <FontAwesomeIcon icon={faDice} />
         </button>
 

@@ -63,29 +63,25 @@ const KnightBody: StealRequest = {
   };
 
   return (
-    <div className={("absolute-container " + (isCurrentPlayer ? "" : "disabled"))}>
+    <div aria-label="actions-bar" className={("absolute-container " + (isCurrentPlayer ? "" : "disabled"))}>
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('buildRoad', NullBody)}>Road</p>
+          <p className="button indented-text" aria-label="build-road" onClick={() => 
+            handleButtonClick('buildRoad', NullBody)}>Road</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('buildSettlement', NullBody)}>Settlement</p>
-        <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('buildCity', NullBody)}>City</p>
+          <p className="button indented-text" aria-label="build-settlement" onClick={() => 
+            handleButtonClick('buildSettlement', NullBody)}>Settlement</p>
         <div className="line-thick"></div>
         <h1 className="text-bold">TRADE</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" onClick={() => setTradeModal(true)}>Bank</p>
+          <p className="button indented-text" aria-label="trade" onClick={() => setTradeModal(true)}>Bank</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('steal', KnightBody)}>Player One</p>
-        <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Two</p>
-        <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Three</p>
         <div className="line-thick"></div>
-        <button className={"button text-bold " + (boughtDev ? "buy-dark" : "")} disabled={boughtDev} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
+        <button className={"button text-bold " + (boughtDev ? "buy-dark" : "")} aria-label="buy-dev-card" 
+          disabled={boughtDev} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
         <div className="line-thick"></div>
-        <h1 className="button text-bold" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
+        <h1 className="button text-bold" aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
         <div className="line-thick"></div>
         </div>
     </div>
