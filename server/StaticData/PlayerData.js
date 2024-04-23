@@ -1,6 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.players = void 0;
+const road_one = {
+    tile_index: 6,
+    edge: 5,
+};
+const road_two = {
+    tile_index: 5,
+    edge: 2,
+};
 const player1 = {
     id: 1,
     name: "steven",
@@ -18,7 +26,7 @@ const player1 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [],
+    potential_roads: [road_one, road_two],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -117,7 +125,7 @@ const player2 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [],
+    potential_roads: [road_one, road_two],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -216,7 +224,7 @@ const player3 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [],
+    potential_roads: [road_one, road_two],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,

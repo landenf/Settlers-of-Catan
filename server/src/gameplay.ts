@@ -212,27 +212,21 @@ function cancelSteal() {
  */
 function buyRoad(road: road_meta_data){
      const player = current_game.current_player;
-     // verify player has needed resources
-     var canBuy = true;
-     if(player.hand["brick"] == 0){
-          canBuy = false;
-     }
 
-     if(player.hand["wood"] == 0){
-          canBuy = false;
-     }
+     const hasResources = player.hand["brick"] > 0 && player.hand["wood"] > 0;
 
-     if(!player.potential_roads.includes(road)){
-          canBuy = false;
-     }
+     // Check if the road  exists in the player's potential roads
+     const roadExists = player.potential_roads.some(
+         (pr) => pr.tile_index === road.tile_index && pr.edge === road.edge
+     );
+     
+     const roadSpaceAvailable = current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] === "white";
+     
+     const canBuy = hasResources && roadExists && roadSpaceAvailable;
+     console.log(hasResources, roadExists, roadSpaceAvailable);
 
-     if(current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] != "white"){// check
-          canBuy = false;
-     }
-     console.log(canBuy);
      // if can buy, do buying functionality
      if(canBuy){
-          console.log('buying');
           //decrease counts buy one for brick and wood and add the road to the player's list
           player.hand["brick"] = player.hand["brick"] - 1;
           player.hand["wood"] = player.hand["wood"] - 1;
@@ -240,7 +234,10 @@ function buyRoad(road: road_meta_data){
           current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
           //add all potential roads and neighboring potential roads
-          potentialUpdatesRoad(road);
+          const addedPotentialRoads: triad_leg[] = [];
+
+          let tileTriads = potentialUpdatesRoad(road);
+          addedPotentialRoads.push(...tileTriads); 
           const neighbor_index = neighbors[road.tile_index as NeighborsKey][road.edge];
           if(neighbor_index != -1 ){
                const neighbor_edge = neighbors[neighbor_index as NeighborsKey].indexOf(road.tile_index);
@@ -248,109 +245,87 @@ function buyRoad(road: road_meta_data){
                     tile_index: neighbor_index,
                     edge: neighbor_edge as road_keys
                }
-               console.log(neighbor_road);
                current_game.gameboard.tiles[neighbor_road.tile_index].road_spaces[neighbor_road.edge] = player.color;
                player.roads_owned.push(neighbor_road);
-               potentialUpdatesRoad(neighbor_road)
-
+               let NeighborTriads = potentialUpdatesRoad(neighbor_road);
+               addedPotentialRoads.push(...NeighborTriads); 
           }
 
 
-          // add potential communities 
-          let builtRoad = road;
-          let 
+          // add potential settlements
+          checkForPotentialSettlements([addedPotentialRoads[0], addedPotentialRoads[3]]) //dont hardcode
+          checkForPotentialSettlements([addedPotentialRoads[1], addedPotentialRoads[2]]) //dont hardcode
+
      }
      current_game.current_player = player;
 
      return current_game; //todo update return
 }
 
+
 /**
  * Helper function to update potential roads from the roads that have been bought.
  * @param road the road you are updating based on
  */
-function potentialUpdatesRoad(road: road_meta_data){
+function potentialUpdatesRoad(road: road_meta_data) {
      const player = current_game.current_player;
 
      // remove bought from potential road
-     const index = player.potential_roads.indexOf(road);
-     player.potential_roads.splice(index, 1);
-     
-     // add the two new potential roads that are associated with this tile
-     if(road.edge == 0){
-          const road_one : road_meta_data = {
-               tile_index: road.tile_index,
-               edge: 5
-          }
+     // const index = player.potential_roads.indexOf(road);
+     // player.potential_roads.splice(index -1, 1);
+     console.log(player.potential_roads);
+     player.potential_roads = player.potential_roads.filter(
+          (current) => !(current.tile_index === road.tile_index && current.edge === road.edge)
+      );
+      
+     console.log(player.potential_roads);
 
-          if(player.potential_roads.indexOf(road_one) < 0){
-               player.potential_roads.push(road_one)
-          }
-
-          checkForNeighborPotentialRoad(road_one);
-
-          const road_two : road_meta_data = {
-               tile_index: road.tile_index,
-               edge: 1
-          }
-
-          if(player.potential_roads.indexOf(road_two) < 0){
-               player.potential_roads.push(road_two)
-          }
-
-          checkForNeighborPotentialRoad(road_two);
-
-     } else if(road.edge == 5){
-          const road_one : road_meta_data = {
-               tile_index: road.tile_index,
-               edge: road.edge - 1 as road_keys
-          }
-
-          if(player.potential_roads.indexOf(road_one) < 0){
-               player.potential_roads.push(road_one)
-          }
-
-
-
-
-          checkForNeighborPotentialRoad(road_one);
-
-          const road_two : road_meta_data = {
-               tile_index: road.tile_index,
-               edge: 0
-          }
-
-          if(player.potential_roads.indexOf(road_two) < 0){
-               player.potential_roads.push(road_two)
-          }
-
-          checkForNeighborPotentialRoad(road_two);
-
-     } else {
-          const new_edge_one = road.edge - 1;
-          const road_one : road_meta_data = {
-               tile_index: road.tile_index,
-               edge: new_edge_one as road_keys
-          }
-
-          if(player.potential_roads.indexOf(road_one) < 0){
-               player.potential_roads.push(road_one)
-          }
-
-          checkForNeighborPotentialRoad(road_one);
-
-          const new_edge_two = road.edge + 1;
-          const road_two : road_meta_data = {
-               tile_index: road.tile_index,
-               edge: new_edge_two as road_keys
-          }
-
-          if(player.potential_roads.indexOf(road_two) < 0){
-               player.potential_roads.push(road_two)
-          }  
-
-          checkForNeighborPotentialRoad(road_two);
+     // add two new potential roads that are associated with this tile
+     // Calculate the edges wrapping around using modulus
+     const edgePrev = (road.edge + 5) % 6; // Wrap around to previous edge
+     const edgeNext = (road.edge + 1) % 6; // Wrap around to next edge
+ 
+     // Road for the previous edge
+     const roadPrev: road_meta_data = {
+         tile_index: road.tile_index,
+         edge: edgePrev as road_keys
+     };
+ 
+     // Road for the next edge
+     const roadNext: road_meta_data = {
+         tile_index: road.tile_index,
+         edge: edgeNext as road_keys
+     };
+ 
+     // Add and check for previous road if not already present
+     if (player.potential_roads.indexOf(roadPrev) < 0 && current_game.gameboard.tiles[roadPrev.tile_index].road_spaces[roadPrev.edge] == 'white') {
+         player.potential_roads.push(roadPrev);
+         checkForNeighborPotentialRoad(roadPrev);
      }
+ 
+     
+     // Add and check for next road if not already present
+     if (player.potential_roads.indexOf(roadNext) < 0 && current_game.gameboard.tiles[roadNext.tile_index].road_spaces[roadNext.edge] == 'white') {
+         player.potential_roads.push(roadNext);
+         checkForNeighborPotentialRoad(roadNext);
+     }
+
+     //construct triad legs
+     let legPrevious : triad_leg = {
+          builtRoad : road,
+          potentialRoad: roadPrev
+     }
+     let letNext : triad_leg = {
+          builtRoad : road,
+          potentialRoad: roadNext
+     }
+
+     return [legPrevious, letNext]
+ }
+ 
+ interface triad_leg { //wasnt sure what to name this
+     builtRoad: road_meta_data,
+     potentialRoad: road_meta_data,
 }
 
 
@@ -363,7 +338,7 @@ function checkForNeighborPotentialRoad (road: road_meta_data){
      //if there is a neighbor 
      let neighbor = neighbors[road.tile_index as road_keys][road.edge];
      if(neighbor != -1){
-          let newEdge = (road.edge + 3) % 6; // This will ensure the edge wraps around within 0 to 5
+          let newEdge = (road.edge + 3) % 6; //handy
           let neighborPotentialRoad : road_meta_data = {
                tile_index: neighbor,
                edge: newEdge as road_keys
@@ -372,31 +347,33 @@ function checkForNeighborPotentialRoad (road: road_meta_data){
      }
 }
 
-function checkForPotentialSettlements(builtRoad: road_meta_data, potentialRoads: road_meta_data[]) {
+
+
+
+function checkForPotentialSettlements(triad_legs: triad_leg[]) {
 
      let newPotentialSettlements: community_meta_data[] = []
      let noSurroundingSettlement = true;
-
      //for each potential road leg
-     potentialRoads.forEach(currentRoad => {
-          let centerVertex = Math.max(builtRoad.edge, currentRoad.edge);
-          let twoEdgeVertices = [currentRoad.edge, (currentRoad.edge + 1) % 6]; 
+     triad_legs.forEach(leg => {
+          let centerVertex = Math.max(leg.builtRoad.edge, leg.potentialRoad.edge);
+          let twoEdgeVertices = [leg.potentialRoad.edge, (leg.potentialRoad.edge + 1) % 6]; 
           let otherVertex = twoEdgeVertices.find(vertex => vertex !== centerVertex);
-          check(currentRoad, centerVertex, otherVertex);
+          check(leg.potentialRoad, centerVertex, otherVertex);
      })
 
      //for the built road leg
-     let centerVertex = Math.max(builtRoad.edge, potentialRoads.filter(road => road.tile_index == builtRoad.tile_index)[0].edge);
-     let twoEdgeVertices = [builtRoad.edge, (builtRoad.edge + 1) % 6]; 
+     let centerVertex = Math.max(triad_legs[0].builtRoad.edge, triad_legs[0].potentialRoad.edge);
+     let twoEdgeVertices = [triad_legs[0].builtRoad.edge, (triad_legs[0].builtRoad.edge + 1) % 6]; 
      let otherVertex = twoEdgeVertices.find(vertex => vertex !== centerVertex);
-     check(builtRoad, centerVertex, otherVertex);
+     check(triad_legs[0].builtRoad, centerVertex, otherVertex);
 
      function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
            
            // get all communtiies on the tile
            let allRelevantVertexes = players.flatMap(player => { // check if any player has a settlement on that tile
                 return player.communities_owned
-                .filter(community => community.tile_index === builtRoad.tile_index)
+                .filter(community => community.tile_index === triad_legs[0].builtRoad.tile_index)
                 .map(community => community.vertex);  
            });
            
@@ -415,9 +392,9 @@ function checkForPotentialSettlements(builtRoad: road_meta_data, potentialRoads:
 
 
      //if there is a third tile, find it, and add to its vertex to the potential roads. 
-     let thirdTile = neighbors[potentialRoads[0].tile_index as road_keys][potentialRoads[0].edge];
+     let thirdTile = neighbors[triad_legs[0].potentialRoad.tile_index as road_keys][triad_legs[0].potentialRoad.edge];
      if(thirdTile != -1){
-          let thirdVertex = Math.max(potentialRoads[0].edge, potentialRoads[1].edge);
+          let thirdVertex = Math.max(triad_legs[0].potentialRoad.edge, triad_legs[1].potentialRoad.edge) + 3; // max of the Pr's rotated 180
           let potentialCommunity: community_meta_data = {
                tile_index: thirdTile, 
                vertex: thirdVertex as community_keys
@@ -523,14 +500,19 @@ function buySettlement(settlement: community_meta_data){
           player.hand["wheat"] = player.hand["wheat"] - 1;
           player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
           
-          //remove from potential communities
-          const index = player.potential_communities.indexOf(settlement);
-          player.potential_communities.splice(index, 1);
+
+          // Find the relative neighboring communities and remove them 
+          const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
+          player.potential_communities = player.potential_communities.filter(
+          (community) =>
+               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
+               (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
+               (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
+          );
 
           //increase level of the settlement
-          let current = current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex];
-          current.level++;
-          current.color = player.color;
+          current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].level++;
+          current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].color = player.color; 
 
           //find neighbor(s)
           for(let i = -1; i < 1; i++) { 
@@ -548,6 +530,31 @@ function buySettlement(settlement: community_meta_data){
           }
      }
      return getGamestate();
+}
+
+
+function findRelativeNeighboringVertexFromVertex (community: community_meta_data){
+     //given tile 5 vertex 3
+     let tileOne = neighbors[community.tile_index as community_keys][community.vertex - 1]
+     let tileTwo = neighbors[community.tile_index as community_keys][community.vertex]
+
+     //for tile one find the edge that touches the origional tile
+     let tileOneEdge = neighbors[tileOne as community_keys].indexOf(community.tile_index);
+     let tileOneEdgeTwo = neighbors[tileOne as community_keys].indexOf(tileTwo);
+     let TileOneRelativeCommunity : community_meta_data = {
+          tile_index: tileOne,
+          vertex: Math.max(tileOneEdge, tileOneEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
+     }  
+     
+     //for tile one find the edge that touches the origional tile
+     let tileTwoEdge = neighbors[tileTwo as community_keys].indexOf(community.tile_index);
+     let tileTwoEdgeTwo = neighbors[tileTwo as community_keys].indexOf(tileOne);
+     let TileTwoRelativeCommunity : community_meta_data = {
+          tile_index: tileTwo,
+          vertex: Math.max(tileTwoEdge, tileTwoEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
+     }       
+
+     return [TileOneRelativeCommunity, TileTwoRelativeCommunity]
 }
 
 /**

@@ -1,4 +1,14 @@
-import { GameState, Player } from "@shared/types";
+const road_one = {
+    tile_index: 6,
+    edge: 5,
+};
+
+const road_two = {
+    tile_index: 5,
+    edge: 2,
+};
+
+import { GameState, Player, road_meta_data } from "@shared/types";
     const player1: Player = {
         id: 1,
         name: "steven",
@@ -16,7 +26,7 @@ import { GameState, Player } from "@shared/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -115,7 +125,7 @@ import { GameState, Player } from "@shared/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -214,7 +224,7 @@ import { GameState, Player } from "@shared/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,

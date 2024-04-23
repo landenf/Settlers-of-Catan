@@ -94,34 +94,25 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
             let key = translateToNumberKey(i);
             let communitySpaceData = gamestate.gameboard.tiles[index].community_spaces[key];
 
-            const community_two : community_meta_data = {
-                tile_index: 5,
-                vertex: 3,
-           }
-           const road_one : road_meta_data = {
-            tile_index: 6,
-            edge: 5,
-            }
-            const road_two : road_meta_data = {
-                tile_index: 4,
-                edge: 4,
-        }
-            //gamestate.client.potential_communities.push(community_two);
-            //gamestate.client.potential_roads.push(road_one);
-            gamestate.current_player.potential_communities.push(community_two);
-            gamestate.current_player.potential_roads.push(road_one);
-            gamestate.current_player.potential_roads.push(road_two);
-
             let isValidPotientialCommunityVertex = gamestate.current_player.potential_communities.some(community => 
                 community.tile_index === index && community.vertex === i);
 
-            //if there is a potential road
+            //if there is a potential community
             if ((showPotenialBuildOptions.settlements && isValidPotientialCommunityVertex)) {
                  newSettlements.push({
                     x: startX, 
                     y: startY, 
+                    level: 0, 
+                    color: 'grey',
+                    vertex: i
+                });
+            //owned communtiy
+            } else if (communitySpaceData.level > 0){
+                newSettlements.push({
+                    x: startX, 
+                    y: startY, 
                     level: communitySpaceData.level, 
-                    color: showPotenialBuildOptions.settlements ? 'grey' : communitySpaceData.color,
+                    color: communitySpaceData.color,
                     vertex: i
                 });
             }
