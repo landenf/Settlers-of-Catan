@@ -11,15 +11,17 @@
   width: 40vw;
   height: 15vh;
   background: #c3332b;
+  display: flex;
   border-radius: 129px;
   margin: 0 auto;
+  justify-content: center;
+  align-items: center;
   position: relative;
 }
 
 .header-text {
   color: #fdfdfd;
   margin: 0 auto;
-  transform: translateY(+50%);
   font-size: 70px;
   text-align: center;
   font-family: Inter;
@@ -45,11 +47,11 @@
   color: #fdfdfd;
   margin: 0 auto;
   font-size: 50px;
-  text-align: center;
+  text-align: right;
   font-family: Inter;
   font-weight: 375;
   word-wrap: break-word;
-  line-height: 10vh;
+  line-height: 8vh;
 }
 
 .buttons {
@@ -59,7 +61,7 @@
 .leave-button,
 .ready-button {
   width: 9vw;
-  height: 6vh;
+  height: 8vh;
   margin: 0 auto;
   display: inline;
   border-radius: 10px;
@@ -76,4 +78,76 @@
 
 .ready-button {
   background-color: #f7c84f;
+}
+
+@media (max-width: 1325px) {
+  .header-text {
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 1170px) {
+  .leave-button,
+  .ready-button {
+    font-size: 25px;
+  }
+  .buttons {
+    width: 70%;
+  }
+}
+
+@media (max-width: 1150px) {
+  .header-text {
+    font-size: 50px;
+  }
+  .players-in-room {
+    font-size: 40px;
+  }
+}
+
+/* @media (max-width: 1030px) {
+  .players-in-room {
+    font-size: 40px;
+  }
+} */
+
+@media (max-width: 980px) {
+  .leave-button,
+  .ready-button {
+    width: 10vw;
+  }
+}
+
+@media (max-width: 900px) {
+  .header-box {
+    height: 20vh;
+  }
+}
+
+@media (max-width: 860px) {
+  .leave-button,
+  .ready-button {
+    width: 11vw;
+  }
+  .players-in-room {
+    font-size: 30px;
+    font-weight: 400;
+  }
+  .main-content-box {
+    border-radius: 110px;
+  }
+}
+
+@media (max-width: 780px) {
+  .leave-button,
+  .ready-button {
+    width: 12vw;
+  }
+  .players-in-room {
+    font-size: 30px;
+    font-weight: 400;
+  }
+  .main-content-box {
+    border-radius: 100px;
+  }
 }

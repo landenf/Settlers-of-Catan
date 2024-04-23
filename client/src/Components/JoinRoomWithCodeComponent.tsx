@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Styles/JoinRoomWithCode.css";
 
-const players = ["Player 1", "Player 2", "Player 3"];
+const players = ["Player 1", "Player 2", "Player 3", "Player 4"];
 
 /**
  * Display area for a user to enter a code
@@ -24,7 +24,7 @@ const JoinRoomWithCodeComponent = () => {
           );
         })}
         <p></p>
-        <p></p>
+        {/* <p></p> */}
         <div className="buttons">
           <button className="leave-button">Leave</button>
           <button className="ready-button">Ready</button>
