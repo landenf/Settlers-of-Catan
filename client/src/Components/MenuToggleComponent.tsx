@@ -20,7 +20,7 @@ const MenuToggleComponent = () => {
   return (
     <div className="toggleButtonContainer">
       {themes.map((type) => {
-        return <MenuButtonComponent color={type.color} text={type.text} />;
+        return <MenuButtonComponent key={type.color} color={type.color} text={type.text} />;
       })}
     </div>
   );
