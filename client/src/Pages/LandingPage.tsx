@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../Styles/LandingPage.css";
 import MenuToggleComponent from "../Components/MenuToggleComponent";
 import JoinRoomWithCodeComponent from "../Components/JoinRoomWithCodeComponent";
+import PlayerStatsComponent from "../Components/PlayerStatsComponent";
+import { players } from "../StaticData/PlayerData";
 
 /**
  * Page where the user starts after logging in and sees their individual player stats.
@@ -21,7 +23,15 @@ const LandingPage: React.FC = () => {
         <p className="catanTitle">CATAN</p>
         <MenuToggleComponent />
       </div>
-      <JoinRoomWithCodeComponent />
+      <PlayerStatsComponent
+        key={players[0].id}
+        id={players[0].id}
+        name={players[0].name}
+        image={players[0].image}
+        color={players[0].color}
+        vp={players[0].vp}
+        resources={players[0].resources}
+      />
     </div>
   );
 };
