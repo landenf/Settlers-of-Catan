@@ -19,9 +19,9 @@ interface MenuToggleProps {
 const MenuToggleComponent: React.FC<MenuToggleProps> = ({ callBackend, state, setCreatePanel }) => {
 
   /* Toggle Button Themes */
-  const theme1 = { color: "#FFFFFF", text: "CREATE ROOM", event: callBackend };
-  const theme2 = { color: "#F7C84F", text: "JOIN ONLINE ROOM", event: callBackend };
-  const theme3 = { color: "#CBCBCB", text: "USE JOIN CODE", event: callBackend };
+  const theme1 = { color: "#FFFFFF", text: "CREATE ROOM", backendCall: "generateGame" };
+  const theme2 = { color: "#F7C84F", text: "JOIN ONLINE ROOM", backendCall: "joinRandomGame" };
+  const theme3 = { color: "#CBCBCB", text: "USE JOIN CODE", backendCall: "joinGameByID" };
 
   const themes = [theme1, theme2, theme3];
 
@@ -29,7 +29,7 @@ const MenuToggleComponent: React.FC<MenuToggleProps> = ({ callBackend, state, se
   return (
     <div className="toggleButtonContainer">
       {themes.map((type) => {
-        return <MenuButtonComponent key={type.color} color={type.color} text={type.text} callBackend={callBackend} state={state} setCreatePanel={setCreatePanel} />;
+        return <MenuButtonComponent key={type.color} color={type.color} text={type.text} callBackend={callBackend} state={state} setCreatePanel={setCreatePanel} backendCall={type.backendCall}/>;
       })}
     </div>
   );

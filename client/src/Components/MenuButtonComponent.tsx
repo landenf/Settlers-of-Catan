@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../Styles/MenuOptions.css";
 import { BackendRequest } from "../Enums/requests";
 import { LimitedSession } from "@shared/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * Interface to change toggle button styling
@@ -17,6 +19,8 @@ export interface CreateRoomProp {
   state: LimitedSession
 
   setCreatePanel: (newState: boolean) => void;
+
+  backendCall: string;
 }
 
 /**
@@ -26,24 +30,44 @@ export interface CreateRoomProp {
  * @param props color and text of the button.
  * @returns toggle button
  */
-const MenuButtonComponent: React.FC<CreateRoomProp> = ({callBackend, state, color, text, setCreatePanel}) => {
+const MenuButtonComponent: React.FC<CreateRoomProp> = ({callBackend, state, color, text, setCreatePanel, backendCall}) => {
   const [isCreatingRoom, setIsCreatingRoom] = useState(true);
+  const [joinId, setJoinId] = useState("");
 
   const toggleRoomCreation = () => setIsCreatingRoom(!isCreatingRoom);
 
-  const handleClick = () => {
-    callBackend("generateGame", {state: state})
+  const handleButtonClick = () => {
+    if (backendCall !== "joinGameByID") {
+      callBackend(backendCall, {state: state})
+      setCreatePanel(true)
+    }
+  }
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setJoinId("");
+    callBackend(backendCall, {state: state})
     setCreatePanel(true)
   }
 
   return (
-    <button
-      className="toggleButton"
-      onClick={() => handleClick() }
-      style={{ backgroundColor: color }}
-    >
-      {text}
-    </button>
+    <div className="toggleButton" style={{ backgroundColor: color }}>
+      {(backendCall !== "joinGameByID" && 
+        <button className="toggleButton" style={{ backgroundColor: color }}
+        onClick={() => handleButtonClick() }
+      >
+        {text}
+      </button>)}
+      {backendCall === "joinGameByID" && (
+          <div className="form-game-id">
+            <form onSubmit={handleSubmit} className="game-id-container">
+              <input className="input-game-id" type="number" value={joinId}
+                onChange={(e) => setJoinId(e.target.value)} />
+              <button type="submit" className="button-game-id"><FontAwesomeIcon icon={faArrowRight}/></button>
+            </form>
+          </div>
+      )}
+    </div>
   );
 };
 export default MenuButtonComponent;

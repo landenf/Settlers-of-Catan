@@ -10,6 +10,9 @@
   word-wrap: break-word;
   opacity: 0.9;
   color: #4c4c4c;
+  text-align: center;
+  justify-content: center;
+  margin: auto;
 }
 .toggleButton:active {
   color: black;
@@ -19,7 +22,46 @@
 .toggleButton:hover {
   box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
     0 17px 50px 0 rgba(0, 0, 0, 0.19);
-  cursor: grab;
+  cursor: pointer;
+}
+
+.game-id-container {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 75% 25%;
+}
+
+.form-game-id {
+  height: 100%;
+}
+
+.input-game-id {
+  text-align: center;
+  font-size: 30px;
+  font-family: Inter;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.0);
+  border: none;
+  outline: 0px;
+}
+
+.button-game-id {
+  margin: auto;
+  height: 100%;
+  width: 100%;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.0);
+  font-size: 35px;
+}
+
+.button-game-id:hover {
+  cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* Menu Options Container Styles */
