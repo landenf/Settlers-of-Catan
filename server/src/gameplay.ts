@@ -2,6 +2,7 @@ import { GameState, Player, road_keys, community_meta_data, road_meta_data, Limi
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
+import { newGame } from "./lobby";
 
 /**
  * This is the example game. 
@@ -592,10 +593,20 @@ function translateToLimitedState(sessionId: number) {
      
 }
 
+/**
+ * Generates a new game and adds it to the list of all games.
+ * @param host the player who's hosting and starting the game
+ */
+function generateGame(host: Player) {
+     const game = newGame(all_games, host)
+     all_games.push(game)
+     return getGamestate(game.id)
+}
+
 function getGamestate(sessionId: number) {
      updateResourceCounts(sessionId);
      checkWinState(sessionId)
      return translateToLimitedState(sessionId);
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, passTurn, switchClient, buyRoad }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, passTurn, switchClient, buyRoad, generateGame }

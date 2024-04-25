@@ -55,49 +55,56 @@ var client_id = 1;
 // objects representing all players. TODO: get this when we set up the landing page and game start!
 const clients = player_data.players
 
-// should increment for each additional game running. TODO: get this when we set up landing page and game start!
-var session_id = 0;
-
 /**
  * Handles a frontend request to update the gamestate.
  */
 function handleRequest(request, body) {
     switch (request) {
         case "buyDevCard":
-            gameplay.buyDevCard(session_id);
+            gameplay.buyDevCard(body.state.id);
             break;
         case "roll":
-            gameplay.handleDiceRoll(session_id);
+            gameplay.handleDiceRoll(body.state.id);
             break;
         case "tradeBank":
-            gameplay.tradeWithBank(body.resourceOffered, body.resourceGained, session_id);
+            gameplay.tradeWithBank(body.resourceOffered, body.resourceGained, body.state.id);
             break;
         case "buyRoad":
-            gameplay.buyRoad(body.roadData, session_id);
+            gameplay.buyRoad(body.roadData, body.state.id);
             break;
         case "steal":
-            gameplay.handleKnight(body.victim, session_id);
+            gameplay.handleKnight(body.victim, body.state.id);
             break;
         case "cancelSteal":
-            gameplay.cancelSteal(session_id);
+            gameplay.cancelSteal(body.state.id);
             break;
         case "passTurn":
-            gameplay.passTurn(session_id);
+            gameplay.passTurn(body.state.id);
             break;
         case "switchClient":
-            gameplay.switchClient(body.player, session_id);
+            gameplay.switchClient(body.player, body.state.id);
+            break;
+        case "generateGame":
+            const game = gameplay.generateGame(body.state.client);
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(game))
+                }
+            });
             break;
         default:
             throw new InvalidEndpointError("That endpoint is not valid!");
     }
-    updateFrontend();
+    if (body.state.id != 0) {
+        updateFrontend(body.state.id);
+    }
 }
 
 /**
  * Function used to send a limited gamestate to every client
  * using the websocket.
  */
-function updateFrontend() {
+function updateFrontend(session_id) {
     wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN) {
             let state = gameplay.switchClient(client.id, session_id)

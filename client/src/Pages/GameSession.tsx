@@ -21,9 +21,12 @@ export interface StateProp {
    * The current game session's state.
    */
   gamestate: LimitedSession
-}
 
-const backend = new WebSocket("ws://localhost:5000")
+  /**
+   * The websocket used with this particular game session.
+   */
+  backend: WebSocket
+}
 
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
@@ -54,6 +57,8 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const updateBoughtDev = (newState: boolean) => {
     setBoughtDev(newState);
   }
+
+  const backend = props.backend
 
   /**
    * Resets the action bar and roll button.
