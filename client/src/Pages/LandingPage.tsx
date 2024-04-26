@@ -30,7 +30,6 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
    */
    backend.addEventListener("message", (msg) => {
     const newState: LimitedSession = JSON.parse(msg.data)
-    console.log(newState)
     setState(newState)
   });
 

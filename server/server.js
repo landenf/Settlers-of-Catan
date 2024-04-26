@@ -85,19 +85,17 @@ function handleRequest(request, body) {
             gameplay.switchClient(body.player, body.state.id);
             break;
         case "generateGame":
-            const game = gameplay.generateGame(body.state.client);
-            wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify(game))
-                }
-            });
+            const new_game = gameplay.generateGame(body.state.client);
+            body.state.id = new_game.id;
+            break;
+        case "joinGameByID":
+            const join_game = gameplay.joinGame(body.state.client, body.id);
+            body.state.id = join_game.id
             break;
         default:
             throw new InvalidEndpointError("That endpoint is not valid!");
     }
-    if (body.state.id != 0) {
-        updateFrontend(body.state.id);
-    }
+    updateFrontend(body.state.id);
 }
 
 /**
@@ -106,7 +104,7 @@ function handleRequest(request, body) {
  */
 function updateFrontend(session_id) {
     wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
+        if (client.readyState === WebSocket.OPEN && gameplay.findPlayerInGame(session_id, client.id)) {
             let state = gameplay.switchClient(client.id, session_id)
             client.send(JSON.stringify(state))
         }
@@ -118,10 +116,11 @@ wss.on('connection', (ws, req) => {
     ws.id = client_id;
     client_id++;
 
-    updateFrontend();
-    
     ws.on('message', message => {
         let request = JSON.parse(message)
+        if (request.body.state.client.id == 0) {
+            request.body.state.client = gameplay.assignClientId(request.body.state.client, ws.id)
+        }
         handleRequest(request.endpoint, request.body)
       });    
 

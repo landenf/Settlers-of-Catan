@@ -65,3 +65,25 @@ export function newGame(all_games: GameState[], host: Player) {
 
     return gamestate;
 }
+
+export function assignPlayerColor(game: GameState, newPlayer: Player) {
+
+     switch (game.players.length) {
+          case 1:
+               newPlayer.color = "blue"
+               break;
+          case 2: 
+               newPlayer.color = "orange"
+               break;
+          case 3: 
+               newPlayer.color = "green"
+               break;
+          default:
+               break;
+     }
+
+     if (game.players.length < 4) {
+          game.players.push(newPlayer)
+     }
+     return game;
+}

@@ -2,7 +2,7 @@ import { GameState, Player, road_keys, community_meta_data, road_meta_data, Limi
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
-import { newGame } from "./lobby";
+import { assignPlayerColor, newGame } from "./lobby";
 
 /**
  * This is the example game. 
@@ -24,7 +24,7 @@ var example_game: GameState = {
  * List of all games currently being played.
  * TODO: Replace example game with games from the landing page / join page!
  */
-var all_games: GameState[] = [example_game]
+var all_games: GameState[] = []
 
 
 type ResourceGainKey = keyof typeof example_game.current_player.resource_gain;
@@ -593,6 +593,11 @@ function translateToLimitedState(sessionId: number) {
      
 }
 
+function assignClientId(player: Player, newId: number) {
+     player.id = newId;
+     return player;
+}
+
 /**
  * Generates a new game and adds it to the list of all games.
  * @param host the player who's hosting and starting the game
@@ -603,10 +608,39 @@ function generateGame(host: Player) {
      return getGamestate(game.id)
 }
 
+/**
+ * Adds a player to an existing game, either by random or by a game's ID.
+ * @param newPlayer the player that's joining the game
+ * @param sessionId the game that the player's joining
+ */
+function joinGame(newPlayer: Player, sessionId?: number) {
+     var game = example_game;
+     if (sessionId == undefined) {
+
+     } else {
+          game = assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
+          return getGamestate(sessionId)
+     }
+}
+
+function findPlayerInGame(sessionId: number, clientId: number) {
+     let isInGame = false;
+     const game = all_games[findGameIndexById(sessionId)]
+     game.players.forEach(player => {
+          if (player.id === clientId) {
+               isInGame = true;
+               console.log(`player ${clientId} is in ${sessionId}!`)
+          }
+     });
+     return isInGame
+}
+
 function getGamestate(sessionId: number) {
      updateResourceCounts(sessionId);
      checkWinState(sessionId)
      return translateToLimitedState(sessionId);
 }
 
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, passTurn, switchClient, buyRoad, generateGame }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
+     passTurn, switchClient, buyRoad, generateGame, assignClientId, joinGame,
+     findPlayerInGame }

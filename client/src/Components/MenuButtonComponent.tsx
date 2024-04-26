@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../Styles/MenuOptions.css";
-import { BackendRequest } from "../Enums/requests";
+import { BackendRequest, JoinGameByIdRequest } from "../Enums/requests";
 import { LimitedSession } from "@shared/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
@@ -45,8 +45,12 @@ const MenuButtonComponent: React.FC<CreateRoomProp> = ({callBackend, state, colo
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    const request: JoinGameByIdRequest = {
+      id: +joinId,
+      state: state
+    }
     setJoinId("");
-    callBackend(backendCall, {state: state})
+    callBackend(backendCall, request)
     setCreatePanel(true)
   }
 
