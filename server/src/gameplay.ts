@@ -622,13 +622,12 @@ function generateGame(host: Player) {
 function joinGame(newPlayer: Player, sessionId?: number) {
      var game = example_game;
      if (sessionId == undefined) {
-
-     } else {
-          
-          game = assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
-          return getGamestate(sessionId)
-
+          const game_index = Math.floor(Math.random() * all_games.length);
+          sessionId = all_games[game_index].id
      }
+     
+     game = assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
+     return getGamestate(sessionId)
 }
 
 /**

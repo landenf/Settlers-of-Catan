@@ -97,6 +97,10 @@ function handleRequest(request, body) {
             const join_game = gameplay.joinGame(body.state.client, body.id);
             body.state.id = join_game.id
             break;
+        case "joinRandomGame":
+            const random_game = gameplay.joinGame(body.state.client, body.id);
+            body.state.id = random_game.id
+            break;
         default:
             throw new InvalidEndpointError("That endpoint is not valid!");
     }
