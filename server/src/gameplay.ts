@@ -593,6 +593,12 @@ function translateToLimitedState(sessionId: number) {
      
 }
 
+/**
+ * Assigns a unique client ID to the user.
+ * @param player the player object to apply the new ID to
+ * @param newId the new ID to apply
+ * @returns the player object with an updated client ID
+ */
 function assignClientId(player: Player, newId: number) {
      player.id = newId;
      return player;
@@ -618,23 +624,35 @@ function joinGame(newPlayer: Player, sessionId?: number) {
      if (sessionId == undefined) {
 
      } else {
+          
           game = assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
           return getGamestate(sessionId)
+
      }
 }
 
+/**
+ * Finds if a given player is in a given game.
+ * @param sessionId the ID of the game to search in
+ * @param clientId the ID of the player to search for
+ * @returns true if the player was found, false if the player was not.
+ */
 function findPlayerInGame(sessionId: number, clientId: number) {
      let isInGame = false;
      const game = all_games[findGameIndexById(sessionId)]
      game.players.forEach(player => {
           if (player.id === clientId) {
                isInGame = true;
-               console.log(`player ${clientId} is in ${sessionId}!`)
           }
      });
      return isInGame
 }
 
+/**
+ * Translates and updates the gamestate, then returns it.
+ * @param sessionId the sessionId of the gamestate to update
+ * @returns an updated, limited gamestate
+ */
 function getGamestate(sessionId: number) {
      updateResourceCounts(sessionId);
      checkWinState(sessionId)

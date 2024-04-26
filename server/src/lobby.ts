@@ -43,7 +43,7 @@ function generateGameId(all_games: GameState[]) {
 }
 
 /**
- * Generates a new gamestate object.
+ * Generates a new gamestate object whenever a player creates a new room.
  */
 export function newGame(all_games: GameState[], host: Player) {
 
@@ -66,6 +66,12 @@ export function newGame(all_games: GameState[], host: Player) {
     return gamestate;
 }
 
+/**
+ * Assigns a unique color to each new player that joins and adds them to the game.
+ * @param game the game to add the new player to
+ * @param newPlayer the new player that's joining the game
+ * @returns the updated game with the new player and their respective new color
+ */
 export function assignPlayerColor(game: GameState, newPlayer: Player) {
 
      switch (game.players.length) {

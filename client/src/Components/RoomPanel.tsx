@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../Styles/JoinRoomWithCode.css";
 import { LimitedSession } from "@shared/types";
 
@@ -7,12 +7,11 @@ interface JoinRoomWithCodeProps {
 }
 
 /**
- * Display area for a user to enter a code
- * to join an already existing game.
- *
+ * Panel that lets the player see the other players in the lobby and ready up 
+ * to play a match.
  */
-const JoinRoomWithCodeComponent = (props: JoinRoomWithCodeProps) => {
-  const [active, setActive] = useState();
+const RoomPanel = (props: JoinRoomWithCodeProps) => {
+
   const players = props.state.players
   return (
     <div className="join-room-with-code">
@@ -27,8 +26,6 @@ const JoinRoomWithCodeComponent = (props: JoinRoomWithCodeProps) => {
             </p>
           );
         })}
-        <p></p>
-        {/* <p></p> */}
         <div className="buttons">
           <button className="leave-button">Leave</button>
           <button className="ready-button">Ready</button>
@@ -37,4 +34,4 @@ const JoinRoomWithCodeComponent = (props: JoinRoomWithCodeProps) => {
     </div>
   );
 };
-export default JoinRoomWithCodeComponent;
+export default RoomPanel;

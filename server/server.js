@@ -56,6 +56,11 @@ var client_id = 1;
 const clients = player_data.players
 
 /**
+ * Set of flags raised if something can't be found in the backend.
+ */
+let flags = [""];
+
+/**
  * Handles a frontend request to update the gamestate.
  */
 function handleRequest(request, body) {
@@ -107,7 +112,7 @@ function updateFrontend(session_id) {
         if (client.readyState === WebSocket.OPEN && gameplay.findPlayerInGame(session_id, client.id)) {
             let state = gameplay.switchClient(client.id, session_id)
             client.send(JSON.stringify(state))
-        }
+        } 
     });
 }
 

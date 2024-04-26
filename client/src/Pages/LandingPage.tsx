@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "../Styles/LandingPage.css";
 import MenuToggleComponent from "../Components/MenuToggleComponent";
-import JoinRoomWithCodeComponent from "../Components/JoinRoomWithCodeComponent";
 import { MockLimitedGameState } from "../StaticData/GameStateStatic";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
+import RoomPanel from "../Components/RoomPanel";
 
 interface LandingProps {
   backend: WebSocket
@@ -13,16 +13,13 @@ interface LandingProps {
 /**
  * Page where the user starts after logging in and sees their individual player stats.
  * From here they can choose to create a game, join an online game, or join an already
- *  existing game with a join code.
+ * existing game with a join code.
  *
  * @returns Landing page for the user.
  */
 const LandingPage: React.FC<LandingProps> = ({ backend }) => {
-  const [isNotInGame, setisNotInGame] = useState(true);
   const [state, setState] = useState(MockLimitedGameState);
-  const [createRoomPanelOpen, setCreateRoomPanel] = useState(false);
-
-  const toggleGameMode = () => setisNotInGame(!isNotInGame);
+  const [roomPanelOpen, setOpenPanel] = useState(false);
 
    /**
    * Used to update the rendering of the client's screen when we
@@ -48,7 +45,6 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
     backend.send(JSON.stringify(message))
 
   }  
-
   backend.addEventListener("message", (msg) => {
     const newState: LimitedSession = JSON.parse(msg.data)
     setState(newState)
@@ -58,9 +54,9 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
     <div className="landing-page">
       <div className="menu">
         <p className="catanTitle">CATAN</p>
-        <MenuToggleComponent callBackend={callBackend} state={state} setCreatePanel={setCreateRoomPanel}/>
+        <MenuToggleComponent callBackend={callBackend} state={state} setRoomPanel={setOpenPanel}/>
       </div>
-      {(createRoomPanelOpen && <JoinRoomWithCodeComponent state={state}/>)}
+      {(roomPanelOpen && <RoomPanel state={state}/>)}
     </div>
   );
 };

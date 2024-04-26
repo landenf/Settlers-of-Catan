@@ -104,7 +104,7 @@ import { Player } from "@shared/types";
         id: 0,
         name: "steve",
         image: "empty-avatar",
-        color: "black",
+        color: "null",
         vp: 7,
         resources: 22,
         hand: {
@@ -203,7 +203,7 @@ import { Player } from "@shared/types";
         id: 0,
         name: "stevie",
         image: "empty-avatar",
-        color: "black",
+        color: " ",
         vp: 7,
         resources: 52,
         hand: {
@@ -298,4 +298,4 @@ import { Player } from "@shared/types";
         hasKnight: false,
         knightCards: 0
     };
-    export const players = [player1, player2, player3]
+    export const players = [player1]

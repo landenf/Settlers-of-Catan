@@ -6,19 +6,34 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 /**
- * Interface to change toggle button styling
- * and text.
+ * Interface to change toggle button styling and text.
  */
-export interface CreateRoomProp {
+export interface MenuButtonProps {
+
+  /**
+   * The color of the button
+   */
   color: string;
 
+  /**
+   * The internal text of the button
+   */
   text: string;
 
+  /**
+   * Function used to call the backend given a request type and body
+   */
   callBackend: (type: string, body: BackendRequest) => void;
 
+  /**
+   * The current state of the game
+   */
   state: LimitedSession
 
-  setCreatePanel: (newState: boolean) => void;
+  /**
+   * Function to set the open / closed state of the room panel
+   */
+  setRoomPanel: (newState: boolean) => void;
 
   backendCall: string;
 }
@@ -30,7 +45,7 @@ export interface CreateRoomProp {
  * @param props color and text of the button.
  * @returns toggle button
  */
-const MenuButtonComponent: React.FC<CreateRoomProp> = ({callBackend, state, color, text, setCreatePanel, backendCall}) => {
+const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, color, text, setRoomPanel, backendCall}) => {
   const [isCreatingRoom, setIsCreatingRoom] = useState(true);
   const [joinId, setJoinId] = useState("");
 
@@ -39,7 +54,7 @@ const MenuButtonComponent: React.FC<CreateRoomProp> = ({callBackend, state, colo
   const handleButtonClick = () => {
     if (backendCall !== "joinGameByID") {
       callBackend(backendCall, {state: state})
-      setCreatePanel(true)
+      setRoomPanel(true)
     }
   }
 
@@ -49,9 +64,13 @@ const MenuButtonComponent: React.FC<CreateRoomProp> = ({callBackend, state, colo
       id: +joinId,
       state: state
     }
+
+    if (joinId.length == 6) {
+      callBackend(backendCall, request);
+      setRoomPanel(true);
+    }
+
     setJoinId("");
-    callBackend(backendCall, request)
-    setCreatePanel(true)
   }
 
   return (
