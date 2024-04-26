@@ -32,7 +32,7 @@ type ResourcesKey = keyof typeof current_game.current_player.hand;
 export const neighbors = {
      0: [3, 4, 1, -1, -1, -1],
      1: [4, 5, 2, -1, -1, 0],
-     2: [5, 6, -1, -1, -1, 2],
+     2: [5, 6, -1, -1, -1, 1],
      3: [7, 8, 4, 0, -1, -1],
      4: [8, 9, 5, 1, 0, 3],
      5: [9, 10, 6, 2, 1, 4],
@@ -256,6 +256,9 @@ function buyRoad(road: road_meta_data){
           checkForPotentialSettlements([addedPotentialRoads[0], addedPotentialRoads[3]]) //dont hardcode
           checkForPotentialSettlements([addedPotentialRoads[1], addedPotentialRoads[2]]) //dont hardcode
 
+          console.log("Potential Roads", player.potential_roads);
+          console.log("potential settlemtnets", player.potential_communities);
+
      }
      current_game.current_player = player;
 
@@ -348,12 +351,11 @@ function checkForNeighborPotentialRoad (road: road_meta_data){
 }
 
 
-
-
 function checkForPotentialSettlements(triad_legs: triad_leg[]) {
 
      let newPotentialSettlements: community_meta_data[] = []
      let noSurroundingSettlement = true;
+
      //for each potential road leg
      triad_legs.forEach(leg => {
           let centerVertex = Math.max(leg.builtRoad.edge, leg.potentialRoad.edge);
@@ -368,15 +370,16 @@ function checkForPotentialSettlements(triad_legs: triad_leg[]) {
      let otherVertex = twoEdgeVertices.find(vertex => vertex !== centerVertex);
      check(triad_legs[0].builtRoad, centerVertex, otherVertex);
 
+     //function to if their is valid potential communtiy
      function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
            
            // get all communtiies on the tile
-           let allRelevantVertexes = players.flatMap(player => { // check if any player has a settlement on that tile
-                return player.communities_owned
-                .filter(community => community.tile_index === triad_legs[0].builtRoad.tile_index)
-                .map(community => community.vertex);  
-           });
-           
+           const currentTile = current_game.gameboard.tiles[currentRoad.tile_index];
+
+          const allRelevantVertexes = Object.entries(currentTile.community_spaces)
+               .filter(([, value]) => value.color !== 'white') // Filter non-white spaces
+               .map(([key,]) => parseInt(key)); // Extract and convert the key to a number
+
            //if there is no settlement vertex by any player on that other vertex it passes
            if (!allRelevantVertexes.includes(otherVertex as community_keys)) {
                 let potentialCommunity: community_meta_data = {
@@ -384,29 +387,28 @@ function checkForPotentialSettlements(triad_legs: triad_leg[]) {
                      vertex: centerVertex as community_keys  
                  };
                  newPotentialSettlements.push(potentialCommunity);
- 
            }else{
                noSurroundingSettlement = false;
            }
      }
 
-
      //if there is a third tile, find it, and add to its vertex to the potential roads. 
      let thirdTile = neighbors[triad_legs[0].potentialRoad.tile_index as road_keys][triad_legs[0].potentialRoad.edge];
      if(thirdTile != -1){
-          let thirdVertex = Math.max(triad_legs[0].potentialRoad.edge, triad_legs[1].potentialRoad.edge) + 3; // max of the Pr's rotated 180
+          let thirdVertex = (Math.max(triad_legs[0].potentialRoad.edge, triad_legs[1].potentialRoad.edge) + 3) % 6; // max of the Pr's rotated 180
           let potentialCommunity: community_meta_data = {
                tile_index: thirdTile, 
                vertex: thirdVertex as community_keys
            };
            newPotentialSettlements.push(potentialCommunity);
+     }else{
+          noSurroundingSettlement = false;
      }
 
      //Add potential Settlement if all three legs pass!
      if(noSurroundingSettlement){
           current_game.current_player.potential_communities.push(...newPotentialSettlements);
      }
-    
 }
 
 
@@ -487,9 +489,14 @@ function buySettlement(settlement: community_meta_data){
           canBuy = false;
      }
 
-     // if(!player.potential_communities.includes(settlement)){
-     //      canBuy = false;
-     // }
+     const filteredCommunities = player.potential_communities.filter(
+          (community) => !(
+              community.tile_index === settlement.tile_index && 
+              community.vertex === settlement.vertex
+          )
+      );
+      
+     if(filteredCommunities.length == 0) { canBuy = false;}
 
      // if can buy, do buying functionality
      if(canBuy){
@@ -500,16 +507,44 @@ function buySettlement(settlement: community_meta_data){
           player.hand["wheat"] = player.hand["wheat"] - 1;
           player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
           
-
-          // Find the relative neighboring communities and remove them 
+          
           const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
+
+          //todo edge case fix: if there isnt two relative communities then only check one or errors. 
+          //removing potential communities that are on the same vertex.
           player.potential_communities = player.potential_communities.filter(
-          (community) =>
+               (community) =>
                (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
                (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
                (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
           );
 
+          // Function to check if a community is within one vertex (plus or minus)
+          const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
+               if (community.tile_index !== reference.tile_index) {
+                   return false;
+               }
+               const absDiff = Math.abs(community.vertex - reference.vertex);
+               return absDiff === 1 || absDiff === 5;
+           };
+          
+          // Get a list of all potential communities within one space (plus or minus one vertex)
+          const potentialCommunitiesToRemove = player.potential_communities.filter(
+               (community) =>
+               isWithinOneVertex(community, settlement) ||
+               isWithinOneVertex(community, relativeCommunities[0]) ||
+               isWithinOneVertex(community, relativeCommunities[1])
+          );
+
+          let allOneAway = findRelativeNeighboringVertexFromVertex(potentialCommunitiesToRemove[0]);
+          //removing those potential communties one away
+          player.potential_communities = player.potential_communities.filter(
+               (community) =>
+               (community.tile_index !== potentialCommunitiesToRemove[0].tile_index || community.vertex !== potentialCommunitiesToRemove[0].vertex) &&
+               (community.tile_index !== allOneAway[0].tile_index || community.vertex !== allOneAway[0].vertex) &&
+               (community.tile_index !== allOneAway[1].tile_index || community.vertex !== allOneAway[1].vertex)
+          );
+        
           //increase level of the settlement
           current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].level++;
           current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].color = player.color; 
@@ -532,29 +567,47 @@ function buySettlement(settlement: community_meta_data){
      return getGamestate();
 }
 
-
+/**
+ * Helper function to find relative vertices at the same spot for the other two tiles given one tile. 
+ */
 function findRelativeNeighboringVertexFromVertex (community: community_meta_data){
      //given tile 5 vertex 3
-     let tileOne = neighbors[community.tile_index as community_keys][community.vertex - 1]
-     let tileTwo = neighbors[community.tile_index as community_keys][community.vertex]
-
-     //for tile one find the edge that touches the origional tile
-     let tileOneEdge = neighbors[tileOne as community_keys].indexOf(community.tile_index);
-     let tileOneEdgeTwo = neighbors[tileOne as community_keys].indexOf(tileTwo);
-     let TileOneRelativeCommunity : community_meta_data = {
-          tile_index: tileOne,
-          vertex: Math.max(tileOneEdge, tileOneEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
-     }  
+     let tileOne = neighbors[community.tile_index as NeighborsKey][community.vertex - 1];
+     let tileTwo = neighbors[community.tile_index as NeighborsKey][community.vertex];
+     let returnCommuntiies : community_meta_data[] = []
      
-     //for tile one find the edge that touches the origional tile
-     let tileTwoEdge = neighbors[tileTwo as community_keys].indexOf(community.tile_index);
-     let tileTwoEdgeTwo = neighbors[tileTwo as community_keys].indexOf(tileOne);
-     let TileTwoRelativeCommunity : community_meta_data = {
-          tile_index: tileTwo,
-          vertex: Math.max(tileTwoEdge, tileTwoEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
-     }       
+     if(tileOne != -1){
+          //for tile one find the edge that touches the origional tile
+          let tileOneEdge = neighbors[tileOne as NeighborsKey].indexOf(community.tile_index);
+          let tileOneEdgeTwo = neighbors[tileOne as NeighborsKey].indexOf(tileTwo);
+          returnCommuntiies.push({
+               tile_index: tileOne,
+               vertex: vertexBetweenRoads(tileOneEdge, tileOneEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
+          })
+     }
 
-     return [TileOneRelativeCommunity, TileTwoRelativeCommunity]
+     if(tileTwo != -1){
+          //for tile one find the edge that touches the origional tile
+          let tileTwoEdge = neighbors[tileTwo as NeighborsKey].indexOf(community.tile_index);
+          let tileTwoEdgeTwo = neighbors[tileTwo as NeighborsKey].indexOf(tileOne);
+          returnCommuntiies.push({
+               tile_index: tileTwo,
+               vertex: vertexBetweenRoads(tileTwoEdge, tileTwoEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
+          })       
+     }
+
+     return returnCommuntiies;
+}
+
+/**
+ * Helper function to determine the vertex inbetween two roads.
+ */
+function vertexBetweenRoads(edge1: number, edge2: number){
+     if((edge1 === 0 && edge2 === 5) || (edge1 === 5 && edge2 === 0)){
+          return 0
+     }else{
+          return Math.max(edge1, edge2)
+     }
 }
 
 /**
