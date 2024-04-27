@@ -3,14 +3,13 @@ import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from
 import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
 import Patterns from '../Styles/Patterns';
 import ResourceTile from './ResourceTile';
-import { Tile } from '@shared/types';
-import { GameState } from '@shared/types';
+import { LimitedSession, Tile } from '@shared/types';
 import { GameBoardActionsDisplay } from '../Pages/GameSession';
 
 interface GameBoardProp {
   tiles: Tile[],
-  gamestate: GameState,
-  updateState: (newState: GameState) => void;
+  gamestate: LimitedSession,
+  updateState: (newState: LimitedSession) => void;
   showPotenialBuildOptions: GameBoardActionsDisplay;
 }
 

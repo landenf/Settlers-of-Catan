@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import '../Styles/PlayerComponent.css';
-import { Player } from "@shared/types";
+import { LimitedPlayer } from "@shared/types";
 
 /**
  * A React component corresponding to a specific Catan player. Created using 
@@ -10,7 +10,7 @@ import { Player } from "@shared/types";
  * total VP, resources, and avatar.
  * @returns a front-end component representing a player and their current stats.
  */
-const PlayerComponent = (player: Player) => {
+const PlayerComponent = (player: LimitedPlayer) => {
 
     /**
      * The player's avatar URL. TODO: Connect to a database of user images.

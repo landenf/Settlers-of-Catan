@@ -1,6 +1,6 @@
 import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
-import { Tile, community_keys, community_meta_data, road_keys, road_meta_data, road_spaces } from '@shared/types';
+import { LimitedSession, Tile, community_keys, community_meta_data, road_keys, road_meta_data, road_spaces } from '@shared/types';
 import { useEffect, useState } from 'react';
 import { RoadRequest, SettlementRequest } from '../Enums/requests';
 import { GameState } from '@shared/types';
@@ -30,12 +30,12 @@ interface HexProp {
     /**
      * The backend information related to the game state.
      */
-    gamestate: GameState;
+    gamestate: LimitedSession;
 
     /**
      * The function to update the gamestate from this component.
      */
-    updateState: (newState: GameState) => void;
+    updateState: (newState: LimitedSession) => void;
 
     /**
      * Boolean to show or hide potential build options.

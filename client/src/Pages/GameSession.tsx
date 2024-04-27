@@ -6,12 +6,12 @@ import VictoryPointsComponent from "../Components/victoryPointsComponent";
 import React, { Component, useEffect, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/GameSession.css";
-import { GameState, Player } from "@shared/types";
+import { LimitedPlayer, LimitedSession, Player } from "@shared/types";
 import RollButton from "../Components/RollButton";
 import TradeModal from "../Components/TradeModal";
 import StealModal from "../Components/StealModal";
 import Dice from "../Components/Dice";
-import DevControls from "../Components/DevControls";
+import { BackendRequest } from "../Enums/requests";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
@@ -20,8 +20,10 @@ export interface StateProp {
   /**
    * The current game session's state.
    */
-  gamestate: GameState
+  gamestate: LimitedSession
 }
+
+const backend = new WebSocket("ws://localhost:5000")
 
 export interface GameBoardActionsDisplay {
   roads: boolean,
@@ -37,17 +39,11 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
 
-  const updateState = (newState: GameState) => {
+  const updateState = (newState: LimitedSession) => {
     setState(newState);  
   }
 
-  useEffect(() => {
-    console.log("Updated state:,", state);
-  }, [state]);
-
-  useEffect(() => {
-    console.log("Updated state:,", state);
-  }, [state]);
+  useEffect(() => {}, [state]);
 
   const updateTradeModal = (newState: boolean) => {
     setTradeModal(newState)
@@ -79,10 +75,6 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
     setBoughtDev(newState);
   }
 
-  const updateCurrentPlayer = (newState: boolean) => {
-    setCurrentPlayer(newState)
-  }
-
   /**
    * Resets the action bar and roll button.
    */
@@ -92,10 +84,49 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   }
 
   /**
+   * Used to update the rendering of the client's screen when we
+   * receive the gamestate from the backend.
+   */
+  backend.addEventListener("message", (msg) => {
+    const newState: LimitedSession = JSON.parse(msg.data)
+    updateState(newState)
+    
+    if (newState.client.hasKnight) {
+      setStealModal(true);
+    }
+
+    setCurrentPlayer(newState.client.color === newState.current_player.color);
+  });
+
+
+  /**
+   * Uses the websocket to send information to the backend and 
+   * retrieve the current game session.
+   * @param type the "endpoint" to hit (/roll or /buyDevCard for example) 
+   * @param body any payload information to send to the backend
+   */
+  const callBackend = (type: string, body: BackendRequest) => {
+    const message = {
+      endpoint: type,
+      body: body
+    }
+
+    backend.send(JSON.stringify(message))
+
+    if (type === "buyDevCard") {
+      updateBoughtDev(true);
+    }
+
+    if (type === "passTurn") {
+      resetTurn();
+    }
+  }
+
+  /**
    * Chooses only players that are not the client to render
    * on the side component.
    */
-  const players_to_render: Player[] = []
+  const players_to_render: LimitedPlayer[] = []
   state.players.forEach(player => {
     if (player.color != state.client.color) {
       players_to_render.push(player)
@@ -104,8 +135,8 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
 
   return (
   <div>
-    <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} setState={updateState}/>
-    <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} setState={updateState}/>
+    <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} callBackend={callBackend}/>
+    <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} callBackend={callBackend}/>
       <div className="background-container">
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={players_to_render}/></div>
@@ -122,17 +153,16 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />
-                  <RollButton updateState={updateState} rolled={rolled} updateRolled={updateRolled} 
+                  <RollButton callBackend={callBackend} state={state} rolled={rolled} updateRolled={updateRolled} 
                   isCurrentPlayer={isCurrentPlayer}/>
                 </div>
             </div>
-            <div className={"ActionsBarComponent"}><ActionsBarComponent state={state} 
-            updateState={updateState} setTradeModal={updateTradeModal} setStealModal={updateStealModal}
-            updateBoughtDev={updateBoughtDev} boughtDev={boughtDev} updateIsCurrentPlayer={updateCurrentPlayer}
-            isCurrentPlayer={isCurrentPlayer} reset={resetTurn} updatePotentialSettlements={updatePotentialSettlements}/></div>
+            <div className={"ActionsBarComponent"}>
+              <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
+              boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}/>
+            </div>
         </div>
       </div>   
-      <DevControls state={state} setState={updateState} updateIsCurrentPlayer={updateCurrentPlayer}/>
     </div>
   );
 };
