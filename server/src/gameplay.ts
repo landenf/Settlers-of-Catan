@@ -267,7 +267,6 @@ function buyRoad(road: road_meta_data, sessionId: number) {
      const roadSpaceAvailable = current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] === "white";
      
      const canBuy = hasResources && roadExists && roadSpaceAvailable;
-     console.log(hasResources, roadExists, roadSpaceAvailable);
 
      // if can buy, do buying functionality
      if(canBuy){
@@ -280,7 +279,7 @@ function buyRoad(road: road_meta_data, sessionId: number) {
           //add all potential roads and neighboring potential roads
           const addedPotentialRoads: triad_leg[] = [];
 
-          let tileTriads = potentialUpdatesRoad(road);
+          let tileTriads = potentialUpdatesRoad(road, sessionId);
           addedPotentialRoads.push(...tileTriads); 
           const neighbor_index = neighbors[road.tile_index as NeighborsKey][road.edge];
           if(neighbor_index != -1 ){
@@ -291,17 +290,14 @@ function buyRoad(road: road_meta_data, sessionId: number) {
                }
                current_game.gameboard.tiles[neighbor_road.tile_index].road_spaces[neighbor_road.edge] = player.color;
                player.roads_owned.push(neighbor_road);
-               let NeighborTriads = potentialUpdatesRoad(neighbor_road);
+               let NeighborTriads = potentialUpdatesRoad(neighbor_road, sessionId);
                addedPotentialRoads.push(...NeighborTriads); 
           }
 
 
           // add potential settlements
-          checkForPotentialSettlements([addedPotentialRoads[0], addedPotentialRoads[3]]) //dont hardcode
-          checkForPotentialSettlements([addedPotentialRoads[1], addedPotentialRoads[2]]) //dont hardcode
-
-          console.log("Potential Roads", player.potential_roads);
-          console.log("potential settlemtnets", player.potential_communities);
+          checkForPotentialSettlements([addedPotentialRoads[0], addedPotentialRoads[3]], sessionId) //dont hardcode
+          checkForPotentialSettlements([addedPotentialRoads[1], addedPotentialRoads[2]], sessionId) //dont hardcode
 
      }
      current_game.current_player = player;
@@ -322,12 +318,9 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
      // remove bought from potential road
      // const index = player.potential_roads.indexOf(road);
      // player.potential_roads.splice(index -1, 1);
-     console.log(player.potential_roads);
      player.potential_roads = player.potential_roads.filter(
           (current) => !(current.tile_index === road.tile_index && current.edge === road.edge)
       );
-      
-     console.log(player.potential_roads);
 
      // add two new potential roads that are associated with this tile
      // Calculate the edges wrapping around using modulus
@@ -349,14 +342,14 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
      // Add and check for previous road if not already present
      if (player.potential_roads.indexOf(roadPrev) < 0 && current_game.gameboard.tiles[roadPrev.tile_index].road_spaces[roadPrev.edge] == 'white') {
          player.potential_roads.push(roadPrev);
-         checkForNeighborPotentialRoad(roadPrev);
+         checkForNeighborPotentialRoad(roadPrev, sessionId);
      }
  
      
      // Add and check for next road if not already present
      if (player.potential_roads.indexOf(roadNext) < 0 && current_game.gameboard.tiles[roadNext.tile_index].road_spaces[roadNext.edge] == 'white') {
          player.potential_roads.push(roadNext);
-         checkForNeighborPotentialRoad(roadNext);
+         checkForNeighborPotentialRoad(roadNext, sessionId);
      }
 
      //construct triad legs
@@ -382,7 +375,8 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
  * Helper function to deal with adding potential roads to neighbors.
  * @param road
  */
-function checkForNeighborPotentialRoad (road: road_meta_data){
+function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)]
      const player = current_game.current_player;
      //if there is a neighbor 
      let neighbor = neighbors[road.tile_index as road_keys][road.edge];
@@ -397,8 +391,9 @@ function checkForNeighborPotentialRoad (road: road_meta_data){
 }
 
 
-function checkForPotentialSettlements(triad_legs: triad_leg[]) {
+function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number) {
 
+     const current_game = all_games[findGameIndexById(sessionId)]
      let newPotentialSettlements: community_meta_data[] = []
      let noSurroundingSettlement = true;
 
@@ -517,7 +512,8 @@ function translateToResourcesKey(toTranslate: string) {
  * 
  * @param settlement info for settlement that is being bought
  */
-function buySettlement(settlement: community_meta_data){
+function buySettlement(settlement: community_meta_data, sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)]
      const player = current_game.current_player;
      // verify needed resources
      var canBuy = true;
@@ -612,7 +608,7 @@ function buySettlement(settlement: community_meta_data){
                }
           }
      }
-     return getGamestate();
+     return getGamestate(sessionId);
 }
 
 /**

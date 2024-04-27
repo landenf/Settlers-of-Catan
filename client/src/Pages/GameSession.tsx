@@ -148,6 +148,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                           gamestate={ state }
                           updateState={ updateState } 
                           showPotenialBuildOptions={showPotenialBuildOptions}  
+                          callBackend={callBackend}
                         />
                 </div>
                 <div className="user-info">

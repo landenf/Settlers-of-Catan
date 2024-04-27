@@ -15,8 +15,8 @@ interface ActionsBarComponentProps {
   setTradeModal: (newState: boolean) => void;
 
   /**
-     * Function to call the backend through the main websocket.
-     */
+    * Function to call the backend through the main websocket.
+    */
   callBackend: (type: string, body: BackendRequest) => void;
 
   /**
@@ -39,11 +39,6 @@ interface ActionsBarComponentProps {
    * Updates whether or not potential settlements or roads should be displayed.
    */
   updatePotentialSettlements: (selected: string) => void;
-
-  /**
-   * Resets action bar component to its initial state.
-   */
-  reset: () => void;
 
 }
 

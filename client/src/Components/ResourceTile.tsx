@@ -2,7 +2,7 @@ import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
 import { LimitedSession, Tile, community_keys, community_meta_data, road_keys, road_meta_data, road_spaces } from '@shared/types';
 import { useEffect, useState } from 'react';
-import { RoadRequest, SettlementRequest } from '../Enums/requests';
+import { BackendRequest, RoadRequest, SettlementRequest } from '../Enums/requests';
 import { GameState } from '@shared/types';
 import { InvalidIndexError } from '../Enums/errors';
 import { GameBoardActionsDisplay } from '../Pages/GameSession';
@@ -42,6 +42,10 @@ interface HexProp {
      */
     showPotenialBuildOptions: GameBoardActionsDisplay;
 
+    /**
+     * Function to call the backend through the main websocket.
+     */
+    callBackend: (type: string, body: BackendRequest) => void;
 }
 
 interface Road_Display_Data {
@@ -64,7 +68,8 @@ interface Settlement_Display_Data {
  * resource type and a number associated.
  * @param props information about the tile passed through, typically from the backend server.
  */
-const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateState, showPotenialBuildOptions }) => {
+const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateState, 
+    showPotenialBuildOptions, callBackend }) => {
 
 
     /**
@@ -76,7 +81,6 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
     const angles = [270, 330, 30, 90, 150, 210];
     const [roads, setRoads] = useState<Road_Display_Data[]>([]);
     const [settlements, setSettlements] = useState<Settlement_Display_Data[]>([]);
-    const [colors, setColors] = useState(Object.values(gamestate.gameboard.tiles[index].road_spaces));
 
     useEffect(() => {
         let newRoads = [];
@@ -94,7 +98,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
             let key = translateToNumberKey(i);
             let communitySpaceData = gamestate.gameboard.tiles[index].community_spaces[key];
 
-            let isValidPotientialCommunityVertex = gamestate.current_player.potential_communities.some(community => 
+            let isValidPotientialCommunityVertex = gamestate.client.potential_communities.some(community => 
                 community.tile_index === index && community.vertex === i);
 
             //if there is a potential community
@@ -117,7 +121,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 });
             }
 
-            let isValidPotientialRoadEdge = gamestate.current_player.potential_roads.some(road => 
+            let isValidPotientialRoadEdge = gamestate.client.potential_roads.some(road => 
                 road.tile_index === index && road.edge === i);
 
             newRoads.push({
@@ -125,7 +129,8 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 startY: startY, 
                 endX: endX, 
                 endY: endY,
-                color:  (showPotenialBuildOptions.roads && isValidPotientialRoadEdge) ? 'grey' : colors[i]
+                color:  (showPotenialBuildOptions.roads && isValidPotientialRoadEdge) ? 'grey' : 
+                    gamestate.gameboard.tiles[index].road_spaces[translateToNumberKey(i)]
             })
         }
 
@@ -179,16 +184,8 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
             roadData: road,
             state: gamestate
         }
-        const response = await fetch('http://localhost:5000/buyRoad', {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-              }});
-        let newState = await response.json();
-        updateState(newState);
-        setColors(Object.values(newState.gameboard.tiles[index].road_spaces));
-        console.log(`Tile ${index} clicked at edge ${idx}`);
+
+        callBackend("buyRoad", body)
     };
 
      //handle buying a settlement
@@ -203,18 +200,9 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 settlementData: settlement,
                 state: gamestate
             }
-            const response = await fetch('http://localhost:5000/buySettlement', {
-                method: "POST",
-                body: JSON.stringify(body),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                  }});
-            let newState = await response.json();
-            console.log(newState);
-            updateState(newState);
-            console.log(`Tile ${index} clicked at vertex ${idx}`);
+
+            callBackend("buySettlement", body)
         }
-        console.log("settlement owned")
     };
 
 

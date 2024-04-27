@@ -75,6 +75,9 @@ function handleRequest(request, body) {
         case "buyRoad":
             gameplay.buyRoad(body.roadData, session_id);
             break;
+        case "buySettlement":
+            gameplay.buySettlement(body.settlementData, session_id);
+            break;
         case "steal":
             gameplay.handleKnight(body.victim, session_id);
             break;
