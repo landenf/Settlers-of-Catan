@@ -2,7 +2,7 @@ import { GameState, Player, road_keys, community_meta_data, road_meta_data, Limi
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
-import { assignPlayerColor, newGame } from "./lobby";
+import { assignPlayerColor, newGame, reassignPlayers } from "./lobby";
 
 /**
  * This is an empty game. 
@@ -680,6 +680,31 @@ function joinGame(newPlayer: Player, sessionId?: number) {
 }
 
 /**
+ * Removes a player from the game. If the game has no players,
+ * it is removed from the list of ongoing games.
+ * @param sessionId the current game to leave
+ * @returns false if there are no more games or players
+ */
+function leaveGame(sessionId: number, client: Player) {
+     let game = all_games[findGameIndexById(sessionId)];
+     game.players = game.players.filter(player => player.id !== client.id);
+
+     failed_to_connect.push(client)
+
+     if (game.players.length < 1) {
+          all_games = all_games.filter(el_game => el_game.id !== game.id)
+     } else {
+          game = reassignPlayers(game);
+     }
+
+     let no_more_games = false
+     if (all_games.length == 0) {
+          no_more_games = true;
+     }
+     return no_more_games;
+}
+
+/**
  * Finds if a given player is in a given game.
  * @param sessionId the ID of the game to search in
  * @param clientId the ID of the player to search for
@@ -704,8 +729,6 @@ function findPlayerInGame(sessionId: number, clientId: number) {
  * @returns true if the player can't join the game
  */
 function findPlayerCantJoin(clientId: number) {
-     console.log("checking client " + clientId + "...")
-     console.log(failed_to_connect)
      if (failed_to_connect.some(player => player.id === clientId)) {
           failed_to_connect = failed_to_connect.filter(player => player.id !== clientId)
           return true
@@ -735,4 +758,4 @@ function getNullGame() {
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin }
+     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame }

@@ -20,6 +20,7 @@ interface LandingProps {
 const LandingPage: React.FC<LandingProps> = ({ backend }) => {
   const [state, setState] = useState(MockLimitedGameState);
   const [roomPanelOpen, setOpenPanel] = useState(false);
+  const [buttonsActive, setButtonsActive] = useState(true);
 
    /**
    * Used to update the rendering of the client's screen when we
@@ -44,19 +45,17 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
 
     backend.send(JSON.stringify(message))
 
-  }  
-  backend.addEventListener("message", (msg) => {
-    const newState: LimitedSession = JSON.parse(msg.data)
-    setState(newState)
-  });
+  };
 
   return (
     <div className="landing-page">
       <div className="menu">
         <p className="catanTitle">CATAN</p>
-        <MenuToggleComponent callBackend={callBackend} state={state} setRoomPanel={setOpenPanel}/>
+        <MenuToggleComponent callBackend={callBackend} state={state} setRoomPanel={setOpenPanel} buttonsActive={buttonsActive}
+          setButtonsActive={setButtonsActive}/>
       </div>
-      {(roomPanelOpen && <RoomPanel state={state}/>)}
+      {(roomPanelOpen && <RoomPanel state={state} callBackend={callBackend} setRoomPanel={setOpenPanel} 
+        setButtonsActive={setButtonsActive}/>)}
     </div>
   );
 };

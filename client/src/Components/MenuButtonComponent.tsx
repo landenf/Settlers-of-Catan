@@ -35,7 +35,20 @@ export interface MenuButtonProps {
    */
   setRoomPanel: (newState: boolean) => void;
 
+  /**
+   * The type of endpoint to hit on the backend.
+   */
   backendCall: string;
+
+  /**
+   * If true, this button should be active and able to be clicked.
+   */
+  buttonsActive: boolean;
+
+  /**
+   * Function to update the active state of the side buttons.
+   */
+  setButtonsActive: (newState: boolean) => void;
 }
 
 /**
@@ -45,20 +58,20 @@ export interface MenuButtonProps {
  * @param props color and text of the button.
  * @returns toggle button
  */
-const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, color, text, setRoomPanel, backendCall}) => {
+const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, color, text, 
+  setRoomPanel, backendCall, buttonsActive, setButtonsActive}) => {
+
+  const [joinId, setJoinId] = useState("");
 
   useEffect(() => {
     if (state.isValid) {
       setRoomPanel(true)
+      setButtonsActive(false);
     } else {
-      setRoomPanel(false)
+      setRoomPanel(false);
+      setButtonsActive(true);
     }
   })
-
-  const [isCreatingRoom, setIsCreatingRoom] = useState(true);
-  const [joinId, setJoinId] = useState("");
-
-  const toggleRoomCreation = () => setIsCreatingRoom(!isCreatingRoom);
 
   const handleButtonClick = () => {
     if (backendCall !== "joinGameByID") {
@@ -83,8 +96,8 @@ const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, col
   return (
     <div className="toggleButton" style={{ backgroundColor: color }}>
       {(backendCall !== "joinGameByID" && 
-        <button className="toggleButton" style={{ backgroundColor: color }}
-        onClick={() => handleButtonClick() }
+        <button className={"toggleButton " + (buttonsActive ? "" : "side-button-disabled")} style={{ backgroundColor: color }}
+        onClick={() => handleButtonClick()} disabled={!buttonsActive}
       >
         {text}
       </button>)}
@@ -92,8 +105,11 @@ const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, col
           <div className="form-game-id">
             <form onSubmit={handleSubmit} className="game-id-container">
               <input className="input-game-id" type="number" value={joinId}
-                onChange={(e) => setJoinId(e.target.value)} />
-              <button type="submit" className="button-game-id"><FontAwesomeIcon icon={faArrowRight}/></button>
+                onChange={(e) => setJoinId(e.target.value)} disabled={!buttonsActive}/>
+              <button type="submit" className={"button-game-id " + (buttonsActive ? "" : "side-button-disabled")} 
+                disabled={!buttonsActive}>
+                <FontAwesomeIcon icon={faArrowRight}/>
+              </button>
             </form>
           </div>
       )}

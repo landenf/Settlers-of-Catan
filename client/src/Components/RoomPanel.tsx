@@ -1,22 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import "../Styles/JoinRoomWithCode.css";
 import { LimitedSession } from "@shared/types";
+import { BackendRequest } from "../Enums/requests";
 
 interface JoinRoomWithCodeProps {
+  
+  /**
+   * Current state of the game
+   */
   state: LimitedSession
+
+  /**
+   * Function used to call the backend given a request type and body
+   */
+  callBackend: (type: string, body: BackendRequest) => void;
+
+  /**
+   * Function to set the open / closed state of the room panel
+   */
+    setRoomPanel: (newState: boolean) => void;
+
+    /**
+     * Function to update the active state of the side buttons.
+     */
+    setButtonsActive: (newState: boolean) => void;
 }
 
 /**
  * Panel that lets the player see the other players in the lobby and ready up 
  * to play a match.
  */
-const RoomPanel = (props: JoinRoomWithCodeProps) => {
+const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoomPanel, setButtonsActive }) => {
 
-  const players = props.state.players
+  const [ready, setReady] = useState(false);
+  const players = state.players
+
+  /**
+   * Function used whenever the user presses the "leave" button. Sends
+   * a backend call to leave the game.
+   */
+  const leaveGame = () => {
+
+    const request: BackendRequest = {
+      state: state
+    }
+
+    callBackend("leaveGame", request)
+    setButtonsActive(true);
+    setRoomPanel(false);
+
+  }
+
   return (
     <div className="join-room-with-code">
       <div className="header-box">
-        <p className="header-text"> ROOM: {props.state.id}</p>
+        <p className="header-text"> ROOM: {state.id}</p>
       </div>
       <div className="main-content-box">
         {players.map((player) => {
@@ -36,8 +74,9 @@ const RoomPanel = (props: JoinRoomWithCodeProps) => {
           );
         })}
         <div className="buttons">
-          <button className="leave-button">Leave</button>
-          <button className="ready-button">Ready</button>
+          <button className="leave-button" onClick={() => leaveGame()}>Leave</button>
+          <button className={"ready-button " + (ready ? "ready" : "not-ready")}
+          onClick={() => setReady(!ready)}>{"Ready" + (ready ? "!" : "?")}</button>
         </div>
       </div>
     </div>

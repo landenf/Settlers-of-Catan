@@ -77,6 +77,19 @@ input::-webkit-inner-spin-button {
   grid-template-rows: 33% 33% 33%;
 }
 
+.side-button-disabled {
+  opacity: .5;
+}
+
+.side-button-disabled:hover {
+  cursor: default;
+}
+
+.side-button-disabled:active {
+  color: #4c4c4c;
+  opacity: .5;
+}
+
 @media (max-width: 1240px) {
   .toggleButton {
     height: 12vh;

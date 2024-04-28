@@ -56,6 +56,11 @@ var client_id = 1;
 const clients = player_data.players
 
 /**
+ * Becomes true if there are no more games currently being played.
+ */
+let no_games_left = false;
+
+/**
  * Handles a frontend request to update the gamestate.
  */
 function handleRequest(request, body) {
@@ -96,6 +101,9 @@ function handleRequest(request, body) {
             const random_game = gameplay.joinGame(body.state.client, body.id);
             body.state.id = random_game.id
             break;
+        case "leaveGame":
+            no_games_left = gameplay.leaveGame(body.state.id, body.state.client);
+            break;
         default:
             throw new InvalidEndpointError("That endpoint is not valid!");
     }
@@ -108,11 +116,13 @@ function handleRequest(request, body) {
  */
 function updateFrontend(session_id) {
     wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN && gameplay.findPlayerInGame(session_id, client.id)) {
+
+        if (client.readyState === WebSocket.OPEN && !no_games_left && gameplay.findPlayerInGame(session_id, client.id)) {
             let state = gameplay.switchClient(client.id, session_id)
             client.send(JSON.stringify(state))
-        } else if (session_id == 0 && gameplay.findPlayerCantJoin(client.id)) {
+        } else if (gameplay.findPlayerCantJoin(client.id)) {
             client.send(JSON.stringify(gameplay.getNullGame()))
+            no_games_left = false;
         }
     });
 }

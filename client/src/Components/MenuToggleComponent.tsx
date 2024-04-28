@@ -20,6 +20,17 @@ interface MenuToggleProps {
    * Function to set the open / closed state of the room panel
    */
   setRoomPanel: (newState: boolean) => void;
+
+  /**
+   * Whether or not the buttons associated with this component
+   * should be clickable or not.
+   */
+  buttonsActive: boolean;
+
+  /**
+   * Function to update the active state of the side buttons.
+   */
+  setButtonsActive: (newState: boolean) => void;
 }
 
 /**
@@ -28,7 +39,7 @@ interface MenuToggleProps {
  *
  * @returns All menu button options.
  */
-const MenuToggleComponent: React.FC<MenuToggleProps> = ({ callBackend, state, setRoomPanel }) => {
+const MenuToggleComponent: React.FC<MenuToggleProps> = ({ callBackend, state, setRoomPanel, buttonsActive, setButtonsActive }) => {
 
   /* Toggle Button Themes */
   const theme1 = { color: "#FFFFFF", text: "CREATE ROOM", backendCall: "generateGame" };
@@ -41,7 +52,8 @@ const MenuToggleComponent: React.FC<MenuToggleProps> = ({ callBackend, state, se
     <div className="toggleButtonContainer">
       {themes.map((type) => {
         return <MenuButtonComponent key={type.color} color={type.color} text={type.text} 
-          callBackend={callBackend} state={state} setRoomPanel={setRoomPanel} backendCall={type.backendCall}/>;
+          callBackend={callBackend} state={state} setRoomPanel={setRoomPanel} backendCall={type.backendCall}
+          buttonsActive={buttonsActive} setButtonsActive={setButtonsActive}/>;
       })}
     </div>
   );

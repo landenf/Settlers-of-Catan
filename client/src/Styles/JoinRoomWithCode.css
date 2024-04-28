@@ -57,6 +57,7 @@
 .buttons {
   width: 85%;
   display: flex;
+  margin-top: 2%;
 }
 .leave-button,
 .ready-button {
@@ -72,12 +73,23 @@
   font-weight: 700;
 }
 
+.leave-button:hover,
+.ready-button:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
+}
+
 .leave-button {
   background-color: #636363;
 }
 
-.ready-button {
-  background-color: #f7c84f;
+.not-ready {
+  background-color: #4f0000;
+}
+
+.ready {
+  background-color: #194f00;
 }
 
 .lobby-players {

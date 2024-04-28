@@ -98,3 +98,23 @@ export function assignPlayerColor(game: GameState, newPlayer: Player) {
      }
      
 }
+
+/**
+ * Reassigns all player colors by order of connection.
+ * @param game the game to reassign colors to
+ */
+export function reassignPlayers(game: GameState) {
+
+     const players = game.players
+     const colors = ["red", "blue", "orange", "green"]
+
+     for (let i = 0; i < players.length; i++) {
+          players[i].color = colors[i]
+     }
+
+     game.players = players;
+     game.current_player = players[0];
+
+     return game
+
+}
