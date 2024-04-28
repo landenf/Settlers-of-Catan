@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.players = void 0;
 const player1 = {
-    id: 1,
+    id: 0,
     name: "steven",
     image: "empty-avatar",
     color: "red",
@@ -101,7 +101,7 @@ const player1 = {
     knightCards: 0
 };
 const player2 = {
-    id: 2,
+    id: 0,
     name: "steve",
     image: "empty-avatar",
     color: "orange",
@@ -200,7 +200,7 @@ const player2 = {
     knightCards: 0
 };
 const player3 = {
-    id: 3,
+    id: 0,
     name: "stevie",
     image: "empty-avatar",
     color: "green",

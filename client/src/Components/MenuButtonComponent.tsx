@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Styles/MenuOptions.css";
 import { BackendRequest, JoinGameByIdRequest } from "../Enums/requests";
 import { LimitedSession } from "@shared/types";
@@ -46,6 +46,15 @@ export interface MenuButtonProps {
  * @returns toggle button
  */
 const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, color, text, setRoomPanel, backendCall}) => {
+
+  useEffect(() => {
+    if (state.isValid) {
+      setRoomPanel(true)
+    } else {
+      setRoomPanel(false)
+    }
+  })
+
   const [isCreatingRoom, setIsCreatingRoom] = useState(true);
   const [joinId, setJoinId] = useState("");
 
@@ -54,7 +63,6 @@ const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, col
   const handleButtonClick = () => {
     if (backendCall !== "joinGameByID") {
       callBackend(backendCall, {state: state})
-      setRoomPanel(true)
     }
   }
 
@@ -67,8 +75,7 @@ const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, col
 
     if (joinId.length == 6) {
       callBackend(backendCall, request);
-      setRoomPanel(true);
-    }
+    } 
 
     setJoinId("");
   }

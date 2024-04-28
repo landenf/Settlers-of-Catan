@@ -5,9 +5,9 @@ import { InvalidResourceError } from "./errors";
 import { assignPlayerColor, newGame } from "./lobby";
 
 /**
- * This is the example game. 
+ * This is an empty game. 
  */
-var example_game: GameState = {
+var null_game: GameState = {
      id: 0,
      client: players[0],
      diceNumber: { number1: 1, number2: 1 },
@@ -27,9 +27,14 @@ var example_game: GameState = {
  */
 var all_games: GameState[] = []
 
+/**
+ * List of players who tried to connect to a game but didn't find one.
+ */
+var failed_to_connect: Player[] = []
 
-type ResourceGainKey = keyof typeof example_game.current_player.resource_gain;
-type ResourcesKey = keyof typeof example_game.current_player.hand;
+
+type ResourceGainKey = keyof typeof null_game.current_player.resource_gain;
+type ResourcesKey = keyof typeof null_game.current_player.hand;
 
 /**
  * Dictionary of the neighbors. Each index is correlated with the road space number 
@@ -587,7 +592,8 @@ function translateToLimitedState(sessionId: number) {
           current_player: current_limited_player,
           current_largest_army: current_game.current_largest_army,
           current_longest_road: current_game.current_longest_road,
-          gameboard: current_game.gameboard
+          gameboard: current_game.gameboard,
+          isValid: current_game.isValid
      }
 
      return limited_state
@@ -660,12 +666,14 @@ function joinGame(newPlayer: Player, sessionId?: number) {
 
           }
 
-     } else {
-          sessionId = all_games[game_index].id
-     }
+     } 
 
      if (foundGame) {
-          assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
+          let game = assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
+          if (!game.isValid) {
+               failed_to_connect.push(newPlayer)
+               return null_game;
+          }
      }
      
      return getGamestate(sessionId)
@@ -689,6 +697,24 @@ function findPlayerInGame(sessionId: number, clientId: number) {
 }
 
 /**
+ * Finds the player who just tried to join a game, but wasn't able to 
+ * find a game.
+ * @param clientId the id of the client to check against those 
+ * who have failed to find a game
+ * @returns true if the player can't join the game
+ */
+function findPlayerCantJoin(clientId: number) {
+     console.log("checking client " + clientId + "...")
+     console.log(failed_to_connect)
+     if (failed_to_connect.some(player => player.id === clientId)) {
+          failed_to_connect = failed_to_connect.filter(player => player.id !== clientId)
+          return true
+     } else {
+          return false
+     }
+}
+
+/**
  * Translates and updates the gamestate, then returns it.
  * @param sessionId the sessionId of the gamestate to update
  * @returns an updated, limited gamestate
@@ -699,6 +725,14 @@ function getGamestate(sessionId: number) {
      return translateToLimitedState(sessionId);
 }
 
+/**
+ * Used when we can't find a game, typically due to trying to join a game
+ * via ID when it's already full.
+ */
+function getNullGame() {
+     return null_game;
+}
+
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, generateGame, assignClientId, joinGame,
-     findPlayerInGame }
+     findPlayerInGame, getNullGame, findPlayerCantJoin }

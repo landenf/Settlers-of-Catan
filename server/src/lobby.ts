@@ -3,9 +3,9 @@ import { players } from "../StaticData/PlayerData";
 import { tiles } from "../StaticData/TileData";
 
 /**
- * This is the example game. 
+ * This is an empty game. 
  */
-var example_game: GameState = {
+var null_game: GameState = {
      id: 0,
      client: players[0],
      diceNumber: { number1: 1, number2: 1 },
@@ -92,6 +92,9 @@ export function assignPlayerColor(game: GameState, newPlayer: Player) {
 
      if (game.players.length < 4) {
           game.players.push(newPlayer)
+          return game;
+     } else {
+          return null_game;
      }
-     return game;
+     
 }

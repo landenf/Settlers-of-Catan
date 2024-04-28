@@ -422,4 +422,9 @@ export type LimitedSession = {
      * and resource tiles.
      */
     gameboard: Board
+
+    /**
+     * Determines if this gamestate is valid and can be manipulated by players.
+     */
+    isValid: boolean;
 }

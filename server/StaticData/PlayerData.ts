@@ -1,6 +1,6 @@
 import { GameState, Player } from "@shared/types";
     const player1: Player = {
-        id: 1,
+        id: 0,
         name: "steven",
         image: "empty-avatar",
         color: "red",
@@ -99,7 +99,7 @@ import { GameState, Player } from "@shared/types";
         knightCards: 0
     };
     const player2: Player = {
-        id: 2,
+        id: 0,
         name: "steve",
         image: "empty-avatar",
         color: "orange",
@@ -198,7 +198,7 @@ import { GameState, Player } from "@shared/types";
         knightCards: 0
     };
     const player3: Player = {
-        id: 3,
+        id: 0,
         name: "stevie",
         image: "empty-avatar",
         color: "green",

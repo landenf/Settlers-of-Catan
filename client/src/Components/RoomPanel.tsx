@@ -12,7 +12,6 @@ interface JoinRoomWithCodeProps {
  */
 const RoomPanel = (props: JoinRoomWithCodeProps) => {
 
-
   const players = props.state.players
   return (
     <div className="join-room-with-code">
