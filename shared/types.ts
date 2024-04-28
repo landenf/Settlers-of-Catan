@@ -113,6 +113,12 @@ export type Player = {
          */
         "total_vp": number;
     }
+
+    /**
+     * Used only in the lobby: lets the server know this player is
+     * ready to start the game.
+     */
+    ready: boolean;
 }
 
 /**
@@ -150,6 +156,12 @@ export type LimitedPlayer = {
      * Total resources held by a player.
      */
     resources: number;
+
+    /**
+     * Used only in the lobby: lets the server know this player is
+     * ready to start the game.
+     */
+    ready: boolean;
 }
 
 /**

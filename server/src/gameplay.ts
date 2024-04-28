@@ -571,7 +571,8 @@ function translateToLimitedState(sessionId: number) {
                image: player.image,
                color: player.color,
                vp: player.vp,
-               resources: player.resources
+               resources: player.resources,
+               ready: player.ready
           })
      });
 
@@ -581,7 +582,8 @@ function translateToLimitedState(sessionId: number) {
           image: current_game.current_player.image,
           color: current_game.current_player.color,
           vp: current_game.current_player.vp,
-          resources: current_game.current_player.resources
+          resources: current_game.current_player.resources,
+          ready: current_game.current_player.ready
      }
 
      var limited_state: LimitedSession = {
@@ -680,6 +682,18 @@ function joinGame(newPlayer: Player, sessionId?: number) {
 }
 
 /**
+ * Readies or unreadies the player. Once all players are ready, the game begins.
+ */
+function handleReady(sessionId: number, client: Player) {
+     const current_game = all_games[findGameIndexById(sessionId)]
+     current_game.players.map(player => {
+          if (player.id === client.id) {
+               player.ready = !player.ready
+          }
+     })
+}
+
+/**
  * Removes a player from the game. If the game has no players,
  * it is removed from the list of ongoing games.
  * @param sessionId the current game to leave
@@ -758,4 +772,4 @@ function getNullGame() {
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame }
+     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady }

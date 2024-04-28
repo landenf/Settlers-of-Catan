@@ -38,7 +38,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #c3332b;
+  background: #78201b;
   border-radius: 129px;
   margin: 0 auto;
 }
@@ -47,11 +47,16 @@
   color: #fdfdfd;
   margin: 0 auto;
   font-size: 50px;
-  text-align: right;
+  text-align: center;
   font-family: Inter;
   font-weight: 375;
   word-wrap: break-word;
   line-height: 8vh;
+  display: grid;
+  grid-template-columns: 80% 20%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .buttons {
@@ -94,10 +99,21 @@
 
 .lobby-players {
   display: grid;
-  grid-template-columns: 25% 75%;
-  width: 60%;
+  grid-template-columns: 20% 80%;
+  text-align: center;
+  width: 70%;
   justify-content: center;
   align-items: center;
+}
+
+.icon-not-ready {
+  height: 50%;
+  color: black;
+}
+
+.icon-ready {
+  height: 50%;
+  color: rgb(0, 255, 0);
 }
 
 .player-color-banner {

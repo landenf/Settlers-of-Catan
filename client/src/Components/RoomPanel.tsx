@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../Styles/JoinRoomWithCode.css";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 interface JoinRoomWithCodeProps {
   
@@ -48,7 +50,23 @@ const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoo
     callBackend("leaveGame", request)
     setButtonsActive(true);
     setRoomPanel(false);
+    setReady(false);
 
+  }
+
+  /**
+   * Handles the action of clicking the ready button. Should
+   * ready up the player and un-ready them depending on when
+   * it's clicked.
+   */
+  const handleReady = () => {
+
+    const request: BackendRequest = {
+      state: state
+    }
+
+    callBackend("handleReady", request)
+    setReady(!ready);
   }
 
   return (
@@ -69,6 +87,8 @@ const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoo
               <div className={"player-color-banner banner-" + (player.color)}>{color}</div>
               <p className="players-in-room">
                 P{players.indexOf(player) + 1}: {player.name}
+                {(!player.ready && <FontAwesomeIcon icon={faBan} className="icon-not-ready"/>)}
+                {(player.ready && <FontAwesomeIcon icon={faCheck} className="icon-ready"/>)}
               </p>
             </div>
           );
@@ -76,7 +96,7 @@ const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoo
         <div className="buttons">
           <button className="leave-button" onClick={() => leaveGame()}>Leave</button>
           <button className={"ready-button " + (ready ? "ready" : "not-ready")}
-          onClick={() => setReady(!ready)}>{"Ready" + (ready ? "!" : "?")}</button>
+          onClick={() => handleReady()}>{"Ready" + (ready ? "!" : "?")}</button>
         </div>
       </div>
     </div>

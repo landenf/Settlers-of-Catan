@@ -104,6 +104,9 @@ function handleRequest(request, body) {
         case "leaveGame":
             no_games_left = gameplay.leaveGame(body.state.id, body.state.client);
             break;
+        case "handleReady":
+            gameplay.handleReady(body.state.id, body.state.client)
+            break;
         default:
             throw new InvalidEndpointError("That endpoint is not valid!");
     }

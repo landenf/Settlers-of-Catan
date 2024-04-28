@@ -96,7 +96,8 @@ import { GameState, Player } from "@shared/types";
             }
         },
         hasKnight: false,
-        knightCards: 0
+        knightCards: 0,
+        ready: false
     };
     const player2: Player = {
         id: 0,
@@ -195,7 +196,8 @@ import { GameState, Player } from "@shared/types";
             }
         },
         hasKnight: false,
-        knightCards: 0
+        knightCards: 0,
+        ready: false
     };
     const player3: Player = {
         id: 0,
@@ -294,6 +296,7 @@ import { GameState, Player } from "@shared/types";
             }
         },
         hasKnight: false,
-        knightCards: 0
+        knightCards: 0,
+        ready: false
     };
     export const players = [player1, player2, player3]
