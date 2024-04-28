@@ -15,13 +15,13 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         image: "empty-avatar",
         color: "red",
         vp: 1,
-        resources: 25,
+        resources: 1000,
         hand: {
-            wheat: 5,
-            brick: 5,
-            stone: 5,
-            sheep: 5,
-            wood: 5
+            wheat: 200,
+            brick: 200,
+            stone: 200,
+            sheep: 200,
+            wood: 200
         },
         communities_owned: [],
         potential_communities: [],

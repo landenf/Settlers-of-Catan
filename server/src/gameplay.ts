@@ -1,4 +1,4 @@
-import { GameState, Player, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer, community_keys } from "@shared/types";
+import { GameState, Player, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer, community_keys, community_spaces } from "@shared/types";
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
@@ -35,7 +35,7 @@ type ResourcesKey = keyof typeof example_game.current_player.hand;
  * that that spot is in on the tile from the key. If it's a -1, then that means this edge
  * is stand-alone and has no neighboring tile.
  */
-export const neighbors = {
+const neighbors = {
      0: [3, 4, 1, -1, -1, -1],
      1: [4, 5, 2, -1, -1, 0],
      2: [5, 6, -1, -1, -1, 1],
@@ -54,9 +54,10 @@ export const neighbors = {
      15: [18, -1, -1, 11, 10, 14],
      16: [-1, -1, 17, 13, 12, -1],
      17: [-1, -1, 18, 14, 13, 16],
-     18: [-1, -1, -1, 15, 14, 18]
+     18: [-1, -1, -1, 15, 14, 17]
  }
- export type NeighborsKey = keyof typeof neighbors;
+
+export type NeighborsKey = keyof typeof neighbors;
 
 /**
  * Finds a game's index in the all_games list by its session ID.
@@ -243,6 +244,15 @@ function cancelSteal(sessionId: number) {
      return getGamestate(sessionId);
 }
 
+ /**
+  * One leg of a "triad" of roads. When one road is placed, typically two more roads 
+  * form an outgoing triad from it.
+  */
+ interface triad_leg { 
+     builtRoad: road_meta_data,
+     potentialRoad: road_meta_data,
+}
+
 
 /**
  * Function that controls buying a road. Only one road_meta data is needed.
@@ -281,6 +291,10 @@ function buyRoad(road: road_meta_data, sessionId: number) {
 
           let tileTriads = potentialUpdatesRoad(road, sessionId);
           addedPotentialRoads.push(...tileTriads); 
+
+          // code to add the road in the representation of the neighboring tile. For example, edge 3 
+          // on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
+          // the z-index of rendering, we must render the road on both.
           const neighbor_index = neighbors[road.tile_index as NeighborsKey][road.edge];
           if(neighbor_index != -1 ){
                const neighbor_edge = neighbors[neighbor_index as NeighborsKey].indexOf(road.tile_index);
@@ -292,19 +306,99 @@ function buyRoad(road: road_meta_data, sessionId: number) {
                player.roads_owned.push(neighbor_road);
                let NeighborTriads = potentialUpdatesRoad(neighbor_road, sessionId);
                addedPotentialRoads.push(...NeighborTriads); 
+          } else {
+               addedPotentialRoads.push(findPotentialsOnBoardEdges(road, sessionId));
           }
 
-
           // add potential settlements
-          checkForPotentialSettlements([addedPotentialRoads[0], addedPotentialRoads[3]], sessionId) //dont hardcode
-          checkForPotentialSettlements([addedPotentialRoads[1], addedPotentialRoads[2]], sessionId) //dont hardcode
+          if (addedPotentialRoads.length == 2) {
+               checkForPotentialSettlements([addedPotentialRoads[0], addedPotentialRoads[1]], sessionId)
+          } else if (addedPotentialRoads.length == 4) {
+               checkForPotentialSettlements([addedPotentialRoads[1], addedPotentialRoads[2]], sessionId)
+          }
 
      }
-     current_game.current_player = player;
 
-     return current_game; //todo update return
+     console.log()
+
+     return getGamestate(sessionId);
 }
 
+/**
+ * Helper function used to determine if a road edge is being added 
+ * "clockwise" or "counterclockwise" is relation to edges on the board.
+ * @param road the road that's just been built
+ * @returns true if clockwise, false if counterclockwise
+ */
+function determineClockwiseRotation(road: road_meta_data) {
+
+     const first_sector = [7, 12, 16];
+     const second_sector = [16, 17, 18];
+     const third_sector = [18, 15, 11];
+     const fourth_sector = [11, 6, 2];
+     const fifth_sector = [2, 1, 0];
+     const sixth_sector = [1, 0, 3]
+
+     const sectors = [first_sector, second_sector, third_sector, fourth_sector, fifth_sector, sixth_sector];
+
+     let sector_count = 0;
+     let isClockwise = false;
+
+     sectors.forEach(sector => {
+          if (sector.some(index => index === road.tile_index)) {
+               if (road.edge === sector_count) {
+                    isClockwise = true;
+               }
+          }
+          sector_count++;
+     });
+
+     return isClockwise;
+
+}
+
+/**
+ * Polyfills a bug associated with adding roads on the edges of the board.
+ * @param road the road that's just been built
+ * @param sessionId the game ID of the current game session
+ */
+function findPotentialsOnBoardEdges(road: road_meta_data, sessionId: number) {
+
+     const edge_tiles = [7, 12, 16, 17, 18, 15, 11, 6, 2, 1, 0, 3];
+     const edge_index = edge_tiles.findIndex(number => number === road.tile_index);
+
+     const current_game = all_games[findGameIndexById(sessionId)];
+     const player = current_game.current_player;
+
+     const isClockwise = determineClockwiseRotation(road);
+
+     let tile_index = edge_index;
+     let tile_edge = road.edge;
+
+     if (isClockwise) {
+          tile_index = (tile_index + 1) % edge_tiles.length;
+          tile_edge = (tile_edge - 1);
+     } else {
+          tile_index = (tile_index - 1)
+          tile_edge = (tile_edge + 1) % 6
+     }
+
+     const translated_edge = translateToNumberKey(tile_edge)
+
+     const newRoad: road_meta_data = {tile_index: edge_tiles[tile_index], edge: translated_edge}
+
+     const newLeg : triad_leg = {
+          builtRoad : road,
+          potentialRoad: newRoad
+     }
+
+     if (player.potential_roads.indexOf(newRoad) < 0 && current_game.gameboard.tiles[newRoad.tile_index].road_spaces[newRoad.edge] == 'white') {
+          player.potential_roads.push(newRoad);
+     }
+
+     return newLeg;
+     
+}
 
 /**
  * Helper function to update potential roads from the roads that have been bought.
@@ -316,8 +410,6 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
      const player = current_game.current_player;
 
      // remove bought from potential road
-     // const index = player.potential_roads.indexOf(road);
-     // player.potential_roads.splice(index -1, 1);
      player.potential_roads = player.potential_roads.filter(
           (current) => !(current.tile_index === road.tile_index && current.edge === road.edge)
       );
@@ -341,15 +433,15 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
  
      // Add and check for previous road if not already present
      if (player.potential_roads.indexOf(roadPrev) < 0 && current_game.gameboard.tiles[roadPrev.tile_index].road_spaces[roadPrev.edge] == 'white') {
-         player.potential_roads.push(roadPrev);
-         checkForNeighborPotentialRoad(roadPrev, sessionId);
+          player.potential_roads.push(roadPrev);
+          checkForNeighborPotentialRoad(roadPrev, sessionId);
      }
  
      
      // Add and check for next road if not already present
      if (player.potential_roads.indexOf(roadNext) < 0 && current_game.gameboard.tiles[roadNext.tile_index].road_spaces[roadNext.edge] == 'white') {
-         player.potential_roads.push(roadNext);
-         checkForNeighborPotentialRoad(roadNext, sessionId);
+          player.potential_roads.push(roadNext);
+          checkForNeighborPotentialRoad(roadNext, sessionId);
      }
 
      //construct triad legs
@@ -357,23 +449,17 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
           builtRoad : road,
           potentialRoad: roadPrev
      }
-     let letNext : triad_leg = {
+     let legNext : triad_leg = {
           builtRoad : road,
           potentialRoad: roadNext
      }
 
-     return [legPrevious, letNext]
+     return [legPrevious, legNext]
  }
- 
- interface triad_leg { //wasnt sure what to name this
-     builtRoad: road_meta_data,
-     potentialRoad: road_meta_data,
-}
-
 
 /**
- * Helper function to deal with adding potential roads to neighbors.
- * @param road
+ * Helper function to add roads to a neighbor tile if it needs to be added.
+ * @param road the road whose neighbor we're looking for
  */
 function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number){
      const current_game = all_games[findGameIndexById(sessionId)]
@@ -390,7 +476,11 @@ function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number)
      }
 }
 
-
+/**
+ * Checks for potential settlements given a set of roads.
+ * @param triad_legs the two legs of the triad to check
+ * @param sessionId the game session to check 
+ */
 function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number) {
 
      const current_game = all_games[findGameIndexById(sessionId)]
@@ -757,6 +847,40 @@ function translateToLimitedState(sessionId: number) {
      return limited_state
      
 }
+
+type numberKey = keyof community_spaces
+
+/**
+     * Translates a number into a community space or road space's index.
+     * @param toTranslate the index to translate to number key
+     * @returns a number key that provides strong 0-5 typing to the index.
+     */
+function translateToNumberKey(toTranslate: number) {
+     var translation: numberKey
+     switch (toTranslate) {
+         case 0:
+             translation = 0;
+             break;
+         case 1:
+             translation = 1;
+             break;
+         case 2: 
+             translation = 2;
+             break;
+         case 3: 
+             translation = 3;
+             break;
+         case 4: 
+             translation = 4;
+             break;
+         case 5:
+             translation = 5;
+             break;
+         default:
+             throw new InvalidResourceError("Tried accessing an invalid index of a community space!")
+     }
+     return translation
+ }
 
 function getGamestate(sessionId: number) {
      updateResourceCounts(sessionId);
