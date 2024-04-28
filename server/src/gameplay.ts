@@ -253,6 +253,24 @@ function cancelSteal(sessionId: number) {
      potentialRoad: road_meta_data,
 }
 
+/**
+ * Compares value of roads and returns true if both values match.
+ * @param road1 the road to compare to
+ * @param road2 to road to compare
+ */
+function compareRoads(road1: road_meta_data, road2: road_meta_data) {
+
+     let sameRoad = false;
+
+     if (road1.edge === road2.edge) {
+          if (road1.tile_index === road1.tile_index) {
+               sameRoad = true;
+          }
+     }
+
+     return sameRoad;
+}
+
 
 /**
  * Function that controls buying a road. Only one road_meta data is needed.
@@ -284,6 +302,14 @@ function buyRoad(road: road_meta_data, sessionId: number) {
           player.hand["brick"] = player.hand["brick"] - 1;
           player.hand["wood"] = player.hand["wood"] - 1;
           player.roads_owned.push(road);
+
+          for (let i = 0; i < current_game.players.length; i++) {
+               const loop_player = current_game.players[i]
+               if (loop_player.color !== player.color) {
+                    loop_player.potential_roads = loop_player.potential_roads.filter(el_road => compareRoads(el_road, road))
+               }
+          }
+
           current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
           //add all potential roads and neighboring potential roads
@@ -318,8 +344,6 @@ function buyRoad(road: road_meta_data, sessionId: number) {
           }
 
      }
-
-     console.log()
 
      return getGamestate(sessionId);
 }
@@ -394,6 +418,10 @@ function findPotentialsOnBoardEdges(road: road_meta_data, sessionId: number) {
 
      if (player.potential_roads.indexOf(newRoad) < 0 && current_game.gameboard.tiles[newRoad.tile_index].road_spaces[newRoad.edge] == 'white') {
           player.potential_roads.push(newRoad);
+          const noncurrent_players = current_game.players.filter(element => element !== player)
+          noncurrent_players.forEach(player => 
+               player.potential_roads.filter(road => road != newRoad)
+          )
      }
 
      return newLeg;
@@ -473,6 +501,12 @@ function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number)
                edge: newEdge as road_keys
           }
           player.potential_roads.push(neighborPotentialRoad)
+          for (let i = 0; i < current_game.players.length; i++) {
+               const loop_player = current_game.players[i]
+               if (loop_player.color !== player.color) {
+                    loop_player.potential_roads = loop_player.potential_roads.filter(el_road => compareRoads(el_road, road))
+               }
+          }
      }
 }
 
