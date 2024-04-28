@@ -12,6 +12,7 @@ interface JoinRoomWithCodeProps {
  */
 const RoomPanel = (props: JoinRoomWithCodeProps) => {
 
+
   const players = props.state.players
   return (
     <div className="join-room-with-code">
@@ -20,10 +21,19 @@ const RoomPanel = (props: JoinRoomWithCodeProps) => {
       </div>
       <div className="main-content-box">
         {players.map((player) => {
+
+          const color = player.color === "red" ? "Red" :
+            player.color === "blue" ? "Blue" :
+            player.color === "orange" ? "Orange" :
+            "Green"
+
           return (
-            <p className="players-in-room" key={player.color}>
-              P{players.indexOf(player) + 1}: {player.name}
-            </p>
+            <div className="lobby-players" key={player.color}>
+              <div className={"player-color-banner banner-" + (player.color)}>{color}</div>
+              <p className="players-in-room">
+                P{players.indexOf(player) + 1}: {player.name}
+              </p>
+            </div>
           );
         })}
         <div className="buttons">

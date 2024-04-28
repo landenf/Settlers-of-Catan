@@ -10,14 +10,15 @@ import { assignPlayerColor, newGame } from "./lobby";
 var example_game: GameState = {
      id: 0,
      client: players[0],
-     diceNumber: {number1: 1, number2: 1},
+     diceNumber: { number1: 1, number2: 1 },
      players: players,
      current_player: players[0],
      current_largest_army: "",
      current_longest_road: "",
      gameboard: {
           tiles: tiles
-     }
+     },
+     isValid: false
 }
 
 /**
@@ -620,13 +621,53 @@ function generateGame(host: Player) {
  * @param sessionId the game that the player's joining
  */
 function joinGame(newPlayer: Player, sessionId?: number) {
-     var game = example_game;
+
+     /** 
+      * Total amount of tries we should try to connect to a random game before
+      * just making a new one.
+      */
+     const total_connection_tries = 100;
+
+     let game_index = 0;
+     let foundGame = true;
+
+     // if a sessionId wasn't specifed, we look for a random game
      if (sessionId == undefined) {
-          const game_index = Math.floor(Math.random() * all_games.length);
+
+          // if there are no games yet, we make our own. otherwise, look for a random one.
+          if (all_games.length == 0) {
+               generateGame(newPlayer);
+               sessionId = all_games[game_index].id
+               foundGame = false;
+          } else {
+               game_index = Math.floor(Math.random() * all_games.length);
+               sessionId = all_games[game_index].id
+
+               // if the random game had too many players, try looking for a new one
+               let current_tries = 0;
+               while (all_games[findGameIndexById(sessionId)].players.length == 4 && current_tries < total_connection_tries) {
+                    game_index = Math.floor(Math.random() * all_games.length);
+                    sessionId = all_games[game_index].id
+                    current_tries++;
+               }
+
+               if (current_tries === total_connection_tries) {
+                    generateGame(newPlayer);
+                    game_index = all_games.length - 1;
+                    sessionId = all_games[game_index].id
+                    foundGame = false;
+               }
+
+          }
+
+     } else {
           sessionId = all_games[game_index].id
      }
+
+     if (foundGame) {
+          assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
+     }
      
-     game = assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
      return getGamestate(sessionId)
 }
 

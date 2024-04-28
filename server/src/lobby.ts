@@ -8,14 +8,15 @@ import { tiles } from "../StaticData/TileData";
 var example_game: GameState = {
      id: 0,
      client: players[0],
-     diceNumber: {number1: 1, number2: 1},
+     diceNumber: { number1: 1, number2: 1 },
      players: players,
      current_player: players[0],
      current_largest_army: "",
      current_longest_road: "",
      gameboard: {
           tiles: tiles
-     }
+     },
+     isValid: false
 }
 
 /**
@@ -60,7 +61,8 @@ export function newGame(all_games: GameState[], host: Player) {
         current_longest_road: "",
         gameboard: {
              tiles: tiles
-        }
+        },
+        isValid: true
     }
 
     return gamestate;

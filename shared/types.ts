@@ -358,6 +358,12 @@ export type GameState = {
      * and resource tiles.
      */
     gameboard: Board
+
+    /**
+     * Flag set to true as long as this gamestate is valid and players can 
+     * play in the session.
+     */
+    isValid: boolean;
 }
 
 /**
