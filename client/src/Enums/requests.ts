@@ -26,4 +26,10 @@ interface StealRequest extends BackendRequest {
 interface RoadRequest extends BackendRequest {
     roadData: road_meta_data;
 }
-export {TradeRequest, BackendRequest, RoadRequest, StealRequest}
+
+interface JoinGameByIdRequest extends BackendRequest {
+    id: number;
+}
+
+
+export {TradeRequest, BackendRequest, RoadRequest, StealRequest, JoinGameByIdRequest}
