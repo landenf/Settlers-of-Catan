@@ -55,8 +55,10 @@ var client_id = 1;
 // objects representing all players. TODO: get this when we set up the landing page and game start!
 const clients = player_data.players
 
-// should increment for each additional game running. TODO: get this when we set up landing page and game start!
-var session_id = 0;
+/**
+ * Becomes true if there are no more games currently being played.
+ */
+let no_games_left = false;
 
 /**
  * Handles a frontend request to update the gamestate.
@@ -64,47 +66,69 @@ var session_id = 0;
 function handleRequest(request, body) {
     switch (request) {
         case "buyDevCard":
-            gameplay.buyDevCard(session_id);
+            gameplay.buyDevCard(body.state.id);
             break;
         case "roll":
-            gameplay.handleDiceRoll(session_id);
+            gameplay.handleDiceRoll(body.state.id);
             break;
         case "tradeBank":
-            gameplay.tradeWithBank(body.resourceOffered, body.resourceGained, session_id);
+            gameplay.tradeWithBank(body.resourceOffered, body.resourceGained, body.state.id);
             break;
         case "buyRoad":
-            gameplay.buyRoad(body.roadData, session_id);
+            gameplay.buyRoad(body.roadData, body.state.id);
             break;
         case "buySettlement":
             gameplay.buySettlement(body.settlementData, session_id);
             break;
         case "steal":
-            gameplay.handleKnight(body.victim, session_id);
+            gameplay.handleKnight(body.victim, body.state.id);
             break;
         case "cancelSteal":
-            gameplay.cancelSteal(session_id);
+            gameplay.cancelSteal(body.state.id);
             break;
         case "passTurn":
-            gameplay.passTurn(session_id);
+            gameplay.passTurn(body.state.id);
             break;
         case "switchClient":
-            gameplay.switchClient(body.player, session_id);
+            gameplay.switchClient(body.player, body.state.id);
+            break;
+        case "generateGame":
+            const new_game = gameplay.generateGame(body.state.client);
+            body.state.id = new_game.id;
+            break;
+        case "joinGameByID":
+            const join_game = gameplay.joinGame(body.state.client, body.id);
+            body.state.id = join_game.id
+            break;
+        case "joinRandomGame":
+            const random_game = gameplay.joinGame(body.state.client, body.id);
+            body.state.id = random_game.id
+            break;
+        case "leaveGame":
+            no_games_left = gameplay.leaveGame(body.state.id, body.state.client);
+            break;
+        case "handleReady":
+            gameplay.handleReady(body.state.id, body.state.client)
             break;
         default:
             throw new InvalidEndpointError("That endpoint is not valid!");
     }
-    updateFrontend();
+    updateFrontend(body.state.id);
 }
 
 /**
  * Function used to send a limited gamestate to every client
  * using the websocket.
  */
-function updateFrontend() {
+function updateFrontend(session_id) {
     wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
+
+        if (client.readyState === WebSocket.OPEN && !no_games_left && gameplay.findPlayerInGame(session_id, client.id)) {
             let state = gameplay.switchClient(client.id, session_id)
             client.send(JSON.stringify(state))
+        } else if (gameplay.findPlayerCantJoin(client.id)) {
+            client.send(JSON.stringify(gameplay.getNullGame()))
+            no_games_left = false;
         }
     });
 }
@@ -114,10 +138,11 @@ wss.on('connection', (ws, req) => {
     ws.id = client_id;
     client_id++;
 
-    updateFrontend();
-    
     ws.on('message', message => {
         let request = JSON.parse(message)
+        if (request.body.state.client.id == 0) {
+            request.body.state.client = gameplay.assignClientId(request.body.state.client, ws.id)
+        }
         handleRequest(request.endpoint, request.body)
       });    
 

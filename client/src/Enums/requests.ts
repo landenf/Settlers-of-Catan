@@ -27,8 +27,14 @@ interface RoadRequest extends BackendRequest {
     roadData: road_meta_data;
 }
 
+interface JoinGameByIdRequest extends BackendRequest {
+    id: number;
+}
+
+
+
 interface SettlementRequest extends BackendRequest {
     settlementData: community_meta_data;
 }
 
-export {TradeRequest, BackendRequest, RoadRequest, StealRequest, SettlementRequest}
+export {TradeRequest, BackendRequest, RoadRequest, StealRequest, JoinGameByIdRequest, SettlementRequest}

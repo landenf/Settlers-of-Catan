@@ -21,6 +21,8 @@
 .env
 
 # emitted js
+/src/shared.js
+/src/lobby.js
 /src/gameplay.js
 /src/errors.js
 
