@@ -10,7 +10,7 @@ const road_two = {
     edge: 2,
 };
 const player1 = {
-    id: 0,
+    id: 1,
     name: "steven",
     image: "empty-avatar",
     color: "red",
@@ -106,11 +106,10 @@ const player1 = {
         }
     },
     hasKnight: false,
-    knightCards: 0,
-    ready: false
+    knightCards: 0
 };
 const player2 = {
-    id: 0,
+    id: 2,
     name: "steve",
     image: "empty-avatar",
     color: "orange",
@@ -206,11 +205,10 @@ const player2 = {
         }
     },
     hasKnight: false,
-    knightCards: 0,
-    ready: false
+    knightCards: 0
 };
 const player3 = {
-    id: 0,
+    id: 3,
     name: "stevie",
     image: "empty-avatar",
     color: "green",
@@ -306,7 +304,6 @@ const player3 = {
         }
     },
     hasKnight: false,
-    knightCards: 0,
-    ready: false
+    knightCards: 0
 };
 exports.players = [player1, player2, player3];

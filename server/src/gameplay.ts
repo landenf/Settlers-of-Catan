@@ -3,39 +3,32 @@ import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
 import { toUSVString } from "util";
-import { assignPlayerColor, newGame, reassignPlayers } from "./lobby";
 
 /**
- * This is an empty game. 
+ * This is the example game. 
  */
-var null_game: GameState = {
+var example_game: GameState = {
      id: 0,
      client: players[0],
-     diceNumber: { number1: 1, number2: 1 },
+     diceNumber: {number1: 1, number2: 1},
      players: players,
      current_player: players[0],
      current_largest_army: "",
      current_longest_road: "",
      gameboard: {
           tiles: tiles
-     },
-     isValid: false
+     }
 }
 
 /**
  * List of all games currently being played.
  * TODO: Replace example game with games from the landing page / join page!
  */
-var all_games: GameState[] = []
-
-/**
- * List of players who tried to connect to a game but didn't find one.
- */
-var failed_to_connect: Player[] = []
+var all_games: GameState[] = [example_game]
 
 
-type ResourceGainKey = keyof typeof null_game.current_player.resource_gain;
-type ResourcesKey = keyof typeof null_game.current_player.hand;
+type ResourceGainKey = keyof typeof example_game.current_player.resource_gain;
+type ResourcesKey = keyof typeof example_game.current_player.hand;
 
 /**
  * Dictionary of the neighbors. Each index is correlated with the road space number 
@@ -861,8 +854,7 @@ function translateToLimitedState(sessionId: number) {
                image: player.image,
                color: player.color,
                vp: player.vp,
-               resources: player.resources,
-               ready: player.ready
+               resources: player.resources
           })
      });
 
@@ -872,8 +864,7 @@ function translateToLimitedState(sessionId: number) {
           image: current_game.current_player.image,
           color: current_game.current_player.color,
           vp: current_game.current_player.vp,
-          resources: current_game.current_player.resources,
-          ready: current_game.current_player.ready
+          resources: current_game.current_player.resources
      }
 
      var limited_state: LimitedSession = {
@@ -884,8 +875,7 @@ function translateToLimitedState(sessionId: number) {
           current_player: current_limited_player,
           current_largest_army: current_game.current_largest_army,
           current_longest_road: current_game.current_longest_road,
-          gameboard: current_game.gameboard,
-          isValid: current_game.isValid
+          gameboard: current_game.gameboard
      }
 
      return limited_state
@@ -926,174 +916,10 @@ function translateToNumberKey(toTranslate: number) {
      return translation
  }
 
-/**
- * Assigns a unique client ID to the user.
- * @param player the player object to apply the new ID to
- * @param newId the new ID to apply
- * @returns the player object with an updated client ID
- */
-function assignClientId(player: Player, newId: number) {
-     player.id = newId;
-     return player;
-}
-
-/**
- * Generates a new game and adds it to the list of all games.
- * @param host the player who's hosting and starting the game
- */
-function generateGame(host: Player) {
-     const game = newGame(all_games, host)
-     all_games.push(game)
-     return getGamestate(game.id)
-}
-
-/**
- * Adds a player to an existing game, either by random or by a game's ID.
- * @param newPlayer the player that's joining the game
- * @param sessionId the game that the player's joining
- */
-function joinGame(newPlayer: Player, sessionId?: number) {
-
-     /** 
-      * Total amount of tries we should try to connect to a random game before
-      * just making a new one.
-      */
-     const total_connection_tries = 100;
-
-     let game_index = 0;
-     let foundGame = true;
-
-     // if a sessionId wasn't specifed, we look for a random game
-     if (sessionId == undefined) {
-
-          // if there are no games yet, we make our own. otherwise, look for a random one.
-          if (all_games.length == 0) {
-               generateGame(newPlayer);
-               sessionId = all_games[game_index].id
-               foundGame = false;
-          } else {
-               game_index = Math.floor(Math.random() * all_games.length);
-               sessionId = all_games[game_index].id
-
-               // if the random game had too many players, try looking for a new one
-               let current_tries = 0;
-               while (all_games[findGameIndexById(sessionId)].players.length == 4 && current_tries < total_connection_tries) {
-                    game_index = Math.floor(Math.random() * all_games.length);
-                    sessionId = all_games[game_index].id
-                    current_tries++;
-               }
-
-               if (current_tries === total_connection_tries) {
-                    generateGame(newPlayer);
-                    game_index = all_games.length - 1;
-                    sessionId = all_games[game_index].id
-                    foundGame = false;
-               }
-
-          }
-
-     } 
-
-     if (foundGame) {
-          let game = assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
-          if (!game.isValid) {
-               failed_to_connect.push(newPlayer)
-               return null_game;
-          }
-     }
-     
-     return getGamestate(sessionId)
-}
-
-/**
- * Readies or unreadies the player. Once all players are ready, the game begins.
- */
-function handleReady(sessionId: number, client: Player) {
-     const current_game = all_games[findGameIndexById(sessionId)]
-     current_game.players.map(player => {
-          if (player.id === client.id) {
-               player.ready = !player.ready
-          }
-     })
-}
-
-/**
- * Removes a player from the game. If the game has no players,
- * it is removed from the list of ongoing games.
- * @param sessionId the current game to leave
- * @returns false if there are no more games or players
- */
-function leaveGame(sessionId: number, client: Player) {
-     let game = all_games[findGameIndexById(sessionId)];
-     game.players = game.players.filter(player => player.id !== client.id);
-
-     failed_to_connect.push(client)
-
-     if (game.players.length < 1) {
-          all_games = all_games.filter(el_game => el_game.id !== game.id)
-     } else {
-          game = reassignPlayers(game);
-     }
-
-     let no_more_games = false
-     if (all_games.length == 0) {
-          no_more_games = true;
-     }
-     return no_more_games;
-}
-
-/**
- * Finds if a given player is in a given game.
- * @param sessionId the ID of the game to search in
- * @param clientId the ID of the player to search for
- * @returns true if the player was found, false if the player was not.
- */
-function findPlayerInGame(sessionId: number, clientId: number) {
-     let isInGame = false;
-     const game = all_games[findGameIndexById(sessionId)]
-     game.players.forEach(player => {
-          if (player.id === clientId) {
-               isInGame = true;
-          }
-     });
-     return isInGame
-}
-
-/**
- * Finds the player who just tried to join a game, but wasn't able to 
- * find a game.
- * @param clientId the id of the client to check against those 
- * who have failed to find a game
- * @returns true if the player can't join the game
- */
-function findPlayerCantJoin(clientId: number) {
-     if (failed_to_connect.some(player => player.id === clientId)) {
-          failed_to_connect = failed_to_connect.filter(player => player.id !== clientId)
-          return true
-     } else {
-          return false
-     }
-}
-
-/**
- * Translates and updates the gamestate, then returns it.
- * @param sessionId the sessionId of the gamestate to update
- * @returns an updated, limited gamestate
- */
 function getGamestate(sessionId: number) {
      updateResourceCounts(sessionId);
      checkWinState(sessionId)
      return translateToLimitedState(sessionId);
 }
 
-/**
- * Used when we can't find a game, typically due to trying to join a game
- * via ID when it's already full.
- */
-function getNullGame() {
-     return null_game;
-}
-
-module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
-     passTurn, switchClient, buyRoad, buySettlement, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady }
+module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, passTurn, switchClient, buyRoad, buySettlement }

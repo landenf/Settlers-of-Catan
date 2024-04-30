@@ -10,7 +10,7 @@ const road_two = {
 
 import { GameState, Player, road_meta_data } from "@shared/types";
     const player1: Player = {
-        id: 0,
+        id: 1,
         name: "steven",
         image: "empty-avatar",
         color: "red",
@@ -106,11 +106,10 @@ import { GameState, Player, road_meta_data } from "@shared/types";
             }
         },
         hasKnight: false,
-        knightCards: 0,
-        ready: false
+        knightCards: 0
     };
     const player2: Player = {
-        id: 0,
+        id: 2,
         name: "steve",
         image: "empty-avatar",
         color: "orange",
@@ -206,11 +205,10 @@ import { GameState, Player, road_meta_data } from "@shared/types";
             }
         },
         hasKnight: false,
-        knightCards: 0,
-        ready: false
+        knightCards: 0
     };
     const player3: Player = {
-        id: 0,
+        id: 3,
         name: "stevie",
         image: "empty-avatar",
         color: "green",
@@ -306,7 +304,6 @@ import { GameState, Player, road_meta_data } from "@shared/types";
             }
         },
         hasKnight: false,
-        knightCards: 0,
-        ready: false
+        knightCards: 0
     };
     export const players = [player1, player2, player3]

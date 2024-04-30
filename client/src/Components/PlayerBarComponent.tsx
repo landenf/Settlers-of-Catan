@@ -32,8 +32,7 @@ const PlayerBarComponent = (props: PlayerBarProp) => {
             image={player.image}
             color={player.color}
             vp={player.vp}
-            resources={player.resources}
-            ready={player.ready}        
+            resources={player.resources}        
             />
 
     );
