@@ -363,7 +363,7 @@ export type GameState = {
     /**
      * The player who currently holds the longest road card.
      */
-    current_longest_road: string
+    current_longest_road?: Player
 
     /**
      * The current gameboard with its representations of player buildings
@@ -427,7 +427,7 @@ export type LimitedSession = {
     /**
      * The player who currently holds the longest road card.
      */
-    current_longest_road: string
+    current_longest_road?: LimitedPlayer
 
     /**
      * The current gameboard with its representations of player buildings

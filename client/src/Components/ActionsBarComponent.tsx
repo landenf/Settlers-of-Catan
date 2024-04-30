@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Styles/ActionsBar.css'; 
-import { LimitedSession } from '@shared/types';
+import { GameState, road_meta_data } from '@shared/types';
 import { BackendRequest, StealRequest } from '../Enums/requests';
 
 /**
@@ -15,14 +15,26 @@ interface ActionsBarComponentProps {
   setTradeModal: (newState: boolean) => void;
 
   /**
-     * Function to call the backend through the main websocket.
-     */
-  callBackend: (type: string, body: BackendRequest) => void;
+   * Function to set the steal modal on or off.
+   * @param newState "true" to display steal modal, "false" to not
+   */
+  setStealModal: (newState: boolean) => void;
+
+  /**
+   * Function to update the frontend gamestate.
+   * @param newState the new gamestate to update to
+   */
+  updateState: (newState: GameState) => void;
 
   /**
    * The current representation of the gamestate.
    */
-  state: LimitedSession;
+  state: GameState;
+
+  /**
+   * Updates whether or not a player has bought a dev card this turn.
+   */
+  updateBoughtDev: (newState: boolean) => void;
 
   /**
    * This is true if a player has purchased a dev card this turn, and false if not.
@@ -30,10 +42,26 @@ interface ActionsBarComponentProps {
   boughtDev: boolean;
 
   /**
+   * Updates whether or not this component is being rendered on the current
+   * player's screen.
+   */
+  updateIsCurrentPlayer: (newState: boolean) => void;
+
+  /**
    * Determines whether or not this component is being rendered on the current
    * player's screen.
    */
   isCurrentPlayer: boolean;
+
+  /**
+   * Highlights the roads that the user can potentially build on.
+   */
+  highlightPotentialRoads: (potentialRoads: road_meta_data) => void;
+
+  /**
+   * Resets action bar component to its initial state.
+   */
+  reset: () => void;
 
 }
 
@@ -41,8 +69,8 @@ interface ActionsBarComponentProps {
  * The sidebar used to trade resources, build settlements, and buy development 
  * cards. Appears on a player's game turn.
  */
-const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, callBackend, setTradeModal, 
-  boughtDev, isCurrentPlayer }) => {
+const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, updateState, setTradeModal, 
+  setStealModal, updateBoughtDev, boughtDev, updateIsCurrentPlayer, isCurrentPlayer, highlightPotentialRoads, reset }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -58,30 +86,57 @@ const KnightBody: StealRequest = {
 }
   
   const handleButtonClick = async (action: string, body: BackendRequest) => {
+    // call back end
+    const URL = 'http://localhost:5000/' + action;
+    const response = await fetch('http://localhost:5000/' + action, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      }});
 
-    callBackend(action, body)
+    // retrieve the new game state and update it in the frontend
+    let newState: GameState = await response.json();
+    updateState(newState);
+
+    if (newState.current_player.hasKnight) {
+      setStealModal(true);
+    }
+
+    if (action === "buyDevCard") {
+      updateBoughtDev(true);
+    }
+
+    if (action === "passTurn") {
+      updateIsCurrentPlayer(newState.client.color === newState.current_player.color);
+      reset();
+    }
   };
 
   return (
-    <div aria-label="actions-bar" className={("absolute-container " + (isCurrentPlayer ? "" : "disabled"))}>
+    <div className={("absolute-container " + (isCurrentPlayer ? "" : "disabled"))}>
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" aria-label="build-road" onClick={() => 
-            handleButtonClick('buildRoad', NullBody)}>Road</p>
+          <p className="button indented-text" onClick={() => handleButtonClick('buildRoad', NullBody)}>Road</p>
         <div className="line"></div>
-          <p className="button indented-text" aria-label="build-settlement" onClick={() => 
-            handleButtonClick('buildSettlement', NullBody)}>Settlement</p>
+          <p className="button indented-text" onClick={() => handleButtonClick('buildSettlement', NullBody)}>Settlement</p>
+        <div className="line"></div>
+          <p className="button indented-text" onClick={() => handleButtonClick('buildCity', NullBody)}>City</p>
         <div className="line-thick"></div>
         <h1 className="text-bold">TRADE</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" aria-label="trade" onClick={() => setTradeModal(true)}>Bank</p>
+          <p className="button indented-text" onClick={() => setTradeModal(true)}>Bank</p>
         <div className="line"></div>
+          <p className="button indented-text" onClick={() => handleButtonClick('steal', KnightBody)}>Player One</p>
+        <div className="line"></div>
+          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Two</p>
+        <div className="line"></div>
+          <p className="button indented-text" onClick={() => handleButtonClick('tradeBank', NullBody)}>Player Three</p>
         <div className="line-thick"></div>
-        <button className={"button text-bold " + (boughtDev ? "buy-dark" : "")} aria-label="buy-dev-card" 
-          disabled={boughtDev} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
+        <button className={"button text-bold " + (boughtDev ? "buy-dark" : "")} disabled={boughtDev} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
         <div className="line-thick"></div>
-        <h1 className="button text-bold" aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
+        <h1 className="button text-bold" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
         <div className="line-thick"></div>
         </div>
     </div>

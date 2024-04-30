@@ -12,7 +12,6 @@ var null_game: GameState = {
      players: players,
      current_player: players[0],
      current_largest_army: "",
-     current_longest_road: "",
      gameboard: {
           tiles: tiles
      },
@@ -58,7 +57,6 @@ export function newGame(all_games: GameState[], host: Player) {
         players: [host],
         current_player: host,
         current_largest_army: "",
-        current_longest_road: "",
         gameboard: {
              tiles: tiles
         },

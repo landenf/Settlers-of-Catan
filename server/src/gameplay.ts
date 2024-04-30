@@ -14,7 +14,6 @@ var null_game: GameState = {
      players: players,
      current_player: players[0],
      current_largest_army: "",
-     current_longest_road: "",
      gameboard: {
           tiles: tiles
      },
@@ -360,8 +359,12 @@ function buyRoad(road: road_meta_data, sessionId: number) {
                     player.potential_communities.push(community_two);
                }
           }
+
+          // if could bought a road and successfully did, check to see if they have the most roads now
+          awardMostRoads(sessionId);
      }
      current_game.current_player = player;
+     
 
      return current_game;
 }
@@ -438,8 +441,23 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
 
 }
 
+/**
+ * Awards the most roads to the current player if they have the most roads owned. Updates their victory points accordingly.
+ */
+function awardMostRoads(sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)];
+     const player = current_game.current_player
 
-
+     if(current_game.current_longest_road == null){
+          current_game.current_longest_road = player;
+     } else {
+          if(current_game.current_longest_road != null && player.roads_owned.length > current_game.current_longest_road.roads_owned.length){
+               current_game.current_longest_road.vp--;
+               current_game.current_longest_road = player;
+               current_game.current_longest_road.vp++;
+          }
+     }
+}
 
 /**
  * Handles trading between players and the bank.
