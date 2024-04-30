@@ -312,11 +312,13 @@ function buyRoad(road: road_meta_data, sessionId: number) {
 
           current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
-          //add all potential roads and neighboring potential roads
+          //add all potential roads and neighboring potential roads and keep track of possible roads
           const addedPotentialRoads: triad_leg[] = [];
+          const possible_roads: triad_leg[] = [];
 
           let tileTriads = potentialUpdatesRoad(road, sessionId);
           addedPotentialRoads.push(...tileTriads); 
+          possible_roads.push(...checkAroundRoads(road))
 
           // code to add the road in the representation of the neighboring tile. For example, edge 3 
           // on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
@@ -332,17 +334,20 @@ function buyRoad(road: road_meta_data, sessionId: number) {
                player.roads_owned.push(neighbor_road);
                let NeighborTriads = potentialUpdatesRoad(neighbor_road, sessionId);
                addedPotentialRoads.push(...NeighborTriads); 
+               possible_roads.push(...checkAroundRoads(neighbor_road))
           } else {
                addedPotentialRoads.push(findPotentialsOnBoardEdges(road, sessionId));
           }
 
-          // add potential settlements
-          if (addedPotentialRoads.length == 2) {
-               checkForPotentialSettlements([addedPotentialRoads[0], addedPotentialRoads[1]], sessionId)
-          } else if (addedPotentialRoads.length == 4) {
-               checkForPotentialSettlements([addedPotentialRoads[1], addedPotentialRoads[2]], sessionId)
+          // add potential settlements by checking all roads around the bought road
+          if (possible_roads.length == 2) {
+               checkForPotentialSettlements([possible_roads[0], possible_roads[1]], sessionId)
           }
-
+          if (possible_roads.length == 4) {
+               checkForPotentialSettlements([possible_roads[2], possible_roads[3]], sessionId)
+          }
+          
+          
      }
 
      return getGamestate(sessionId);
@@ -401,9 +406,9 @@ function findPotentialsOnBoardEdges(road: road_meta_data, sessionId: number) {
 
      if (isClockwise) {
           tile_index = (tile_index + 1) % edge_tiles.length;
-          tile_edge = (tile_edge - 1);
+          tile_edge = (tile_edge + 5) % 6;
      } else {
-          tile_index = (tile_index - 1)
+          tile_index = (tile_index + (edge_tiles.length - 1)) % edge_tiles.length;
           tile_edge = (tile_edge + 1) % 6
      }
 
@@ -511,6 +516,47 @@ function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number)
 }
 
 /**
+ * Returns all roads that surround the given road 
+ * @param road the road to search around
+ * @param sessionId the game ID of the current session
+ */
+function checkAroundRoads(road: road_meta_data) {
+     const possible_roads: triad_leg[] = []
+
+     // add two new potential roads that are associated with this tile
+     // Calculate the edges wrapping around using modulus
+     const edgePrev = (road.edge + 5) % 6; // Wrap around to previous edge
+     const edgeNext = (road.edge + 1) % 6; // Wrap around to next edge
+ 
+     // Road for the previous edge
+     const roadPrev: road_meta_data = {
+         tile_index: road.tile_index,
+         edge: edgePrev as road_keys
+     };
+ 
+     // Road for the next edge
+     const roadNext: road_meta_data = {
+         tile_index: road.tile_index,
+         edge: edgeNext as road_keys
+     };
+
+     //construct triad legs
+     let legPrevious : triad_leg = {
+          builtRoad : road,
+          potentialRoad: roadPrev
+     }
+     let legNext : triad_leg = {
+          builtRoad : road,
+          potentialRoad: roadNext
+     }
+
+     possible_roads.push(legPrevious);
+     possible_roads.push(legNext);
+
+     return possible_roads
+}
+
+/**
  * Checks for potential settlements given a set of roads.
  * @param triad_legs the two legs of the triad to check
  * @param sessionId the game session to check 
@@ -518,6 +564,8 @@ function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number)
 function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number) {
 
      const current_game = all_games[findGameIndexById(sessionId)]
+     const edge_tiles = [7, 12, 16, 17, 18, 15, 11, 6, 2, 1, 0, 3];
+
      let newPotentialSettlements: community_meta_data[] = []
      let noSurroundingSettlement = true;
 
@@ -535,7 +583,7 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
      let otherVertex = twoEdgeVertices.find(vertex => vertex !== centerVertex);
      check(triad_legs[0].builtRoad, centerVertex, otherVertex);
 
-     //function to if their is valid potential communtiy
+     //function to if there is valid potential communtiy
      function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
            
            // get all communtiies on the tile
@@ -557,15 +605,15 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
            }
      }
 
-     //if there is a third tile, find it, and add to its vertex to the potential roads. 
+     //if there is a third tile, find it, and add its vertex to the potential roads. 
      let thirdTile = neighbors[triad_legs[0].potentialRoad.tile_index as road_keys][triad_legs[0].potentialRoad.edge];
      if(thirdTile != -1){
-          let thirdVertex = (Math.max(triad_legs[0].potentialRoad.edge, triad_legs[1].potentialRoad.edge) + 3) % 6; // max of the Pr's rotated 180
+          let thirdVertex = (Math.max(triad_legs[0].potentialRoad.edge, triad_legs[1].potentialRoad.edge + 3) % 6) ; // max of the Pr's rotated 180
           let potentialCommunity: community_meta_data = {
                tile_index: thirdTile, 
                vertex: thirdVertex as community_keys
            };
-           newPotentialSettlements.push(potentialCommunity);
+          //  newPotentialSettlements.push(potentialCommunity);
      }else{
           noSurroundingSettlement = false;
      }
