@@ -13,7 +13,6 @@ var null_game: GameState = {
      diceNumber: { number1: 1, number2: 1 },
      players: players,
      current_player: players[0],
-     current_largest_army: "",
      gameboard: {
           tiles: tiles
      },
@@ -184,9 +183,28 @@ function buyDevCard(sessionId: number) {
 
           determineDevBenefit(player);
           updateResourceCounts(sessionId);
+          awardLargestArmy(sessionId);
      }
 
      return getGamestate(sessionId);
+}
+
+/**
+ * Awards largest army to the current player if they have the largest army. Updates their victory points accordingly.
+ */
+function awardLargestArmy(sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)];
+     const player = current_game.current_player
+
+     if(current_game.current_largest_army == null){
+          current_game.current_largest_army = player;
+     } else {
+          if(current_game.current_largest_army != null && player.knightCards > current_game.current_largest_army.knightCards){
+               current_game.current_largest_army.vp--;
+               current_game.current_largest_army = player;
+               current_game.current_largest_army.vp++;
+          }
+     }
 }
 
 /**

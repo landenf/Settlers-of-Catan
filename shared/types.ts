@@ -358,7 +358,7 @@ export type GameState = {
     /**
      * The player who currently holds the largest army card.
      */
-    current_largest_army: string
+    current_largest_army?: Player
 
     /**
      * The player who currently holds the longest road card.
@@ -422,7 +422,7 @@ export type LimitedSession = {
     /**
      * The player who currently holds the largest army card.
      */
-    current_largest_army: string
+    current_largest_army?: LimitedPlayer
 
     /**
      * The player who currently holds the longest road card.
