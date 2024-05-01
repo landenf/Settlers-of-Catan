@@ -42,10 +42,10 @@ const PlayerStatisticsComponent = () => {
             <div className="playerName">{userProfile.username}</div>
                 <div className="stats">
                     <div className="stats-column">
+                        <p className="individual-stat">Total Victory Points: {userProfile.VictoryPoints}</p>
                         <p className="individual-stat">Games Won: {userProfile.GamesWon}</p>
                         <p className="individual-stat">Largest Army: {userProfile.LargestArmy}</p>
                         <p className="individual-stat">Most Roads: {userProfile.MostRoads}</p>
-                        <p className="individual-stat">Total Victory Points: {userProfile.VictoryPoints}</p>
                     </div>
                     <div className="stats-column">
                         <p className="individual-stat">Total Wheat: {userProfile.TotalWheat}</p>
