@@ -10,9 +10,6 @@ const PlayerStatsComponent = (player: Player) => {
         <img className="avatar" src={player_image} alt="Avatar Image" />
         <div className="playerName">STEVE</div>
         <div className="stats">
-          {/* {player.player_stats.map((stat: number) => {
-            <p className="individual-stat">{stat}</p>;
-          })} */}
           <p className="individual-stat">total wins: 2</p>
           <p className="individual-stat">total wins: 2</p>
           <p className="individual-stat">total wins: 2</p>

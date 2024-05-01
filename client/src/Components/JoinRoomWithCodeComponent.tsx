@@ -24,7 +24,6 @@ const JoinRoomWithCodeComponent = () => {
           );
         })}
         <p></p>
-        {/* <p></p> */}
         <div className="buttons">
           <button className="leave-button">Leave</button>
           <button className="ready-button">Ready</button>
