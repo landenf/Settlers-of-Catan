@@ -1,7 +1,7 @@
 import React from 'react';
-import '../Styles/ActionsBar.css'; 
+import '../../../Styles/Gameplay/Menus/ActionsBar.css'; 
 import { LimitedSession } from '@shared/types';
-import { BackendRequest, StealRequest } from '../Enums/requests';
+import { BackendRequest, StealRequest } from '../../../Enums/requests';
 
 /**
  * An interface that provides strong typing to props passed to the action bar.

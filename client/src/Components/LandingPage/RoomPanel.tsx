@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import "../Styles/JoinRoomWithCode.css";
+import "../../Styles/LandingAuth/JoinRoomWithCode.css";
 import { LimitedSession } from "@shared/types";
-import { BackendRequest } from "../Enums/requests";
+import { BackendRequest } from "../../Enums/requests";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBan, faCheck } from "@fortawesome/free-solid-svg-icons";
 

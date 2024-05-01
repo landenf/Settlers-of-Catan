@@ -1,16 +1,16 @@
-import GameBoard from "../Components/GameBoard";
-import PlayerBarComponent from "../Components/PlayerBarComponent";
-import ActionsBarComponent from "../Components/ActionsBarComponent";
-import Hand from "../Components/Hand"
-import VictoryPointsComponent from "../Components/victoryPointsComponent";
+import GameBoard from "../Components/Gameplay/Gameboard/GameBoard";
+import PlayerBarComponent from "../Components/Gameplay/Player/PlayerBarComponent";
+import ActionsBarComponent from "../Components/Gameplay/Menus/ActionsBarComponent";
+import Hand from "../Components/Gameplay/Player/Hand"
+import VictoryPointsComponent from "../Components/Gameplay/Player/victoryPointsComponent";
 import React, { Component, useEffect, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
-import "../Styles/GameSession.css";
+import "../Styles/Gameplay/GameSession.css";
 import { LimitedPlayer, LimitedSession, Player } from "@shared/types";
-import RollButton from "../Components/RollButton";
-import TradeModal from "../Components/TradeModal";
-import StealModal from "../Components/StealModal";
-import Dice from "../Components/Dice";
+import RollButton from "../Components/Gameplay/Gameboard/RollButton";
+import TradeModal from "../Components/Gameplay/Menus/TradeModal";
+import StealModal from "../Components/Gameplay/Menus/StealModal";
+import Dice from "../Components/Gameplay/Gameboard/Dice";
 import { BackendRequest } from "../Enums/requests";
 
 /**

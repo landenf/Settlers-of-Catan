@@ -1,9 +1,9 @@
 import React, { useState } from "react"
-import RollButton from "../../Components/RollButton"
+import RollButton from "../../Components/Gameplay/Gameboard/RollButton"
 import { MockLimitedGameState } from "../../StaticData/GameStateStatic"
 import { LimitedSession } from "@shared/types"
 import { BackendRequest } from "../../Enums/requests"
-import ActionsBarComponent from "../../Components/ActionsBarComponent"
+import ActionsBarComponent from "../../Components/Gameplay/Menus/ActionsBarComponent"
 import { buyRoad, buySettlement, handleDiceRoll } from "./mockBackend"
 
 var state = MockLimitedGameState

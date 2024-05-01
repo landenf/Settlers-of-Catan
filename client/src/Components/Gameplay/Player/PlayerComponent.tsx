@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import '../Styles/PlayerComponent.css';
+import '../../../Styles/Gameplay/Player/PlayerComponent.css';
 import { LimitedPlayer } from "@shared/types";
 
 /**

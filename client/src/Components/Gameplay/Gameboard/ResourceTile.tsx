@@ -2,11 +2,11 @@ import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
 import { LimitedSession, Tile, community_keys, community_meta_data, road_keys, road_meta_data, road_spaces } from '@shared/types';
 import { useEffect, useState } from 'react';
-import { BackendRequest, RoadRequest, SettlementRequest } from '../Enums/requests';
+import { BackendRequest, RoadRequest, SettlementRequest } from '../../../Enums/requests';
 import { GameState } from '@shared/types';
-import { InvalidIndexError } from '../Enums/errors';
-import { GameBoardActionsDisplay } from '../Pages/GameSession';
-import { players } from '../StaticData/PlayerData';
+import { InvalidIndexError } from '../../../Enums/errors';
+import { GameBoardActionsDisplay } from '../../../Pages/GameSession';
+import { players } from '../../../StaticData/PlayerData';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.

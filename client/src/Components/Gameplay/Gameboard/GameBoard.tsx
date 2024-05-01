@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from 'react-hexgrid';
-import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
-import Patterns from '../Styles/Patterns';
+import { GameBoardConfiguration } from '../../../StaticData/GameBoardStatic';
+import Patterns from '../../../Styles/Patterns';
 import ResourceTile from './ResourceTile';
 import { LimitedSession, Tile } from '@shared/types';
-import { GameBoardActionsDisplay } from '../Pages/GameSession';
-import { BackendRequest } from '../Enums/requests';
+import { GameBoardActionsDisplay } from '../../../Pages/GameSession';
+import { BackendRequest } from '../../../Enums/requests';
 
 interface GameBoardProp {
   tiles: Tile[],
