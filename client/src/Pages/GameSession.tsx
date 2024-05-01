@@ -21,20 +21,17 @@ export interface StateProp {
    * The current game session's state.
    */
   gamestate: LimitedSession
-}
 
-const backend = new WebSocket("ws://localhost:5000")
-
-export interface GameBoardActionsDisplay {
-  roads: boolean,
-  settlements: boolean
+  /**
+   * The websocket used with this particular game session.
+   */
+  backend: WebSocket
 }
 
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
-  const [showPotenialBuildOptions, setshowPotenialBuildOptions] = useState<GameBoardActionsDisplay>({roads: false, settlements: false})
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
@@ -52,20 +49,6 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const updateStealModal = (newState: boolean) => {
     setStealModal(newState);
   }
-  
-  const updatePotentialSettlements = (selected: string) => {
-    if (selected === 'settlements') {
-      setshowPotenialBuildOptions(prevState => ({
-        roads: false,  
-        settlements: !prevState.settlements  // Toggle settlements
-      }));
-    } else if (selected === 'roads') {
-      setshowPotenialBuildOptions(prevState => ({
-        roads: !prevState.roads,  // Toggle roads
-        settlements: false  
-      }));
-    }
-  };
 
   const updateRolled = (newState: boolean) => {
     setRolled(newState);
@@ -74,6 +57,8 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const updateBoughtDev = (newState: boolean) => {
     setBoughtDev(newState);
   }
+
+  const backend = props.backend
 
   /**
    * Resets the action bar and roll button.
@@ -145,12 +130,8 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                   <Dice numberRolled={state.diceNumber}/>
                       <GameBoard 
                           tiles={tiles}
-                          gamestate={ state }
-                          updateState={ updateState } 
-                          showPotenialBuildOptions={showPotenialBuildOptions}  
-                          callBackend={callBackend}
-                        />
-                </div>
+                          gamestate={ props.gamestate }
+                          updateState={ updateState } /></div>
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />
@@ -160,7 +141,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
             </div>
             <div className={"ActionsBarComponent"}>
               <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
-              boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}/>
+              boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer}/>
             </div>
         </div>
       </div>   

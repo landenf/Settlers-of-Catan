@@ -21,7 +21,6 @@ const MockGameSession = (props: MockDataProps) => {
     const [buyingSettlement, setBuyingSettlement] = useState(false)
     const [state, setState] = useState(props.state)
     const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color)
-    const [selected, setSelected] = useState("")
 
     const callBackend = (action: string, request: BackendRequest) => {
         if (action === "roll") {
@@ -48,7 +47,7 @@ const MockGameSession = (props: MockDataProps) => {
             <RollButton callBackend={callBackend} state={props.state} rolled={rolled} 
             updateRolled={setRolled} isCurrentPlayer={isCurrentPlayer}/>
             <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={setTradeModal}
-            boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={setSelected}/>
+            boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer}/>
         </div>
     )
 }; export default MockGameSession

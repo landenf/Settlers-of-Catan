@@ -15,8 +15,8 @@ interface ActionsBarComponentProps {
   setTradeModal: (newState: boolean) => void;
 
   /**
-    * Function to call the backend through the main websocket.
-    */
+     * Function to call the backend through the main websocket.
+     */
   callBackend: (type: string, body: BackendRequest) => void;
 
   /**
@@ -35,11 +35,6 @@ interface ActionsBarComponentProps {
    */
   isCurrentPlayer: boolean;
 
-    /**
-   * Updates whether or not potential settlements or roads should be displayed.
-   */
-  updatePotentialSettlements: (selected: string) => void;
-
 }
 
 /**
@@ -47,7 +42,7 @@ interface ActionsBarComponentProps {
  * cards. Appears on a player's game turn.
  */
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, callBackend, setTradeModal, 
-  boughtDev, isCurrentPlayer, updatePotentialSettlements }) => {
+  boughtDev, isCurrentPlayer }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -72,11 +67,11 @@ const KnightBody: StealRequest = {
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
-          <p className="button indented-text" aria-label="build-road" onClick={() => updatePotentialSettlements('roads')}>Road</p>
+          <p className="button indented-text" aria-label="build-road" onClick={() => 
+            handleButtonClick('buildRoad', NullBody)}>Road</p>
         <div className="line"></div>
-          <p className="button indented-text" aria-label="build-settlement" onClick={() => updatePotentialSettlements('settlements')}>Settlement</p>
-        <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('buildCity', NullBody)}>City</p>
+          <p className="button indented-text" aria-label="build-settlement" onClick={() => 
+            handleButtonClick('buildSettlement', NullBody)}>Settlement</p>
         <div className="line-thick"></div>
         <h1 className="text-bold">TRADE</h1>
         <div className="line-thick"></div>

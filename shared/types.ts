@@ -113,6 +113,12 @@ export type Player = {
          */
         "total_vp": number;
     }
+
+    /**
+     * Used only in the lobby: lets the server know this player is
+     * ready to start the game.
+     */
+    ready: boolean;
 }
 
 /**
@@ -150,6 +156,12 @@ export type LimitedPlayer = {
      * Total resources held by a player.
      */
     resources: number;
+
+    /**
+     * Used only in the lobby: lets the server know this player is
+     * ready to start the game.
+     */
+    ready: boolean;
 }
 
 /**
@@ -207,18 +219,6 @@ export type Tile = {
 
 }
 
-export type community_spaces_data = {
-    /**
-    * A number corresponding to the community level.
-    */
-       level: number;
-
-       /**
-        * A color associate with the player.
-        */
-       color: string;
-} 
-
 /**
  * A list of spaces on a tile where communities are built or
  * are already built. The first number represents the space:
@@ -227,17 +227,17 @@ export type community_spaces_data = {
  */
 export type community_spaces = {
     /** top-left vertex */
-    0: community_spaces_data
+    0: number
     /** top-right vertex */
-    1: community_spaces_data
+    1: number
     /** mid-right vertex */
-    2: community_spaces_data
+    2: number
     /** bottom-right vertex*/
-    3: community_spaces_data
+    3: number
     /** bottom-left vertex */
-    4: community_spaces_data
+    4: number
     /** mid-left vertex */
-    5: community_spaces_data
+    5: number
 }
 
 /**
@@ -257,7 +257,7 @@ export type community_meta_data = {
     /**
      * A number that corresponds to which vertex it is on to.
      */
-    vertex: community_keys;
+    vertex: number;
 
 }
 
@@ -370,6 +370,12 @@ export type GameState = {
      * and resource tiles.
      */
     gameboard: Board
+
+    /**
+     * Flag set to true as long as this gamestate is valid and players can 
+     * play in the session.
+     */
+    isValid: boolean;
 }
 
 /**
@@ -428,4 +434,9 @@ export type LimitedSession = {
      * and resource tiles.
      */
     gameboard: Board
+
+    /**
+     * Determines if this gamestate is valid and can be manipulated by players.
+     */
+    isValid: boolean;
 }
