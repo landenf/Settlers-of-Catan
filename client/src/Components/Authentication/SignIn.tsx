@@ -29,7 +29,7 @@ const SignInComponent: React.FC<SignInComponentProps> = ({ onSwitch }) => {
           alert(error.code); // Consider replacing alert with a more user-friendly error handling strategy
       }
     }
-    navigate('/home'); // Navigate on success
+    navigate('/session'); // Navigate on success
   };
 
   return (

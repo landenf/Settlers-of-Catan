@@ -1,24 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.players = void 0;
+const road_one = {
+    tile_index: 6,
+    edge: 5,
+};
+const road_two = {
+    tile_index: 5,
+    edge: 2,
+};
 const player1 = {
-    id: 0,
+    id: 1,
     name: "steven",
     image: "empty-avatar",
     color: "red",
     vp: 1,
-    resources: 25,
+    resources: 1000,
     hand: {
-        wheat: 5,
-        brick: 5,
-        stone: 5,
-        sheep: 5,
-        wood: 5
+        wheat: 200,
+        brick: 200,
+        stone: 200,
+        sheep: 200,
+        wood: 200
     },
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [],
+    potential_roads: [road_one, road_two],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -98,11 +106,10 @@ const player1 = {
         }
     },
     hasKnight: false,
-    knightCards: 0,
-    ready: false
+    knightCards: 0
 };
 const player2 = {
-    id: 0,
+    id: 2,
     name: "steve",
     image: "empty-avatar",
     color: "orange",
@@ -118,7 +125,7 @@ const player2 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [],
+    potential_roads: [road_one, road_two],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -198,11 +205,10 @@ const player2 = {
         }
     },
     hasKnight: false,
-    knightCards: 0,
-    ready: false
+    knightCards: 0
 };
 const player3 = {
-    id: 0,
+    id: 3,
     name: "stevie",
     image: "empty-avatar",
     color: "green",
@@ -218,7 +224,7 @@ const player3 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [],
+    potential_roads: [road_one, road_two],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -298,7 +304,6 @@ const player3 = {
         }
     },
     hasKnight: false,
-    knightCards: 0,
-    ready: false
+    knightCards: 0
 };
 exports.players = [player1, player2, player3];
