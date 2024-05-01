@@ -50,60 +50,14 @@
 }
 
 .game-end-buttons {
-    text-align: center;
-    justify-content: center;
-    margin: auto 0;
-}
-
-.affirmSteal, .denySteal {
-    margin: 0 5%;
+    margin: 5% 5%;
     height: 6vh;
     width: 25%;
     text-align: center;
     font-size: 1.5vw; 
+    word-wrap: break-word;
     font-style: bold;
+    background-color: rgb(175, 76, 76);
     border: 1px solid rgb(60, 0, 0);
     border-radius: 10px;
-}
-
-.affirmSteal {
-    background-color: rgb(139, 255, 139);
-}
-
-.affirmSteal:hover {
-    animation: onAffirmHover 0.5s linear;
-    cursor: pointer;
-}
-
-.denySteal {
-    background-color: rgb(255, 121, 121);
-}
-
-.denySteal:hover {
-    animation: onCancelHover 0.5s linear;
-    cursor: pointer;
-}
-
-.dark {
-    background-color: rgb(86, 158, 86);
-}
-
-.dark:hover {
-    cursor: default;
-}
-
-.disabled {
-    display: none;
-}
-
-@media (max-height: 750px) {
-    .summary {
-        margin-top: 2%;
-    }
-}
-
-@media (max-height: 520px) {
-    .summary {
-        margin-top: 1%;
-    }
 }

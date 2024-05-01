@@ -115,8 +115,8 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
                     </div>
                 ))}
             </div>
-            <div className="game-end-buttons">
-                <button className="exit-game" onClick={() => handleExitGame()}>Exit Game</button>
+            <div>
+                <button className="game-end-buttons" onClick={() => handleExitGame()}>Exit Game</button>
             </div>
         </div>
     );
