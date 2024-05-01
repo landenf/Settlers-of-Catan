@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore'; // For Firestore operations
 import { auth, db } from '../../firebase-config.js';
-import '../../Styles/AuthenticationStyles.css';
+import '../../Styles/LandingAuth/AuthenticationStyles.css';
 import { useNavigate } from 'react-router-dom';
 
 interface SignUpComponentProps {
@@ -26,11 +26,11 @@ const SignUpComponent: React.FC<SignUpComponentProps> = ({ onSwitch }) => {
         uid: userCredential.user.uid
       });
       setErrorMessage('');
+      navigate('/home'); // Navigate on success
     } catch (error: any) { // Adjust error handling as needed
       console.error("Error signing up: ", error);
       setErrorMessage(error.message || 'An error occurred during sign up.');
     }
-    navigate('/session'); // Navigate on success
   };
 
   return (

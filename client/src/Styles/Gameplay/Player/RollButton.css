@@ -1,0 +1,46 @@
+@keyframes onRollHover {
+    0% {background-color: #dadada;}
+    100% {background-color: #959595;}
+}
+
+.rollButton {
+    width: 50%;
+    height: 50%;
+    position: 'relative';
+    background: #dadada;
+    border-radius: 25px;
+    text-align: 'center';
+    display: 'inline-block';
+    font-size: 50px;
+}
+
+.rollButton:hover {
+    animation-name: onRollHover;
+    animation-duration: .1s;
+    animation-timing-function: linear;
+    cursor: pointer;
+    background-color: #959595;
+}
+
+.roll-dark {
+    background-color: #383838;
+}
+
+.roll-dark:hover {
+    animation-duration: 0s;
+    background-color: #383838;
+    cursor: default;
+}
+
+@media (max-width: 1000px)  {
+    .rollButton {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 640px)  {
+    .rollButton {
+        font-size: 20px;
+    }
+}
+

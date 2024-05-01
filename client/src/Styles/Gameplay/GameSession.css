@@ -1,0 +1,46 @@
+.background-container {
+    background-image: url('../../../public/images/background-image.jpg');
+   
+    height: 100vh; /* Optional: Adjusts the height of the container to fill the viewport */
+    text-align: center;
+    align-items: center;
+}
+
+.game-container {
+    background-color: hsla(0, 0%, 100%, 0.6);
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.in-background {
+    filter: brightness(50%)
+}
+
+.ActionsBarComponent, .GameBoard, .PlayerbarComponent {
+    flex: 1; 
+    text-align: center; 
+}
+
+.center-column {
+    display: flex; 
+    flex-direction: column; 
+    text-align: center; 
+    align-items: center;
+    height: 100%;
+    width: auto;
+}
+
+.user-info {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    width: 100%;
+    place-items: center;
+}
+
+.game-board {
+    height: auto;
+    width: auto;
+}

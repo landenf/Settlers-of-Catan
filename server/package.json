@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server",
+    "start": "tsc && node server",
     "dev": "nodemon server"
   },
   "keywords": [],
@@ -19,6 +19,7 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
+    "@types/node": "^20.12.7",
     "nodemon": "^3.0.3",
     "typescript": "^5.3.3"
   }

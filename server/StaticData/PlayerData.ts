@@ -1,22 +1,32 @@
-import { GameState, Player } from "../src/types";
+const road_one = {
+    tile_index: 6,
+    edge: 5,
+};
+
+const road_two = {
+    tile_index: 5,
+    edge: 2,
+};
+
+import { GameState, Player, road_meta_data } from "@shared/types";
     const player1: Player = {
-        id: 1,
+        id: 0,
         name: "steven",
         image: "empty-avatar",
         color: "red",
         vp: 1,
-        resources: 25,
+        resources: 1000,
         hand: {
-            wheat: 5,
-            brick: 5,
-            stone: 5,
-            sheep: 5,
-            wood: 5
+            wheat: 200,
+            brick: 200,
+            stone: 200,
+            sheep: 200,
+            wood: 200
         },
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -94,10 +104,13 @@ import { GameState, Player } from "../src/types";
                 sheep: 0,
                 wood: 2
             }
-        }
+        },
+        hasKnight: false,
+        knightCards: 0,
+        ready: false
     };
     const player2: Player = {
-        id: 2,
+        id: 0,
         name: "steve",
         image: "empty-avatar",
         color: "orange",
@@ -113,7 +126,7 @@ import { GameState, Player } from "../src/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -191,14 +204,17 @@ import { GameState, Player } from "../src/types";
                 sheep: 0,
                 wood: 0
             }
-        }
+        },
+        hasKnight: false,
+        knightCards: 0,
+        ready: false
     };
     const player3: Player = {
-        id: 3,
+        id: 0,
         name: "stevie",
         image: "empty-avatar",
         color: "green",
-        vp: 18,
+        vp: 7,
         resources: 52,
         hand: {
             wheat: 5,
@@ -210,7 +226,7 @@ import { GameState, Player } from "../src/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -288,6 +304,9 @@ import { GameState, Player } from "../src/types";
                 sheep: 0,
                 wood: 0
             }
-        }
+        },
+        hasKnight: false,
+        knightCards: 0,
+        ready: false
     };
     export const players = [player1, player2, player3]

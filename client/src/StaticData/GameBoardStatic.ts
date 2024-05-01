@@ -1,4 +1,4 @@
-import { Tile } from "@backend/types";
+import { Tile } from "@shared/types";
 
 const Tile_Resources: {[index: number]:any} = {
     0: "wheat",
@@ -49,20 +49,20 @@ const total_tiles = [...Array(19).keys()]
 export const tiles: Tile[] = total_tiles.map((index) => (
   {
     community_spaces: {
-      0: 0,
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0
+      0: {level: 0, color: 'white'},
+      1: {level: 0, color: 'white'},
+      2: {level: 0, color: 'white'},
+      3: {level: 0, color: 'white'},
+      4: {level: 0, color: 'white'},
+      5: {level: 0, color: 'white'}
     },
     road_spaces: {
-      0: 0,
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0
+      0: "white",
+      1: "white",
+      2: "white",
+      3: "white",
+      4: "white",
+      5: "white"
     },
     number_roll: Tile_Dice[index],
     type: Tile_Resources[index]
@@ -70,9 +70,9 @@ export const tiles: Tile[] = total_tiles.map((index) => (
 )
   
 export const GameBoardConfiguration =  {
-    "width": "auto",
+    "width": "100%",
     "height": "70vh",
-    "layout": { "width": 9, "height": 9, "flat": false, "spacing": 1.02 },
+    "layout": { "width": 9, "height": 9, "flat": false, "spacing": 1.1 },
     "origin": { "x": 0, "y": 0 },
     "map": "hexagon",
     "mapProps": [ 2 ]

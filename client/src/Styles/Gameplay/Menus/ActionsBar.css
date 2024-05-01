@@ -1,0 +1,84 @@
+@keyframes onActionHover {
+    0% {background: hsla(0, 0%, 100%, 0.3);}
+    100% {background: hsla(0, 0%, 50%, 0.3);}
+}
+
+.actions-bar {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    align-items: center;
+}
+
+.inner-box {
+    width: 99.7%; 
+    height: 99.7%;
+    position: absolute;
+    background: white;
+}
+
+.absolute-container {
+    width: 100%;
+    height: auto;
+}
+
+.inner-container {
+    width: 90%;
+    background-color: hsla(0, 0%, 100%, 0.3);
+    margin: auto;
+    padding: 1%;
+}
+
+.line {
+    margin: 0 auto;
+    width: 50%; 
+    border-top: 1px solid #767676; 
+}
+
+.line-thick {
+    border-top: 2px solid black; 
+    width: 100%; 
+}
+
+.text, .text-bold {
+    color: black;
+    font-size: 2vw; 
+    font-family: 'Inter';
+    font-weight: 400;
+    word-wrap: break-word;
+    margin: 0;
+    padding: 1vh;
+}
+
+.text-bold {
+    font-weight: 700;
+}
+
+.indented-text {
+    padding: 1vh 0;
+    margin: 0;
+}
+
+.button {
+    background-color: hsla(0, 0%, 100%, 0.0);
+    border: none;
+}
+
+.button:hover {
+    animation-name: onActionHover;
+    animation-duration: .1s;
+    animation-timing-function: linear;
+    background: hsla(0, 0%, 50%, 0.3);
+    cursor: pointer;
+}
+
+.buy-dark {
+    background: hsla(0, 0%, 50%, 0.3);
+    color: hsla(0, 0%, 18%, 0.3)
+}
+
+.buy-dark:hover {
+    animation-duration: 0s;
+    background: hsla(0, 0%, 50%, 0.3);
+    cursor: default;
+}
