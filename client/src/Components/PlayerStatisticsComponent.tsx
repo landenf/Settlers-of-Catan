@@ -49,7 +49,7 @@ const PlayerStatisticsComponent = () => {
                     </div>
                     <div className="stats-column">
                         <p className="individual-stat">Total Wheat: {userProfile.TotalWheat}</p>
-                        <p className="individual-stat">Total Rock: {userProfile.TotalRock}</p>
+                        <p className="individual-stat">Total Stone: {userProfile.TotalStone}</p>
                         <p className="individual-stat">Total Wood: {userProfile.TotalWood}</p>
                         <p className="individual-stat">Total Brick: {userProfile.TotalBrick}</p>
                         <p className="individual-stat">Total Sheep: {userProfile.TotalSheep}</p>
@@ -58,6 +58,6 @@ const PlayerStatisticsComponent = () => {
             </div>
        </div>
     );
-};
+};  
 
 export default PlayerStatisticsComponent;

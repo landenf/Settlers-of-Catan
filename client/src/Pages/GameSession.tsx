@@ -12,6 +12,7 @@ import TradeModal from "../Components/TradeModal";
 import StealModal from "../Components/StealModal";
 import Dice from "../Components/Dice";
 import { BackendRequest } from "../Enums/requests";
+import EndGameModal from "../Components/EndGameModal";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
@@ -32,6 +33,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
+  const [endGameModalEnabled, setEndGameModal] = useState(false);
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
@@ -79,6 +81,10 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
     if (newState.client.hasKnight) {
       setStealModal(true);
     }
+    
+    if(newState.winner){
+      setEndGameModal(true);
+    }
 
     setCurrentPlayer(newState.client.color === newState.current_player.color);
   });
@@ -122,6 +128,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   <div>
     <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} callBackend={callBackend}/>
     <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} callBackend={callBackend}/>
+    <EndGameModal setEndGameModal={setEndGameModal} endGameModalState={endGameModalEnabled} gamestate={state} callBackend={callBackend}></EndGameModal>
       <div className="background-container">
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={players_to_render}/></div>

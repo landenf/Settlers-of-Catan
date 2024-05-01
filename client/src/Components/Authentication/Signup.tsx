@@ -23,7 +23,16 @@ const SignUpComponent: React.FC<SignUpComponentProps> = ({ onSwitch }) => {
       await setDoc(doc(db, "UserProfiles", userCredential.user.uid), {
         username: username,
         email: email,
-        uid: userCredential.user.uid
+        uid: userCredential.user.uid,
+        GamesWon: 0,
+        LargestArmy: 0,
+        MostRoads: 0,
+        VictoryPoints: 0,
+        TotalWheat: 0,
+        TotalStone: 0,
+        TotalWood: 0,
+        TotalBrick: 0,
+        TotalSheep: 0
       });
       setErrorMessage('');
       navigate('/home'); // Navigate on success
