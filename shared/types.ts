@@ -113,6 +113,12 @@ export type Player = {
          */
         "total_vp": number;
     }
+
+    /**
+     * Used only in the lobby: lets the server know this player is
+     * ready to start the game.
+     */
+    ready: boolean;
 }
 
 /**
@@ -150,6 +156,12 @@ export type LimitedPlayer = {
      * Total resources held by a player.
      */
     resources: number;
+
+    /**
+     * Used only in the lobby: lets the server know this player is
+     * ready to start the game.
+     */
+    ready: boolean;
 }
 
 /**
@@ -370,6 +382,12 @@ export type GameState = {
      * and resource tiles.
      */
     gameboard: Board
+
+    /**
+     * Flag set to true as long as this gamestate is valid and players can 
+     * play in the session.
+     */
+    isValid: boolean;
 }
 
 /**
@@ -428,4 +446,9 @@ export type LimitedSession = {
      * and resource tiles.
      */
     gameboard: Board
+
+    /**
+     * Determines if this gamestate is valid and can be manipulated by players.
+     */
+    isValid: boolean;
 }

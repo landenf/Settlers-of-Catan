@@ -16,7 +16,8 @@ export const MockGameState: GameState = {
     current_longest_road: "",
     gameboard: {
         tiles: tiles
-    }
+    },
+    isValid: false
 }
 
 export const MockLimitedGameState: LimitedSession = {
@@ -32,5 +33,6 @@ export const MockLimitedGameState: LimitedSession = {
     current_longest_road: "",
     gameboard: {
         tiles: []
-    }
+    },
+    isValid: false
 }
