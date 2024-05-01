@@ -5,6 +5,7 @@ import { MockLimitedGameState } from "../StaticData/GameStateStatic";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import RoomPanel from "../Components/RoomPanel";
+import PlayerStatisticsComponent from "../Components/PlayerStatisticsComponent";
 
 interface LandingProps {
   backend: WebSocket
@@ -54,6 +55,7 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
         <MenuToggleComponent callBackend={callBackend} state={state} setRoomPanel={setOpenPanel} buttonsActive={buttonsActive}
           setButtonsActive={setButtonsActive}/>
       </div>
+      <PlayerStatisticsComponent/>
       {(roomPanelOpen && <RoomPanel state={state} callBackend={callBackend} setRoomPanel={setOpenPanel} 
         setButtonsActive={setButtonsActive}/>)}
     </div>

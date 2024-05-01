@@ -25,10 +25,11 @@ const SignInComponent: React.FC<SignInComponentProps> = ({ onSwitch }) => {
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
-      navigate('/home'); // Navigate on success
       } else {
           alert(error.code); // Consider replacing alert with a more user-friendly error handling strategy
       }
+    }finally {
+      navigate('/home'); // Navigate on success
     }
   };
 
