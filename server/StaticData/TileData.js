@@ -46,20 +46,20 @@ const Tile_Dice = {
 const total_tiles = [...Array(19).keys()];
 exports.tiles = total_tiles.map((index) => ({
     community_spaces: {
-        0: 0,
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
+        0: { level: 0, color: 'white' },
+        1: { level: 0, color: 'white' },
+        2: { level: 0, color: 'white' },
+        3: { level: 0, color: 'white' },
+        4: { level: 0, color: 'white' },
+        5: { level: 0, color: 'white' }
     },
     road_spaces: {
-        0: "grey",
-        1: "grey",
-        2: "grey",
-        3: "grey",
-        4: "grey",
-        5: "grey"
+        0: "white",
+        1: "white",
+        2: "white",
+        3: "white",
+        4: "white",
+        5: "white"
     },
     number_roll: Tile_Dice[index],
     type: Tile_Resources[index]
