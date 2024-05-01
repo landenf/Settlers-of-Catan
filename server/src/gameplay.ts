@@ -35,7 +35,7 @@ type ResourcesKey = keyof typeof example_game.current_player.hand;
  * that that spot is in on the tile from the key. If it's a -1, then that means this edge
  * is stand-alone and has no neighboring tile.
  */
-const neighbors = {
+const edge_neighbors = {
      0: [3, 4, 1, -1, -1, -1],
      1: [4, 5, 2, -1, -1, 0],
      2: [5, 6, -1, -1, -1, 1],
@@ -57,7 +57,34 @@ const neighbors = {
      18: [-1, -1, -1, 15, 14, 17]
  }
 
-export type NeighborsKey = keyof typeof neighbors;
+ /**
+  * An array of arrays of dictionaries representing all vertices that touch one another.
+  * [i] finds all neighbors for all of tile i's 6 vertices
+  * [i][j] finds the neighbors for tile i's jth vertex
+  */
+ const vertex_neighbors = [
+     [[[3, 4]], [[3, 3], [4, 5]], [[1, 0], [4, 4]], [[1, 5]], [[-1]], [[-1]]], // 0
+     [[[0, 2], [4, 4]], [[4, 3], [5, 5]], [[2, 0], [5, 4]], [[2, 0]], [[-1]], [[-1]]], // 1
+     [[[1, 2], [5, 4]], [[5, 3], [6, 5]], [[6, 4]], [[-1]], [[-1]], [[1, 5]]], // 2
+     [[[7, 4]], [[7, 3], [8, 5]], [[4, 0], [8, 4]], [[0, 1], [4, 5]], [[0, 4]], [[-1]]], // 3
+     [[[3, 2], [8, 4]], [[8, 3], [9, 5]], [[5, 0], [9, 4]], [[1, 1], [5, 5]], [[0, 2], [1, 0]], [[0, 1], [3, 3]]], // 4
+     [[[4, 2], [9, 4]], [[9, 3], [10, 5]], [[6, 0], [10, 4]], [[2, 1], [6, 5]], [[1, 2], [2, 0]], [[1, 1], [4, 3]]], // 5
+     [[[5, 2], [10, 4]], [[10, 3], [11, 0]], [[11, 4]], [[-1]], [[2, 2]], [[2, 1], [5, 3]]], // 6
+     [[[-1]], [[12, 5]], [[8, 0], [12, 4]], [[3, 1], [8, 5]], [[3, 0]], [[-1]]], // 7
+     [[[7, 2], [12, 4]], [[12, 3], [13, 5]], [[9, 0], [13, 4]], [[4, 1], [9, 5]], [[3, 2], [4, 0]], [[3, 1], [7, 3]]], // 8
+     [[[8, 2], [13, 4]], [[13, 3], [14, 5]], [[10, 0], [14, 4]], [[5, 1], [10, 5]], [[4, 2], [5, 0]], [[4, 1], [8, 3]]], // 9
+     [[[9, 2], [14, 4]], [[14, 3], [15, 5]], [[11, 0], [15, 4]], [[6, 1], [11, 5]], [[5, 2], [6, 0]], [[5, 1], [9, 3]]], // 10
+     [[[10, 2], [15, 4]], [[15, 3]], [[-1]], [[-1]], [[6, 2]], [[6, 1], [10, 3]]], // 11
+     [[[-1]], [[16, 5]], [[13, 0], [16, 4]], [[8, 1], [13, 5]], [[7, 2], [8, 0]], [[7, 1]]], // 12
+     [[[12, 2], [16, 4]], [[16, 3], [17, 5]], [[14, 0], [17, 4]], [[9, 1], [14, 5]], [[8, 2], [9, 0]], [[8, 1], [12, 3]]], // 13
+     [[[13, 2], [17, 4]], [[17, 3], [18, 5]], [[15, 0], [18, 4]], [[10, 1], [15, 5]], [[9, 2], [10, 0]], [[9, 1], [13, 3]]], // 14
+     [[[14, 2], [18, 4]], [[18, 3]], [[-1]], [[-1]], [[11, 1]], [[10, 2], [11, 0]], [[10, 1], [14, 2]]], // 15
+     [[[-1]], [[-1]], [[17, 0]], [[13, 1], [17, 5]], [[12, 2], [13, 0]], [[12, 1]]], // 16
+     [[[16, 2]], [[-1]], [[18, 0]], [[14, 1], [18, 5]], [[13, 2], [14, 0]], [[13, 1], [16, 3]]], // 17
+     [[[17, 2]], [[-1]], [[-1]], [[15, 1]], [[14, 2], [15, 0]], [[14, 1], [17, 3]]] // 18
+ ]
+
+export type NeighborsKey = keyof typeof edge_neighbors;
 
 /**
  * Finds a game's index in the all_games list by its session ID.
@@ -323,9 +350,9 @@ function buyRoad(road: road_meta_data, sessionId: number) {
           // code to add the road in the representation of the neighboring tile. For example, edge 3 
           // on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
           // the z-index of rendering, we must render the road on both.
-          const neighbor_index = neighbors[road.tile_index as NeighborsKey][road.edge];
+          const neighbor_index = edge_neighbors[road.tile_index as NeighborsKey][road.edge];
           if(neighbor_index != -1 ){
-               const neighbor_edge = neighbors[neighbor_index as NeighborsKey].indexOf(road.tile_index);
+               const neighbor_edge = edge_neighbors[neighbor_index as NeighborsKey].indexOf(road.tile_index);
                const neighbor_road: road_meta_data = {
                     tile_index: neighbor_index,
                     edge: neighbor_edge as road_keys
@@ -337,7 +364,7 @@ function buyRoad(road: road_meta_data, sessionId: number) {
                possible_roads.push(...checkAroundRoads(neighbor_road))
           } else {
                findPotentialsOnBoardEdges(road, sessionId);
-               possible_roads.push(checkPotentialsOnEdges(road, sessionId))
+               possible_roads.push(checkRoadsAroundOnEdges(road, sessionId))
           }
 
           // add potential settlements by checking all roads around the bought road
@@ -345,13 +372,7 @@ function buyRoad(road: road_meta_data, sessionId: number) {
                checkForPotentialSettlements([possible_roads[0], possible_roads[1]], sessionId)
           }
           if (possible_roads.length == 3) {
-          
-               console.log(possible_roads)
-               if (possible_roads[0].potentialRoad.edge == possible_roads[2].potentialRoad.edge) {
-                    checkForPotentialSettlements([possible_roads[1], possible_roads[2]], sessionId)
-               } else {
-                    checkForPotentialSettlements([possible_roads[0], possible_roads[2]], sessionId)
-               }
+               checkForPotentialSettlementsOnEdge(possible_roads, sessionId)
           }
           if (possible_roads.length == 4) {
                checkForPotentialSettlements([possible_roads[0], possible_roads[3]], sessionId)
@@ -508,7 +529,7 @@ function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number)
      const current_game = all_games[findGameIndexById(sessionId)]
      const player = current_game.current_player;
      //if there is a neighbor 
-     let neighbor = neighbors[road.tile_index as road_keys][road.edge];
+     let neighbor = edge_neighbors[road.tile_index as road_keys][road.edge];
      if(neighbor != -1){
           let newEdge = (road.edge + 3) % 6; //handy
           let neighborPotentialRoad : road_meta_data = {
@@ -571,12 +592,10 @@ function checkAroundRoads(road: road_meta_data) {
  * @param road the road that's just been built
  * @param sessionId the game ID of the current game session
  */
-function checkPotentialsOnEdges(road: road_meta_data, sessionId: number) {
+function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
 
      const edge_tiles = [7, 12, 16, 17, 18, 15, 11, 6, 2, 1, 0, 3];
      const edge_index = edge_tiles.findIndex(number => number === road.tile_index);
-
-     const current_game = all_games[findGameIndexById(sessionId)];
 
      const isClockwise = determineClockwiseRotation(road);
 
@@ -632,7 +651,7 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
      //function to see if there is valid potential communtiy
      function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
            
-           // get all communtiies on the tile
+           // get all communities on the tile
            const currentTile = current_game.gameboard.tiles[currentRoad.tile_index];
 
           const allRelevantVertexes = Object.entries(currentTile.community_spaces)
@@ -650,8 +669,8 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
      }
 
      //if there is a third tile, find it, and add its vertex to the potential roads. 
-     let thirdTile = neighbors[triad_legs[0].potentialRoad.tile_index as road_keys][triad_legs[0].potentialRoad.edge];
-     if(thirdTile != -1){
+     let thirdTile = edge_neighbors[triad_legs[0].potentialRoad.tile_index as road_keys][triad_legs[0].potentialRoad.edge];
+     if(thirdTile != -1 && triad_legs[0].builtRoad !== triad_legs[1].builtRoad){
           let thirdVertex = ((vertexBetweenRoads(triad_legs[0].potentialRoad.edge, triad_legs[1].potentialRoad.edge) + 3) % 6) ; // max of the Pr's rotated 180
           let potentialCommunity: community_meta_data = {
                tile_index: thirdTile, 
@@ -664,6 +683,76 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
      if(newPotentialSettlements.length > 0){
           current_game.current_player.potential_communities.push(...newPotentialSettlements);
      }
+}
+
+/**
+ * Checks for potential settlements on the board's edge given three roads
+ * @param possible_roads all the possible roads that span from the built edge road
+ * @param sessionId the game session to check 
+ */
+function checkForPotentialSettlementsOnEdge(possible_roads: triad_leg[], sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+
+     let newPotentialSettlements: community_meta_data[] = []
+     let triad_legs: triad_leg[] = []
+
+     if (possible_roads[0].potentialRoad.edge == possible_roads[2].potentialRoad.edge) {
+          triad_legs = [possible_roads[1], possible_roads[2]]
+     } else {
+          triad_legs = [possible_roads[0], possible_roads[2]]
+     }
+
+     //for first road leg
+     let centerVertex1 = vertexBetweenRoads(triad_legs[0].builtRoad.edge, triad_legs[0].potentialRoad.edge);
+     let twoEdgeVertices1 = [triad_legs[0].potentialRoad.edge, (triad_legs[0].potentialRoad.edge + 1) % 6]; 
+     let otherVertex1 = twoEdgeVertices1.find(vertex => vertex !== centerVertex1);
+     check(triad_legs[0].potentialRoad, centerVertex1, otherVertex1);
+
+     // for second road leg
+     let centerVertex2 = 0;
+     let current_tile_index = triad_legs[0].builtRoad.tile_index;
+     let search_neighbors = vertex_neighbors[current_tile_index][centerVertex1]
+     search_neighbors.forEach(set_of_neighbors => {
+          if (set_of_neighbors[0] == triad_legs[1].potentialRoad.tile_index) {
+               centerVertex2 = set_of_neighbors[1]
+          }
+     });
+     let twoEdgeVertices2 = [triad_legs[1].potentialRoad.edge, (triad_legs[1].potentialRoad.edge + 1) % 6]; 
+     let otherVertex2 = twoEdgeVertices2.find(vertex => vertex !== centerVertex2);
+     check(triad_legs[1].potentialRoad, centerVertex2, otherVertex2);
+
+     // for the built road leg
+     let centerVertex = vertexBetweenRoads(possible_roads[0].builtRoad.edge, possible_roads[0].potentialRoad.edge);
+     let twoEdgeVertices = [possible_roads[0].builtRoad.edge, (possible_roads[0].builtRoad.edge + 1) % 6]; 
+     let otherVertex = twoEdgeVertices.find(vertex => vertex !== centerVertex);
+     check(possible_roads[0].builtRoad, centerVertex, otherVertex);
+
+     //function to see if there is valid potential communtiy
+     function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
+           
+           // get all communtiies on the tile
+           const currentTile = current_game.gameboard.tiles[currentRoad.tile_index];
+
+          const allRelevantVertexes = Object.entries(currentTile.community_spaces)
+               .filter(([, value]) => value.color !== 'white') // Filter non-white spaces
+               .map(([key,]) => parseInt(key)); // Extract and convert the key to a number
+
+           //if there is no settlement vertex by any player on that other vertex it passes
+           if (!allRelevantVertexes.includes(otherVertex as community_keys)) {
+                let potentialCommunity: community_meta_data = {
+                     tile_index: currentRoad.tile_index, 
+                     vertex: centerVertex as community_keys  
+                 };
+                 newPotentialSettlements.push(potentialCommunity);
+           }
+     }
+
+     //Add potential Settlement if all three legs pass!
+     if (newPotentialSettlements.length > 0){
+          current_game.current_player.potential_communities.push(...newPotentialSettlements);
+     }
+
 }
 
 
@@ -809,9 +898,9 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
 
           //find neighbor(s)
           for(let i = -1; i < 1; i++) { 
-               const neighbor_index = neighbors[settlement.tile_index as NeighborsKey][settlement.vertex + i]; // i is -1 and 0 need to get both neighbors
+               const neighbor_index = edge_neighbors[settlement.tile_index as NeighborsKey][settlement.vertex + i]; // i is -1 and 0 need to get both neighbors
                if(neighbor_index > -1 ){
-                    const neighbor_vertex = neighbors[neighbor_index as NeighborsKey].indexOf(settlement.tile_index) + (1 + i); // offset vertex's
+                    const neighbor_vertex = edge_neighbors[neighbor_index as NeighborsKey].indexOf(settlement.tile_index) + (1 + i); // offset vertex's
                     const neighbor_settlement: community_meta_data = {
                          tile_index: neighbor_index,
                          vertex: neighbor_vertex as community_keys
@@ -830,14 +919,14 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
  */
 function findRelativeNeighboringVertexFromVertex (community: community_meta_data){
      //given tile 5 vertex 3
-     let tileOne = neighbors[community.tile_index as NeighborsKey][community.vertex - 1];
-     let tileTwo = neighbors[community.tile_index as NeighborsKey][community.vertex];
+     let tileOne = edge_neighbors[community.tile_index as NeighborsKey][community.vertex - 1];
+     let tileTwo = edge_neighbors[community.tile_index as NeighborsKey][community.vertex];
      let returnCommuntiies : community_meta_data[] = []
      
      if(tileOne != -1){
           //for tile one find the edge that touches the origional tile
-          let tileOneEdge = neighbors[tileOne as NeighborsKey].indexOf(community.tile_index);
-          let tileOneEdgeTwo = neighbors[tileOne as NeighborsKey].indexOf(tileTwo);
+          let tileOneEdge = edge_neighbors[tileOne as NeighborsKey].indexOf(community.tile_index);
+          let tileOneEdgeTwo = edge_neighbors[tileOne as NeighborsKey].indexOf(tileTwo);
           returnCommuntiies.push({
                tile_index: tileOne,
                vertex: vertexBetweenRoads(tileOneEdge, tileOneEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
@@ -846,8 +935,8 @@ function findRelativeNeighboringVertexFromVertex (community: community_meta_data
 
      if(tileTwo != -1){
           //for tile one find the edge that touches the origional tile
-          let tileTwoEdge = neighbors[tileTwo as NeighborsKey].indexOf(community.tile_index);
-          let tileTwoEdgeTwo = neighbors[tileTwo as NeighborsKey].indexOf(tileOne);
+          let tileTwoEdge = edge_neighbors[tileTwo as NeighborsKey].indexOf(community.tile_index);
+          let tileTwoEdgeTwo = edge_neighbors[tileTwo as NeighborsKey].indexOf(tileOne);
           returnCommuntiies.push({
                tile_index: tileTwo,
                vertex: vertexBetweenRoads(tileTwoEdge, tileTwoEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween

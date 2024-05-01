@@ -91,7 +91,7 @@ function handleRequest(request, body) {
             gameplay.switchClient(body.player, session_id);
             break;
         default:
-            throw new InvalidEndpointError("That endpoint is not valid!");
+            throw new InvalidEndpointError(`Endpoint "${request}" is not valid!`);
     }
     updateFrontend();
 }
