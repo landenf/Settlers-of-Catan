@@ -7,6 +7,7 @@ import "../Styles/PlayerComponent.css";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import { useNavigate } from 'react-router-dom';
+import AvatarComponent from './AvatarComponent';
 
 /**
  * Interface providing strong typing to the end game modal props.
@@ -104,21 +105,26 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
 
     return (
         <div className={"end-game-modal " + (endGameModalState ? "" : "disabled")}>
-            <div className="header">Game Over</div>
-            <div className="description">Results:</div>
-            <div className="summary">
-                <p>Your Final score: {gamestate.current_player.vp}</p>
-                <p>{gamestate.winner ? gamestate.winner.name : "No Winner (Error)"}</p>
+        <div className="header">Game Over</div>
+        <div className="description">Results: {gamestate.winner ? gamestate.winner.name : "No Winner (Error)"}</div>
+        <div className="content">
+            <div className="personal-info">
+                <img style={{ height: '15vh', width: '15vh', borderRadius: '90%'}} src={'/images/empty-avatar.jpg'} alt="Avatar Image" />
+                <p>Total Victory Points: {gamestate.current_player.vp}</p>
+            </div>
+            <div className="leaderboard">
+                <div className="description">Leaderboard:</div>
                 {sortedPlayers.map((player, index) => (
                     <div key={player.id}>
-                    <p>{renderMedal(index + 1)} {player.name} - {player.vp} Victory Points</p>
+                        <p>{renderMedal(index + 1)} {player.name} - {player.vp} Victory Points</p>
                     </div>
                 ))}
             </div>
-            <div>
-                <button className="game-end-buttons" onClick={() => handleExitGame()}>Exit Game</button>
-            </div>
         </div>
+        <div>
+            <button className="game-end-buttons" onClick={() => handleExitGame()}>Exit Game</button>
+        </div>
+    </div>
     );
 };
 

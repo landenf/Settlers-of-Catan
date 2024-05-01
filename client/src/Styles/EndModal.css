@@ -61,3 +61,50 @@
     border: 1px solid rgb(60, 0, 0);
     border-radius: 10px;
 }
+
+.end-game-modal {
+    height: 50vh;
+    width: 60vw; /* Increased width to accommodate two columns */
+    top: 10%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%);
+    z-index: 5;
+    background-color: hsla(0, 0%, 100%, 1);
+    outline: 5px solid rgb(60, 0, 0);
+    text-align: center;
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+}
+
+.content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-grow: 1; /* Allow this section to fill the space */
+}
+
+.personal-info, .leaderboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content vertically in each column */
+    flex: 1; /* Both sections take equal width */
+}
+
+.header {
+    font-size: 2vw;
+}
+
+.description {
+    font-size: 1vw;
+}
+
+.game-end-buttons {
+    margin: 2% auto;
+    height: 6vh;
+    width: 25%;
+    font-size: 1.5vw;
+    border-radius: 10px;
+    background-color: rgb(175, 76, 76);
+    border: 1px solid rgb(60, 0, 0);
+}
