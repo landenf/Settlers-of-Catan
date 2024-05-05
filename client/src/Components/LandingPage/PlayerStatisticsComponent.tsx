@@ -37,7 +37,7 @@ const PlayerStatisticsComponent = () => {
 
     return (
         <div className="Profile">
-            <div className="main-content-box">
+            <div className="main-stats-box">
             <img style={{ height: '15vh', width: '15vh', borderRadius: '90%'}} src={player_image} alt="Avatar Image" />
             <div className="playerName">{userProfile.username}</div>
                 <div className="stats">
