@@ -388,6 +388,11 @@ export type GameState = {
      * play in the session.
      */
     isValid: boolean;
+
+    /**
+     * Flag set to true once all players have readied up and began the game.
+     */
+    isStarted: boolean;
 }
 
 /**
@@ -451,4 +456,9 @@ export type LimitedSession = {
      * Determines if this gamestate is valid and can be manipulated by players.
      */
     isValid: boolean;
+
+    /**
+     * Flag set to true once all players have readied up and began the game.
+     */
+    isStarted: boolean;
 }

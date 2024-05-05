@@ -19,7 +19,8 @@ var null_game: GameState = {
      gameboard: {
           tiles: tiles
      },
-     isValid: false
+     isValid: false,
+     isStarted: false
 }
 
 /**
@@ -1064,7 +1065,8 @@ function translateToLimitedState(sessionId: number) {
           current_largest_army: current_game.current_largest_army,
           current_longest_road: current_game.current_longest_road,
           gameboard: current_game.gameboard,
-          isValid: current_game.isValid
+          isValid: current_game.isValid,
+          isStarted: current_game.isStarted
      }
 
      return limited_state
@@ -1255,13 +1257,43 @@ function findPlayerCantJoin(clientId: number) {
 }
 
 /**
+ * Checks if the game should start, given enough players have readied up,
+ * and updates the gamestate accordingly.
+ * @param sessionId the sessionId of the gamestate to check
+ * @returns false if the game was not started, true if it was
+ */
+function updateStarted(sessionId: number) {
+     const current_game = all_games[findGameIndexById(sessionId)]
+     
+     let game_started = true;
+     if (current_game.players.length < 2) {
+          game_started = false;
+     }
+
+     current_game.players.forEach(player => {
+          if (!player.ready) {
+               game_started = false;
+          }
+     });
+
+     if (game_started) {
+          current_game.isStarted = true;
+     } else {
+          current_game.isStarted = false;
+     }
+
+     return game_started;
+}
+
+/**
  * Translates and updates the gamestate, then returns it.
  * @param sessionId the sessionId of the gamestate to update
  * @returns an updated, limited gamestate
  */
 function getGamestate(sessionId: number) {
      updateResourceCounts(sessionId);
-     checkWinState(sessionId)
+     checkWinState(sessionId);
+     updateStarted(sessionId);
      return translateToLimitedState(sessionId);
 }
 

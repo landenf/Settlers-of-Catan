@@ -16,7 +16,8 @@ var null_game: GameState = {
      gameboard: {
           tiles: tiles
      },
-     isValid: false
+     isValid: false,
+     isStarted: false
 }
 
 /**
@@ -52,17 +53,18 @@ export function newGame(all_games: GameState[], host: Player) {
     host.color = "red"
 
     const gamestate: GameState = {
-        id: newId,
-        client: host,
-        diceNumber: {number1: 1, number2: 1},
-        players: [host],
-        current_player: host,
-        current_largest_army: "",
-        current_longest_road: "",
-        gameboard: {
-             tiles: tiles
-        },
-        isValid: true
+         id: newId,
+         client: host,
+         diceNumber: { number1: 1, number2: 1 },
+         players: [host],
+         current_player: host,
+         current_largest_army: "",
+         current_longest_road: "",
+         gameboard: {
+              tiles: tiles
+         },
+         isValid: true,
+         isStarted: false
     }
 
     return gamestate;
