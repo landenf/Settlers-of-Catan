@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { query, collection, where, getDocs, updateDoc } from 'firebase/firestore';
-import { auth, db } from '../firebase-config';
+import { auth, db } from '../../../firebase-config';
 
 const EndGameComponent = () => {
     const [user, loading, error] = useAuthState(auth);

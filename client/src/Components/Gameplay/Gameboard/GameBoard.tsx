@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import { HexGrid, Layout, Hexagon, Text, GridGenerator, HexUtils, Pattern } from 'react-hexgrid';
-import { GameBoardConfiguration } from '../StaticData/GameBoardStatic';
-import Patterns from '../Styles/Patterns';
+import { GameBoardConfiguration } from '../../../StaticData/GameBoardStatic';
+import Patterns from '../../../Styles/Patterns';
 import ResourceTile from './ResourceTile';
 import { LimitedSession, Tile } from '@shared/types';
-import Dice from './Dice';
+import { GameBoardActionsDisplay } from '../../../Pages/GameSession';
+import { BackendRequest } from '../../../Enums/requests';
 
 interface GameBoardProp {
   tiles: Tile[],
   gamestate: LimitedSession,
   updateState: (newState: LimitedSession) => void;
-
+  showPotenialBuildOptions: GameBoardActionsDisplay;
+  
+  /**
+   * Function to call the backend through the main websocket.
+   */
+  callBackend: (type: string, body: BackendRequest) => void;
 }
+
 /**
  * The gameboard where the magic happens. Rendered at the center of the screen,
  * it shows each individual tile, their resource type, and their number to roll.
  * @param props a boardstate often retrieved and modified in the backend
  */
-const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState }) => {
+const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, showPotenialBuildOptions, callBackend }) => {
   // generate hexagonal grid
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
   const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
@@ -40,6 +47,8 @@ const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState }) =
               tile={tiles[i]}
               gamestate={ gamestate }
               updateState={updateState}
+              showPotenialBuildOptions={showPotenialBuildOptions}
+              callBackend={callBackend}
               />
           ))}
         </Layout>

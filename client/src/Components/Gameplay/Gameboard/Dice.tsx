@@ -1,5 +1,5 @@
 import React from "react"
-import "../Styles/Dice.css"
+import "../../../Styles/Gameplay/Gameboard/Dice.css"
 import SingleDie from "./SingleDie";
 
 /**

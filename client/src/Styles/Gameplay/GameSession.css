@@ -1,5 +1,5 @@
 .background-container {
-    background-image: url('../../public/images/background-image.jpg');
+    background-image: url('../../../public/images/background-image.jpg');
    
     height: 100vh; /* Optional: Adjusts the height of the container to fill the viewport */
     text-align: center;

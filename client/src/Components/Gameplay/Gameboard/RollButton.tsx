@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import '../Styles/RollButton.css'
+import '../../../Styles/Gameplay/Player/RollButton.css'
 import { GameState, LimitedSession } from "@shared/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDice } from "@fortawesome/free-solid-svg-icons";
-import { BackendRequest } from "../Enums/requests";
+import { BackendRequest } from "../../../Enums/requests";
 
 /**
 * An interface that provides strong typing to a gamestate passed to the roll

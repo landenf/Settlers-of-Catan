@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import "../Styles/hand.css"
-import { TradeParams } from "../Enums/tradebody";
+import "../../../Styles/Gameplay/Player/Hand.css"
+import { TradeParams } from "../../../Enums/tradebody";
 
 /**
  * An interface that provides strong typing to a resource card prop.
