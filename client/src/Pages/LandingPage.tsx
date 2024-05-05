@@ -55,7 +55,7 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
         <MenuToggleComponent callBackend={callBackend} state={state} setRoomPanel={setOpenPanel} buttonsActive={buttonsActive}
           setButtonsActive={setButtonsActive}/>
       </div>
-      <PlayerStatisticsComponent/>
+      {!roomPanelOpen && (<PlayerStatisticsComponent/>)}
       {(roomPanelOpen && <RoomPanel state={state} callBackend={callBackend} setRoomPanel={setOpenPanel} 
         setButtonsActive={setButtonsActive}/>)}
     </div>
