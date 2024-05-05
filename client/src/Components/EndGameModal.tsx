@@ -3,11 +3,10 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { query, collection, where, getDocs, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase-config';
 import "../Styles/EndModal.css";
-import "../Styles/PlayerComponent.css";
+import "../Styles/Gameplay/Player/PlayerComponent.css";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import { useNavigate } from 'react-router-dom';
-import AvatarComponent from './AvatarComponent';
 
 /**
  * Interface providing strong typing to the end game modal props.
