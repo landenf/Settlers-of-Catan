@@ -1,16 +1,16 @@
-import GameBoard from "../Components/GameBoard";
-import PlayerBarComponent from "../Components/PlayerBarComponent";
-import ActionsBarComponent from "../Components/ActionsBarComponent";
-import Hand from "../Components/Hand"
-import VictoryPointsComponent from "../Components/victoryPointsComponent";
+import GameBoard from "../Components/Gameplay/Gameboard/GameBoard";
+import PlayerBarComponent from "../Components/Gameplay/Player/PlayerBarComponent";
+import ActionsBarComponent from "../Components/Gameplay/Menus/ActionsBarComponent";
+import Hand from "../Components/Gameplay/Player/Hand"
+import VictoryPointsComponent from "../Components/Gameplay/Player/victoryPointsComponent";
 import React, { Component, useEffect, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
-import "../Styles/GameSession.css";
+import "../Styles/Gameplay/GameSession.css";
 import { LimitedPlayer, LimitedSession, Player } from "@shared/types";
-import RollButton from "../Components/RollButton";
-import TradeModal from "../Components/TradeModal";
-import StealModal from "../Components/StealModal";
-import Dice from "../Components/Dice";
+import RollButton from "../Components/Gameplay/Gameboard/RollButton";
+import TradeModal from "../Components/Gameplay/Menus/TradeModal";
+import StealModal from "../Components/Gameplay/Menus/StealModal";
+import Dice from "../Components/Gameplay/Gameboard/Dice";
 import { BackendRequest } from "../Enums/requests";
 import EndGameModal from "../Components/EndGameModal";
 
@@ -29,11 +29,17 @@ export interface StateProp {
   backend: WebSocket
 }
 
+export interface GameBoardActionsDisplay {
+  roads: boolean,
+  settlements: boolean
+}
+
 const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const [state, setState] = useState(props.gamestate);
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
   const [endGameModalEnabled, setEndGameModal] = useState(false);
+  const [showPotenialBuildOptions, setshowPotenialBuildOptions] = useState<GameBoardActionsDisplay>({roads: false, settlements: false})
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
@@ -51,6 +57,20 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const updateStealModal = (newState: boolean) => {
     setStealModal(newState);
   }
+  
+  const updatePotentialSettlements = (selected: string) => {
+    if (selected === 'settlements') {
+      setshowPotenialBuildOptions(prevState => ({
+        roads: false,  
+        settlements: !prevState.settlements  // Toggle settlements
+      }));
+    } else if (selected === 'roads') {
+      setshowPotenialBuildOptions(prevState => ({
+        roads: !prevState.roads,  // Toggle roads
+        settlements: false  
+      }));
+    }
+  };
 
   const updateRolled = (newState: boolean) => {
     setRolled(newState);
@@ -137,8 +157,12 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
                   <Dice numberRolled={state.diceNumber}/>
                       <GameBoard 
                           tiles={tiles}
-                          gamestate={ props.gamestate }
-                          updateState={ updateState } /></div>
+                          gamestate={ state }
+                          updateState={ updateState } 
+                          showPotenialBuildOptions={showPotenialBuildOptions}  
+                          callBackend={callBackend}
+                        />
+                </div>
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp}/>
                   <Hand gamestate={state} />
@@ -148,7 +172,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
             </div>
             <div className={"ActionsBarComponent"}>
               <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
-              boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer}/>
+              boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}/>
             </div>
         </div>
       </div>   

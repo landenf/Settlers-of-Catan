@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ResourceCard from "./ResourceCard";
-import "../Styles/hand.css"
+import "../../../Styles/Gameplay/Player/Hand.css"
 import { LimitedSession, Player } from "@shared/types";
 
 /**

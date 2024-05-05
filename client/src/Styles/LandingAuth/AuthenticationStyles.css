@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('../../public/images/background-image.jpg');
+    background-image: url('../../../public/images/background-image.jpg');
     background-size: cover;
     overflow: hidden; 
 }

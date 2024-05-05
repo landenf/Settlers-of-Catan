@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SignIn from '../Components/Authentication/SignIn';
 import SignUp from '../Components/Authentication/Signup';
-import '../Styles/AuthenticationStyles.css'; 
+import '../Styles/LandingAuth/AuthenticationStyles.css'; 
 
 const AuthenticationPage: React.FC = () => {
   const [isSigningIn, setIsSigningIn] = useState(true); // Start with Sign In

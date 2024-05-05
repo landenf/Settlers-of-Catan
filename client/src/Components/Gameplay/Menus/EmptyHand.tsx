@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../Styles/hand.css"
+import "../../../Styles/Gameplay/Player/Hand.css"
 import { LimitedSession } from "@shared/types";
 import EmptyResourceCard from "./EmptyResourceCard";
-import { TradeParams } from "../Enums/tradebody";
+import { TradeParams } from "../../../Enums/tradebody";
 
 /**
  * An interface that provides strong typing to an empty hand prop.

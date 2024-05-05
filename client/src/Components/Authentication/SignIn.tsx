@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import {auth} from '../../firebase-config.js';
-import '../../Styles/AuthenticationStyles.css'; 
+import '../../Styles/LandingAuth/AuthenticationStyles.css'; 
 import { useNavigate } from 'react-router-dom';
 
 interface SignInComponentProps {

@@ -1,4 +1,4 @@
-import { LimitedSession, road_meta_data, Player } from '@shared/types';
+import { LimitedSession, road_meta_data, Player, community_meta_data } from '@shared/types';
 
 /**
  * Wrapper type for all kinds of requests.
@@ -32,4 +32,9 @@ interface JoinGameByIdRequest extends BackendRequest {
 }
 
 
-export {TradeRequest, BackendRequest, RoadRequest, StealRequest, JoinGameByIdRequest}
+
+interface SettlementRequest extends BackendRequest {
+    settlementData: community_meta_data;
+}
+
+export {TradeRequest, BackendRequest, RoadRequest, StealRequest, JoinGameByIdRequest, SettlementRequest}

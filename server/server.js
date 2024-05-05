@@ -77,6 +77,9 @@ function handleRequest(request, body) {
         case "buyRoad":
             gameplay.buyRoad(body.roadData, body.state.id);
             break;
+        case "buySettlement":
+            gameplay.buySettlement(body.settlementData, session_id);
+            break;
         case "steal":
             gameplay.handleKnight(body.victim, body.state.id);
             break;
@@ -108,7 +111,7 @@ function handleRequest(request, body) {
             gameplay.handleReady(body.state.id, body.state.client)
             break;
         default:
-            throw new InvalidEndpointError("That endpoint is not valid!");
+            throw new InvalidEndpointError(`Endpoint "${request}" is not valid!`);
     }
     updateFrontend(body.state.id);
 }

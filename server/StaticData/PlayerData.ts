@@ -1,22 +1,32 @@
-import { GameState, Player } from "@shared/types";
+const road_one = {
+    tile_index: 6,
+    edge: 5,
+};
+
+const road_two = {
+    tile_index: 5,
+    edge: 2,
+};
+
+import { GameState, Player, road_meta_data } from "@shared/types";
     const player1: Player = {
         id: 0,
         name: "steven",
         image: "empty-avatar",
         color: "red",
         vp: 1,
-        resources: 25,
+        resources: 1000,
         hand: {
-            wheat: 5,
-            brick: 5,
-            stone: 5,
-            sheep: 5,
-            wood: 5
+            wheat: 200,
+            brick: 200,
+            stone: 200,
+            sheep: 200,
+            wood: 200
         },
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -116,7 +126,7 @@ import { GameState, Player } from "@shared/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -216,7 +226,7 @@ import { GameState, Player } from "@shared/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [],
+        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,

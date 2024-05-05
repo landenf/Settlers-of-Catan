@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../Styles/MenuOptions.css";
-import { BackendRequest, JoinGameByIdRequest } from "../Enums/requests";
+import "../../Styles/LandingAuth/MenuOptions.css";
+import { BackendRequest, JoinGameByIdRequest } from "../../Enums/requests";
 import { LimitedSession } from "@shared/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
