@@ -17,7 +17,8 @@ var null_game: GameState = {
           tiles: tiles
      },
      isValid: false,
-     isStarted: false
+     isStarted: false,
+     canStart: false
 }
 
 /**
@@ -64,7 +65,8 @@ export function newGame(all_games: GameState[], host: Player) {
               tiles: tiles
          },
          isValid: true,
-         isStarted: false
+         isStarted: false,
+         canStart: false
     }
 
     return gamestate;

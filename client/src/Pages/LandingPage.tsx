@@ -27,9 +27,9 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
 
   useEffect(() => {
     if (state.isStarted) {
-      navigate('/session');
+      navigate("/session")
     }
-  });
+  })
 
    /**
    * Used to update the rendering of the client's screen when we

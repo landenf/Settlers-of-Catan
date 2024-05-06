@@ -18,6 +18,7 @@ export const MockGameState: GameState = {
         tiles: tiles
     },
     isValid: false,
+    canStart: false,
     isStarted: false
 }
 
@@ -36,5 +37,6 @@ export const MockLimitedGameState: LimitedSession = {
         tiles: []
     },
     isValid: false,
+    canStart: false,
     isStarted: false
 }

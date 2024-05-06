@@ -390,7 +390,12 @@ export type GameState = {
     isValid: boolean;
 
     /**
-     * Flag set to true once all players have readied up and began the game.
+     * Flag set to true once all players have readied up.
+     */
+    canStart: boolean;
+
+    /**
+     * Flag set once the game has started.
      */
     isStarted: boolean;
 }
@@ -458,7 +463,12 @@ export type LimitedSession = {
     isValid: boolean;
 
     /**
-     * Flag set to true once all players have readied up and began the game.
+     * Flag set to true once all players have readied up.
+     */
+    canStart: boolean;
+
+    /**
+     * Flag set once the game has started.
      */
     isStarted: boolean;
 }

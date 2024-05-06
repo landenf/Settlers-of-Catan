@@ -20,6 +20,7 @@ var null_game: GameState = {
           tiles: tiles
      },
      isValid: false,
+     canStart: false,
      isStarted: false
 }
 
@@ -1066,6 +1067,7 @@ function translateToLimitedState(sessionId: number) {
           current_longest_road: current_game.current_longest_road,
           gameboard: current_game.gameboard,
           isValid: current_game.isValid,
+          canStart: current_game.canStart,
           isStarted: current_game.isStarted
      }
 
@@ -1158,13 +1160,15 @@ function joinGame(newPlayer: Player, sessionId?: number) {
 
                // if the random game had too many players, try looking for a new one
                let current_tries = 0;
-               while (all_games[findGameIndexById(sessionId)].players.length == 4 && current_tries < total_connection_tries) {
+               let current_game = all_games[findGameIndexById(sessionId)]
+               while (current_game.players.length == 4 && current_tries < total_connection_tries) {
                     game_index = Math.floor(Math.random() * all_games.length);
                     sessionId = all_games[game_index].id
+                    current_game = all_games[findGameIndexById(sessionId)]
                     current_tries++;
                }
 
-               if (current_tries === total_connection_tries) {
+               if (current_tries === total_connection_tries || current_game.isStarted) {
                     generateGame(newPlayer);
                     game_index = all_games.length - 1;
                     sessionId = all_games[game_index].id
@@ -1177,7 +1181,7 @@ function joinGame(newPlayer: Player, sessionId?: number) {
 
      if (foundGame) {
           let game = assignPlayerColor(all_games[findGameIndexById(sessionId)], newPlayer)
-          if (!game.isValid) {
+          if (!game.isValid || game.isStarted) {
                failed_to_connect.push(newPlayer)
                return null_game;
           }
@@ -1257,7 +1261,7 @@ function findPlayerCantJoin(clientId: number) {
 }
 
 /**
- * Checks if the game should start, given enough players have readied up,
+ * Checks if the game can start, given enough players have readied up,
  * and updates the gamestate accordingly.
  * @param sessionId the sessionId of the gamestate to check
  * @returns false if the game was not started, true if it was
@@ -1277,12 +1281,22 @@ function updateStarted(sessionId: number) {
      });
 
      if (game_started) {
-          current_game.isStarted = true;
+          current_game.canStart = true;
      } else {
-          current_game.isStarted = false;
+          current_game.canStart = false;
      }
 
      return game_started;
+}
+
+/**
+ * Starts the given game.
+ * @param sessionId the game ID of the session to start
+ */
+function startGame(sessionId: number) {
+     const current_game = all_games[findGameIndexById(sessionId)]
+     current_game.isStarted = true;
+     return getGamestate(sessionId)
 }
 
 /**
@@ -1307,4 +1321,4 @@ function getNullGame() {
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, buySettlement, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady }
+     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame }
