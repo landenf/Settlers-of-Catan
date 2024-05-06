@@ -964,6 +964,12 @@ function vertexBetweenRoads(edge1: number, edge2: number){
      }
 }
 
+function initialRound(road_data: road_meta_data, sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)];
+
+
+}
+
 /**
  * Checks each player's victory points and sets the game state's winner
  * property accordingly.
