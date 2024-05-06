@@ -5,9 +5,11 @@ import { MockLimitedGameState } from "../StaticData/GameStateStatic";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import RoomPanel from "../Components/LandingPage/RoomPanel";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 interface LandingProps {
-  backend: WebSocket
+  backend: WebSocket;
 }
 
 /**
@@ -22,40 +24,53 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
   const [roomPanelOpen, setOpenPanel] = useState(false);
   const [buttonsActive, setButtonsActive] = useState(true);
 
-   /**
+  /**
    * Used to update the rendering of the client's screen when we
    * receive the gamestate from the backend.
    */
-   backend.addEventListener("message", (msg) => {
-    const newState: LimitedSession = JSON.parse(msg.data)
-    setState(newState)
+  backend.addEventListener("message", (msg) => {
+    const newState: LimitedSession = JSON.parse(msg.data);
+    setState(newState);
   });
 
   /**
    * Uses the websocket to send information to the backend and retrieve
    * gamestate information.
-   * @param type the "endpoint" to hit (/roll or /buyDevCard for example) 
+   * @param type the "endpoint" to hit (/roll or /buyDevCard for example)
    * @param body any payload information to send to the backend
    */
   const callBackend = (type: string, body: BackendRequest) => {
     const message = {
       endpoint: type,
-      body: body
-    }
+      body: body,
+    };
 
-    backend.send(JSON.stringify(message))
-
+    backend.send(JSON.stringify(message));
   };
 
   return (
     <div className="landing-page">
       <div className="menu">
         <p className="catanTitle">CATAN</p>
-        <MenuToggleComponent callBackend={callBackend} state={state} setRoomPanel={setOpenPanel} buttonsActive={buttonsActive}
-          setButtonsActive={setButtonsActive}/>
+        <MenuToggleComponent
+          callBackend={callBackend}
+          state={state}
+          setRoomPanel={setOpenPanel}
+          buttonsActive={buttonsActive}
+          setButtonsActive={setButtonsActive}
+        />
+        <button className="home-page-button">
+          <FontAwesomeIcon icon={faHouse} />
+        </button>
       </div>
-      {(roomPanelOpen && <RoomPanel state={state} callBackend={callBackend} setRoomPanel={setOpenPanel} 
-        setButtonsActive={setButtonsActive}/>)}
+      {roomPanelOpen && (
+        <RoomPanel
+          state={state}
+          callBackend={callBackend}
+          setRoomPanel={setOpenPanel}
+          setButtonsActive={setButtonsActive}
+        />
+      )}
     </div>
   );
 };
