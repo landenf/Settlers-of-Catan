@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { query, collection, where, getDocs, updateDoc } from 'firebase/firestore';
-import { auth, db } from '../firebase-config';
-import "../Styles/EndModal.css";
-import "../Styles/Gameplay/Player/PlayerComponent.css";
+import { auth, db } from '../../../firebase-config';
+import "../../../Styles/EndModal.css";
+import "../../../Styles/Gameplay/Player/PlayerComponent.css";
 import { LimitedSession } from "@shared/types";
-import { BackendRequest } from "../Enums/requests";
+import { BackendRequest } from "../../../Enums/requests";
 import { useNavigate } from 'react-router-dom';
 
 /**

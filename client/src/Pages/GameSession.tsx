@@ -12,7 +12,7 @@ import TradeModal from "../Components/Gameplay/Menus/TradeModal";
 import StealModal from "../Components/Gameplay/Menus/StealModal";
 import Dice from "../Components/Gameplay/Gameboard/Dice";
 import { BackendRequest } from "../Enums/requests";
-import EndGameModal from "../Components/EndGameModal";
+import EndGameModal from "../Components/Gameplay/Menus/EndGameModal";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
