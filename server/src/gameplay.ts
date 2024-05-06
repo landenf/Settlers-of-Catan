@@ -2,7 +2,7 @@ import { GameState, Player, road_keys, community_meta_data, road_meta_data, Limi
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
-import { toUSVString } from "util";
+//import { toUSVString } from "util";
 import { assignPlayerColor, newGame, reassignPlayers } from "./lobby";
 
 /**
@@ -14,8 +14,6 @@ var null_game: GameState = {
      diceNumber: { number1: 1, number2: 1 },
      players: players,
      current_player: players[0],
-     current_largest_army: "",
-     current_longest_road: "",
      gameboard: {
           tiles: tiles
      },
@@ -961,6 +959,24 @@ function vertexBetweenRoads(edge1: number, edge2: number){
           return 0
      }else{
           return Math.max(edge1, edge2)
+     }
+}
+
+/**
+ * Awards the most roads to the current player if they have the most roads owned. Updates their victory points accordingly.
+ */
+function awardMostRoads(sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)];
+     const player = current_game.current_player
+
+     if(current_game.current_longest_road == null){
+          current_game.current_longest_road = player;
+     } else {
+          if(current_game.current_longest_road != null && player.roads_owned.length > current_game.current_longest_road.roads_owned.length){
+               current_game.current_longest_road.vp--;
+               current_game.current_longest_road = player;
+               current_game.current_longest_road.vp++;
+          }
      }
 }
 

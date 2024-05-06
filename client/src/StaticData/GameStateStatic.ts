@@ -12,8 +12,6 @@ export const MockGameState: GameState = {
     players: players,
     winner: undefined,
     current_player: players[0],
-    current_largest_army: "",
-    current_longest_road: "",
     gameboard: {
         tiles: tiles
     },
@@ -29,8 +27,6 @@ export const MockLimitedGameState: LimitedSession = {
     },
     players: players,
     current_player: players[0],
-    current_largest_army: "",
-    current_longest_road: "",
     gameboard: {
         tiles: []
     },
