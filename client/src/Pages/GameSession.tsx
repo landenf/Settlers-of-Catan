@@ -21,12 +21,17 @@ export interface StateProp {
   /**
    * The current game session's state.
    */
-  gamestate: LimitedSession
+  state: LimitedSession
 
   /**
    * The websocket used with this particular game session.
    */
   backend: WebSocket
+
+  /**
+   * A function used to update the gamestate.
+   */
+  setState: (newState: LimitedSession) => void;
 }
 
 export interface GameBoardActionsDisplay {
@@ -34,8 +39,7 @@ export interface GameBoardActionsDisplay {
   settlements: boolean
 }
 
-const GameSession: React.FC<StateProp> = (props: StateProp) => {
-  const [state, setState] = useState(props.gamestate);
+const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
   const [endGameModalEnabled, setEndGameModal] = useState(false);
@@ -47,8 +51,6 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   const updateState = (newState: LimitedSession) => {
     setState(newState);  
   }
-
-  useEffect(() => {}, [state]);
 
   const updateTradeModal = (newState: boolean) => {
     setTradeModal(newState)
@@ -80,7 +82,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
     setBoughtDev(newState);
   }
 
-  const backend = props.backend
+  const websocket = backend
 
   /**
    * Resets the action bar and roll button.
@@ -94,7 +96,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
    * Used to update the rendering of the client's screen when we
    * receive the gamestate from the backend.
    */
-  backend.addEventListener("message", (msg) => {
+  websocket.addEventListener("message", (msg) => {
     const newState: LimitedSession = JSON.parse(msg.data)
     updateState(newState)
     

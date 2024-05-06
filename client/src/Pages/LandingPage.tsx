@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Styles/LandingAuth/LandingPage.css";
 import MenuToggleComponent from "../Components/LandingPage/MenuToggleComponent";
 import { MockLimitedGameState } from "../StaticData/GameStateStatic";
@@ -6,9 +6,12 @@ import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import RoomPanel from "../Components/LandingPage/RoomPanel";
 import PlayerStatisticsComponent from "../Components/LandingPage/PlayerStatisticsComponent";
+import { useNavigate } from "react-router-dom";
 
 interface LandingProps {
-  backend: WebSocket
+  backend: WebSocket,
+  state: LimitedSession,
+  setState: (newState: LimitedSession) => void
 }
 
 /**
@@ -18,10 +21,16 @@ interface LandingProps {
  *
  * @returns Landing page for the user.
  */
-const LandingPage: React.FC<LandingProps> = ({ backend }) => {
-  const [state, setState] = useState(MockLimitedGameState);
+const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
   const [roomPanelOpen, setOpenPanel] = useState(false);
   const [buttonsActive, setButtonsActive] = useState(true);
+  const navigate = useNavigate(); // For navigation
+
+  useEffect(() => {
+    if (state.isStarted) {
+      navigate("/session")
+    }
+  })
 
    /**
    * Used to update the rendering of the client's screen when we
@@ -55,7 +64,7 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
         <MenuToggleComponent callBackend={callBackend} state={state} setRoomPanel={setOpenPanel} buttonsActive={buttonsActive}
           setButtonsActive={setButtonsActive}/>
       </div>
-      <PlayerStatisticsComponent/>
+      {!roomPanelOpen && (<PlayerStatisticsComponent/>)}
       {(roomPanelOpen && <RoomPanel state={state} callBackend={callBackend} setRoomPanel={setOpenPanel} 
         setButtonsActive={setButtonsActive}/>)}
     </div>
