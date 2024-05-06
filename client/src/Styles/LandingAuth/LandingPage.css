@@ -19,26 +19,21 @@
   background-color: #c3332b;
 }
 
-.home-page-button {
-  left: 1vw;
-  top: 94vh;
-  padding: 0;
-  border: none;
-  background: white;
-  position: absolute;
-  height: 30px;
-  width: 30px;
-  border-radius: 20px;
-  align-items: center;
-  border-color: none;
+.info-icon {
+  background-image: url("https://fontawesome.com/icons/circle-info?f=classic&s=solid");
+  top: 1vh;
+  left: 1vh;
+  position: relative;
+  color: white;
+  width: 25px;
+  height: 25px;
 }
-.home-page-button:active {
+
+.info-button:active {
   opacity: 0.9;
 }
 
-.home-page-button:hover {
-  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
-    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+.info-button:hover {
   cursor: pointer;
 }
 

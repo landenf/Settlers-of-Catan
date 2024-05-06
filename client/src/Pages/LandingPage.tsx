@@ -6,7 +6,8 @@ import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import RoomPanel from "../Components/LandingPage/RoomPanel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import InstructionsModal from "../Components/LandingPage/InstructionsModal";
 
 interface LandingProps {
   backend: WebSocket;
@@ -23,6 +24,11 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
   const [state, setState] = useState(MockLimitedGameState);
   const [roomPanelOpen, setOpenPanel] = useState(false);
   const [buttonsActive, setButtonsActive] = useState(true);
+  const [instructionsModalEnabled, setInstructionsModal] = useState(false);
+
+  const updateInstructionsModal = () => {
+    setInstructionsModal(!instructionsModalEnabled);
+  };
 
   /**
    * Used to update the rendering of the client's screen when we
@@ -50,7 +56,14 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
 
   return (
     <div className="landing-page">
+      <InstructionsModal
+        setInstructionsModal={() => setInstructionsModal(false)}
+        instructionsModalState={instructionsModalEnabled}
+      />
       <div className="menu">
+        <div onClick={updateInstructionsModal} className="info-button">
+          <FontAwesomeIcon className="info-icon" icon={faCircleInfo} />
+        </div>
         <p className="catanTitle">CATAN</p>
         <MenuToggleComponent
           callBackend={callBackend}
@@ -59,9 +72,6 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
           buttonsActive={buttonsActive}
           setButtonsActive={setButtonsActive}
         />
-        <button className="home-page-button">
-          <FontAwesomeIcon icon={faHouse} />
-        </button>
       </div>
       {roomPanelOpen && (
         <RoomPanel
