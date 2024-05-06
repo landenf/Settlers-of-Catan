@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import "../Styles/TradeModal.css";
+import "../../../Styles/Gameplay/Menus/TradeModal.css";
 import EmptyHand from "./EmptyHand";
 import { LimitedSession } from "@shared/types";
-import { TradeParams } from "../Enums/tradebody";
-import { BackendRequest, TradeRequest } from "../Enums/requests";
+import { TradeParams } from "../../../Enums/tradebody";
+import { BackendRequest, TradeRequest } from "../../../Enums/requests";
 
 /**
  * An interface that provides strong typing to a trade modal's enabled prop.

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MenuButtonComponent from "./MenuButtonComponent";
-import "../Styles/MenuOptions.css";
-import { BackendRequest } from "../Enums/requests";
+import "../../Styles/LandingAuth/MenuOptions.css";
+import { BackendRequest } from "../../Enums/requests";
 import { LimitedSession } from "@shared/types";
 
 interface MenuToggleProps {

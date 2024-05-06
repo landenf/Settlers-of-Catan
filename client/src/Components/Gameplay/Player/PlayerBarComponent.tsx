@@ -1,7 +1,7 @@
 import React from "react";
 import PlayerComponent from "./PlayerComponent";
 import { LimitedPlayer } from "@shared/types"
-import '../Styles/PlayerBarComponent.css';
+import '../../../Styles/Gameplay/Player/PlayerBarComponent.css';
 
 /**
  * An interface that provides strong typing to a list of players as a prop.

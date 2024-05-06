@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "../Styles/LandingPage.css";
-import MenuToggleComponent from "../Components/MenuToggleComponent";
+import "../Styles/LandingAuth/LandingPage.css";
+import MenuToggleComponent from "../Components/LandingPage/MenuToggleComponent";
 import { MockLimitedGameState } from "../StaticData/GameStateStatic";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
-import RoomPanel from "../Components/RoomPanel";
+import RoomPanel from "../Components/LandingPage/RoomPanel";
 
 interface LandingProps {
   backend: WebSocket

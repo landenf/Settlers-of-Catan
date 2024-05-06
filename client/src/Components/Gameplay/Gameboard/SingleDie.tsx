@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../Styles/Dice.css"
+import "../../../Styles/Gameplay/Gameboard/Dice.css"
 
 /**
  * An interface providing strong typing to the die.

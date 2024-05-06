@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import {auth} from '../../firebase-config.js';
-import '../../Styles/AuthenticationStyles.css'; 
+import '../../Styles/LandingAuth/AuthenticationStyles.css'; 
 import { useNavigate } from 'react-router-dom';
 
 interface SignInComponentProps {
@@ -25,11 +25,11 @@ const SignInComponent: React.FC<SignInComponentProps> = ({ onSwitch }) => {
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
+      navigate('/home'); // Navigate on success
       } else {
           alert(error.code); // Consider replacing alert with a more user-friendly error handling strategy
       }
     }
-    navigate('/home'); // Navigate on success
   };
 
   return (

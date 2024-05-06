@@ -219,6 +219,18 @@ export type Tile = {
 
 }
 
+export type community_spaces_data = {
+    /**
+    * A number corresponding to the community level.
+    */
+       level: number;
+
+       /**
+        * A color associate with the player.
+        */
+       color: string;
+} 
+
 /**
  * A list of spaces on a tile where communities are built or
  * are already built. The first number represents the space:
@@ -227,17 +239,17 @@ export type Tile = {
  */
 export type community_spaces = {
     /** top-left vertex */
-    0: number
+    0: community_spaces_data
     /** top-right vertex */
-    1: number
+    1: community_spaces_data
     /** mid-right vertex */
-    2: number
+    2: community_spaces_data
     /** bottom-right vertex*/
-    3: number
+    3: community_spaces_data
     /** bottom-left vertex */
-    4: number
+    4: community_spaces_data
     /** mid-left vertex */
-    5: number
+    5: community_spaces_data
 }
 
 /**
@@ -257,7 +269,7 @@ export type community_meta_data = {
     /**
      * A number that corresponds to which vertex it is on to.
      */
-    vertex: number;
+    vertex: community_keys;
 
 }
 

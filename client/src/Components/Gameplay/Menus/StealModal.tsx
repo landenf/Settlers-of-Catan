@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import "../Styles/StealModal.css";
-import "../Styles/PlayerComponent.css"
+import "../../../Styles/Gameplay/Menus/StealModal.css";
+import "../../../Styles/Gameplay/Player/PlayerComponent.css"
 import { LimitedSession, LimitedPlayer } from "@shared/types";
-import AvatarComponent from "./AvatarComponent";
-import { BackendRequest, StealRequest } from "../Enums/requests";
+import AvatarComponent from "../Player/AvatarComponent";
+import { BackendRequest, StealRequest } from "../../../Enums/requests";
 
 /**
  * Interface providing strong typing to the steal modal props.
