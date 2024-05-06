@@ -15,7 +15,9 @@ export const MockGameState: GameState = {
     gameboard: {
         tiles: tiles
     },
-    isValid: false
+    isValid: false,
+    canStart: false,
+    isStarted: false
 }
 
 export const MockLimitedGameState: LimitedSession = {
@@ -30,5 +32,7 @@ export const MockLimitedGameState: LimitedSession = {
     gameboard: {
         tiles: []
     },
-    isValid: false
+    isValid: false,
+    canStart: false,
+    isStarted: false
 }
