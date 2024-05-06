@@ -5,6 +5,7 @@ import { MockLimitedGameState } from "../StaticData/GameStateStatic";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import RoomPanel from "../Components/LandingPage/RoomPanel";
+import PlayerStatisticsComponent from "../Components/LandingPage/PlayerStatisticsComponent";
 import { useNavigate } from "react-router-dom";
 
 interface LandingProps {
@@ -63,6 +64,7 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
         <MenuToggleComponent callBackend={callBackend} state={state} setRoomPanel={setOpenPanel} buttonsActive={buttonsActive}
           setButtonsActive={setButtonsActive}/>
       </div>
+      {!roomPanelOpen && (<PlayerStatisticsComponent/>)}
       {(roomPanelOpen && <RoomPanel state={state} callBackend={callBackend} setRoomPanel={setOpenPanel} 
         setButtonsActive={setButtonsActive}/>)}
     </div>
