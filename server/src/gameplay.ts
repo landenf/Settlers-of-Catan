@@ -212,6 +212,7 @@ function buyDevCard(sessionId: number) {
 
           determineDevBenefit(player);
           updateResourceCounts(sessionId);
+          awardLargestArmy(sessionId);
      }
 
      return getGamestate(sessionId);
@@ -386,6 +387,7 @@ function buyRoad(road: road_meta_data, sessionId: number) {
           
      }
 
+     awardMostRoads(sessionId);
      return getGamestate(sessionId);
 }
 
@@ -976,6 +978,24 @@ function awardMostRoads(sessionId: number){
                current_game.current_longest_road.vp--;
                current_game.current_longest_road = player;
                current_game.current_longest_road.vp++;
+          }
+     }
+}
+
+/**
+ * Awards largest army to the current player if they have the largest army. Updates their victory points accordingly.
+ */
+function awardLargestArmy(sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)];
+     const player = current_game.current_player
+
+     if(current_game.current_largest_army == null){
+          current_game.current_largest_army = player;
+     } else {
+          if(current_game.current_largest_army != null && player.knightCards > current_game.current_largest_army.knightCards){
+               current_game.current_largest_army.vp--;
+               current_game.current_largest_army = player;
+               current_game.current_largest_army.vp++;
           }
      }
 }
