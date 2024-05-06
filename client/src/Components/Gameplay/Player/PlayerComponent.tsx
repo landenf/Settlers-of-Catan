@@ -57,8 +57,8 @@ const PlayerComponent = (player: LimitedPlayer) => {
                 </div>
             </div>
             <div className="playerAwards">
-                <img src="/images/temp_road.png" className="hidden"></img>
-                <img src="/images/temp_knight.png" className="hidden"></img>
+                <img src="/images/temp_road.png" className={player.hasMostRoads ? "" : "hidden"}></img>
+                <img src="/images/temp_knight.png" className={player.hasLargestArmy ? "" : "hidden"}></img>
             </div>
         </div>
     )

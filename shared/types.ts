@@ -32,6 +32,17 @@ export type Player = {
     vp: number;
 
     /**
+     * Whether this player has the largest army.
+     */
+    hasLargestArmy: boolean;
+
+
+    /**
+    * Whether this player has most roads.
+    */
+    hasMostRoads: boolean;
+
+    /**
      * A dictionary of resources cards currently held in the player's hand.
      */
     hand: resource_counts;
@@ -151,6 +162,17 @@ export type LimitedPlayer = {
      * The player's total count of victory points.
      */
     vp: number;
+
+    /**
+     * Whether this player has the largest army.
+     */
+        hasLargestArmy: boolean;
+
+
+    /**
+    * Whether this player has most roads.
+    */
+    hasMostRoads: boolean;
 
     /**
      * Total resources held by a player.

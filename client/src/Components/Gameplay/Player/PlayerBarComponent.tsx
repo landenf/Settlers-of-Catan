@@ -32,6 +32,8 @@ const PlayerBarComponent = (props: PlayerBarProp) => {
             image={player.image}
             color={player.color}
             vp={player.vp}
+            hasLargestArmy={player.hasLargestArmy}
+            hasMostRoads={player.hasMostRoads}
             resources={player.resources}
             ready={player.ready}        
             />
