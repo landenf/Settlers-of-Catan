@@ -12,6 +12,7 @@ import TradeModal from "../Components/Gameplay/Menus/TradeModal";
 import StealModal from "../Components/Gameplay/Menus/StealModal";
 import Dice from "../Components/Gameplay/Gameboard/Dice";
 import { BackendRequest } from "../Enums/requests";
+import EndGameModal from "../Components/Gameplay/Menus/EndGameModal";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
@@ -41,6 +42,7 @@ export interface GameBoardActionsDisplay {
 const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
+  const [endGameModalEnabled, setEndGameModal] = useState(false);
   const [showPotenialBuildOptions, setshowPotenialBuildOptions] = useState<GameBoardActionsDisplay>({roads: false, settlements: false})
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
@@ -101,6 +103,10 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
     if (newState.client.hasKnight) {
       setStealModal(true);
     }
+    
+    if(newState.winner){
+      setEndGameModal(true);
+    }
 
     setCurrentPlayer(newState.client.color === newState.current_player.color);
   });
@@ -144,6 +150,7 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   <div>
     <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} callBackend={callBackend}/>
     <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} callBackend={callBackend}/>
+    { endGameModalEnabled && <EndGameModal setEndGameModal={setEndGameModal} endGameModalState={endGameModalEnabled} gamestate={state} callBackend={callBackend}/>}
       <div className="background-container">
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={players_to_render}/></div>
