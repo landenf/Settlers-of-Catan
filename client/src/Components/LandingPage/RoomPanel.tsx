@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../Styles/LandingAuth/JoinRoomWithCode.css";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../../Enums/requests";
@@ -74,7 +74,7 @@ const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoo
       <div className="header-box">
         <p className="header-text"> ROOM: {state.id}</p>
       </div>
-      <div className="main-content-box">
+      <div className={("main-content-box")}>
         {players.map((player) => {
 
           const color = player.color === "red" ? "Red" :

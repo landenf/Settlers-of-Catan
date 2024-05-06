@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Styles/LandingAuth/LandingPage.css";
 import MenuToggleComponent from "../Components/LandingPage/MenuToggleComponent";
 import { MockLimitedGameState } from "../StaticData/GameStateStatic";
@@ -8,9 +8,13 @@ import RoomPanel from "../Components/LandingPage/RoomPanel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import InstructionsModal from "../Components/LandingPage/InstructionsModal";
+import PlayerStatisticsComponent from "../Components/LandingPage/PlayerStatisticsComponent";
+import { useNavigate } from "react-router-dom";
 
 interface LandingProps {
-  backend: WebSocket;
+  backend: WebSocket,
+  state: LimitedSession,
+  setState: (newState: LimitedSession) => void
 }
 
 /**
@@ -20,11 +24,17 @@ interface LandingProps {
  *
  * @returns Landing page for the user.
  */
-const LandingPage: React.FC<LandingProps> = ({ backend }) => {
-  const [state, setState] = useState(MockLimitedGameState);
+const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
   const [roomPanelOpen, setOpenPanel] = useState(false);
   const [buttonsActive, setButtonsActive] = useState(true);
   const [instructionsModalEnabled, setInstructionsModal] = useState(false);
+  const navigate = useNavigate(); // For navigation
+
+  useEffect(() => {
+    if (state.isStarted) {
+      navigate("/session")
+    }
+  })
 
   const updateInstructionsModal = () => {
     setInstructionsModal(!instructionsModalEnabled);
@@ -73,14 +83,10 @@ const LandingPage: React.FC<LandingProps> = ({ backend }) => {
           setButtonsActive={setButtonsActive}
         />
       </div>
-      {roomPanelOpen && (
-        <RoomPanel
-          state={state}
-          callBackend={callBackend}
-          setRoomPanel={setOpenPanel}
-          setButtonsActive={setButtonsActive}
-        />
-      )}
+
+      {!roomPanelOpen && (<PlayerStatisticsComponent/>)}
+      {(roomPanelOpen && <RoomPanel state={state} callBackend={callBackend} setRoomPanel={setOpenPanel} 
+        setButtonsActive={setButtonsActive}/>)}
     </div>
   );
 };
