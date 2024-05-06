@@ -148,7 +148,7 @@ const GameSession: React.FC<StateProp> = (props: StateProp) => {
   <div>
     <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} callBackend={callBackend}/>
     <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} callBackend={callBackend}/>
-    <EndGameModal setEndGameModal={setEndGameModal} endGameModalState={endGameModalEnabled} gamestate={state} callBackend={callBackend}></EndGameModal>
+    { endGameModalEnabled && <EndGameModal setEndGameModal={setEndGameModal} endGameModalState={endGameModalEnabled} gamestate={state} callBackend={callBackend}/>}
       <div className="background-container">
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={players_to_render}/></div>
