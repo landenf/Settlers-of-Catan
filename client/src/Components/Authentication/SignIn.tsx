@@ -19,15 +19,15 @@ const SignInComponent: React.FC<SignInComponentProps> = ({ onSwitch }) => {
       const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
       console.log(userCredential.user);
       setErrorMessage('');
-      navigate('/home'); // Move this inside the try block to ensure it only happens on success
-    } catch (error: any) { // Catching 'any' because Firebase errors are of type FirebaseError, which is not included by default
+      navigate('/home'); 
+    } catch (error: any) { 
       if (error.code === 'auth/invalid-login-credentials') {
         setErrorMessage('Invalid login credentials');
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
       } else {
-        alert(error.code); // Consider replacing alert with a more user-friendly error handling strategy
+        alert(error.code);
       }
     }
   };
