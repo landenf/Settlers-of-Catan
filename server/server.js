@@ -110,6 +110,9 @@ function handleRequest(request, body) {
         case "handleReady":
             gameplay.handleReady(body.state.id, body.state.client)
             break;
+        case "startGame":
+            gameplay.startGame(body.state.id);
+            break;
         default:
             throw new InvalidEndpointError(`Endpoint "${request}" is not valid!`);
     }
