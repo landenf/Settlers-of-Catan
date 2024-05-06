@@ -107,6 +107,8 @@ const player1 = {
     },
     hasKnight: false,
     knightCards: 0,
+    hasLargestArmy: false,
+    hasMostRoads: false,
     ready: false
 };
 const player2 = {
@@ -207,6 +209,8 @@ const player2 = {
     },
     hasKnight: false,
     knightCards: 0,
+    hasLargestArmy: false,
+    hasMostRoads: false,
     ready: false
 };
 const player3 = {
@@ -306,6 +310,8 @@ const player3 = {
         }
     },
     hasKnight: false,
+    hasLargestArmy: false,
+    hasMostRoads: false,
     knightCards: 0,
     ready: false
 };

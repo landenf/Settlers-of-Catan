@@ -99,7 +99,9 @@ import { Player } from "@shared/types";
         },
         hasKnight: false,
         knightCards: 0,
-        ready: false
+        ready: false,
+        hasLargestArmy: false,
+        hasMostRoads: false
     };
     const player2: Player = {
         id: 0,
@@ -199,7 +201,9 @@ import { Player } from "@shared/types";
         },
         hasKnight: false,
         knightCards: 0,
-        ready: false
+        ready: false,
+        hasLargestArmy: false,
+        hasMostRoads: false
     };
     const player3: Player = {
         id: 0,
@@ -299,6 +303,8 @@ import { Player } from "@shared/types";
         },
         hasKnight: false,
         knightCards: 0,
-        ready: false
+        ready: false,
+        hasLargestArmy: false,
+        hasMostRoads: false
     };
     export const players = [player1]

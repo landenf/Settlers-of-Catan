@@ -13,8 +13,6 @@ var null_game: GameState = {
      diceNumber: { number1: 1, number2: 1 },
      players: players,
      current_player: players[0],
-     current_largest_army: "",
-     current_longest_road: "",
      gameboard: {
           tiles: tiles
      },
@@ -180,13 +178,15 @@ function rollDice(sessionId: number) {
 /**
  * Determines if a player receives a knight or vp.
  */
-function determineDevBenefit(player: Player) {
+function determineDevBenefit(player: Player, sessionId: number) {
      const probability = Math.floor(Math.random() * 10) + 1;
      if (probability < 4) {
           player.vp++;
      } else {
           player.hasKnight = true;
           player.knightCards++;
+		  awardLargestArmy(sessionId);
+
      }
 }
 
@@ -213,7 +213,7 @@ function buyDevCard(sessionId: number) {
           player.hand["wheat"] = player.hand["wheat"] - 1;
           player.hand["stone"] = player.hand["stone"] - 1;
 
-          determineDevBenefit(player);
+          determineDevBenefit(player, sessionId);
           updateResourceCounts(sessionId);
      }
 
@@ -389,6 +389,7 @@ function buyRoad(road: road_meta_data, sessionId: number) {
           
      }
 
+     awardMostRoads(sessionId);
      return getGamestate(sessionId);
 }
 
@@ -966,6 +967,57 @@ function vertexBetweenRoads(edge1: number, edge2: number){
 }
 
 /**
+ * Awards the most roads to the current player if they have the most roads owned. Updates their victory points accordingly.
+ */
+function awardMostRoads(sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)];
+     const player = current_game.current_player
+
+     if(current_game.current_longest_road == null){
+          current_game.current_longest_road = player;
+		  player.hasMostRoads = true;
+     } else {
+          if(current_game.current_longest_road != null && player.roads_owned.length > current_game.current_longest_road.roads_owned.length){
+			current_game.players.forEach(player => {
+				if (player.hasMostRoads) {
+					player.hasMostRoads = false;
+					player.vp--;
+				}
+		   });
+            current_game.current_longest_road = player;
+            player.vp++;
+			player.hasMostRoads = true;
+          }
+     }
+}
+
+/**
+ * Awards largest army to the current player if they have the largest army. Updates their victory points accordingly.
+ */
+function awardLargestArmy(sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)];
+     const player = current_game.current_player
+     if(current_game.current_largest_army == undefined){
+          current_game.current_largest_army = player;
+		  current_game.current_largest_army.vp++;
+		  player.hasLargestArmy = true;
+     } else {
+        if(current_game.current_largest_army != undefined && player.knightCards > current_game.current_largest_army.knightCards){    
+
+			current_game.players.forEach(player => {
+				if (player.hasLargestArmy) {
+					player.hasLargestArmy = false;
+					player.vp--;
+				}
+		   });
+       		current_game.current_largest_army = player;
+       		current_game.current_largest_army.vp++;
+			player.hasLargestArmy = true;
+        }
+     }
+}
+
+/**
  * Checks each player's victory points and sets the game state's winner
  * property accordingly.
  */
@@ -1041,6 +1093,8 @@ function translateToLimitedState(sessionId: number) {
                image: player.image,
                color: player.color,
                vp: player.vp,
+			   hasLargestArmy: player.hasLargestArmy,
+			   hasMostRoads: player.hasMostRoads,
                resources: player.resources,
                ready: player.ready
           })
@@ -1052,6 +1106,8 @@ function translateToLimitedState(sessionId: number) {
           image: current_game.current_player.image,
           color: current_game.current_player.color,
           vp: current_game.current_player.vp,
+		  hasLargestArmy: current_game.current_player.hasLargestArmy,
+		  hasMostRoads: current_game.current_player.hasMostRoads,
           resources: current_game.current_player.resources,
           ready: current_game.current_player.ready
      }
@@ -1242,6 +1298,7 @@ function findPlayerInGame(sessionId: number, clientId: number) {
      });
      return isInGame
 }
+
 
 /**
  * Finds the player who just tried to join a game, but wasn't able to 
