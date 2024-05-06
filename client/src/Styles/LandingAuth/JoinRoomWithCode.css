@@ -43,6 +43,11 @@
   margin: 0 auto;
 }
 
+.taller-box {
+  top: 15vh;
+  height: 65vh;
+}
+
 .players-in-room {
   color: #fdfdfd;
   margin: 0 auto;
@@ -64,6 +69,7 @@
   display: flex;
   margin-top: 2%;
 }
+
 .leave-button,
 .ready-button {
   width: 9vw;
