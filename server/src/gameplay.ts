@@ -2,7 +2,7 @@ import { GameState, Player, road_keys, community_meta_data, road_meta_data, Limi
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
-import { toUSVString } from "util";
+//import { toUSVString } from "util";
 import { assignPlayerColor, newGame, reassignPlayers } from "./lobby";
 
 /**
@@ -107,6 +107,13 @@ function findGameIndexById(sessionId: number) {
      return index;
 }
  
+
+function initialRoundRoad(road_data: road_meta_data, sessionId: number){
+	const current_game = all_games[findGameIndexById(sessionId)];
+
+
+}
+
 /**
  * Function to roll the dice and distribute resources based upon the result.
  */
@@ -346,49 +353,62 @@ function buyRoad(road: road_meta_data, sessionId: number) {
 
           current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
-          //add all potential roads and neighboring potential roads and keep track of possible roads
-          const addedPotentialRoads: triad_leg[] = [];
-          const possible_roads: triad_leg[] = [];
-
-          let tileTriads = potentialUpdatesRoad(road, sessionId);
-          addedPotentialRoads.push(...tileTriads); 
-          possible_roads.push(...checkAroundRoads(road))
-
-          // code to add the road in the representation of the neighboring tile. For example, edge 3 
-          // on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
-          // the z-index of rendering, we must render the road on both.
-          const neighbor_index = edge_neighbors[road.tile_index as NeighborsKey][road.edge];
-          if(neighbor_index != -1 ){
-               const neighbor_edge = edge_neighbors[neighbor_index as NeighborsKey].indexOf(road.tile_index);
-               const neighbor_road: road_meta_data = {
-                    tile_index: neighbor_index,
-                    edge: neighbor_edge as road_keys
-               }
-               current_game.gameboard.tiles[neighbor_road.tile_index].road_spaces[neighbor_road.edge] = player.color;
-               player.roads_owned.push(neighbor_road);
-               let NeighborTriads = potentialUpdatesRoad(neighbor_road, sessionId);
-               addedPotentialRoads.push(...NeighborTriads); 
-               possible_roads.push(...checkAroundRoads(neighbor_road))
-          } else {
-               findPotentialsOnBoardEdges(road, sessionId);
-               possible_roads.push(checkRoadsAroundOnEdges(road, sessionId))
-          }
-
-          // add potential settlements by checking all roads around the bought road
-          if (possible_roads.length == 2) {
-               checkForPotentialSettlements([possible_roads[0], possible_roads[1]], sessionId)
-          }
-          if (possible_roads.length == 3) {
-               checkForPotentialSettlementsOnEdge(possible_roads, sessionId)
-          }
-          if (possible_roads.length == 4) {
-               checkForPotentialSettlements([possible_roads[0], possible_roads[3]], sessionId)
-               checkForPotentialSettlements([possible_roads[1], possible_roads[2]], sessionId)
-          }
-          
+          addAllPotentialsWithRoad(road, sessionId);
      }
 
      return getGamestate(sessionId);
+}
+
+/**
+ * Helper function to add all potentials when buying a road.
+ * 
+ * @param road road meta data
+ * @param player the current player whos potentials you are updating
+ */
+function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
+	const current_game = all_games[findGameIndexById(sessionId)]
+	const player = current_game.current_player;
+
+
+    //add all potential roads and neighboring potential roads and keep track of possible roads
+    const addedPotentialRoads: triad_leg[] = [];
+    const possible_roads: triad_leg[] = [];
+     
+    let tileTriads = potentialUpdatesRoad(road, sessionId);
+    addedPotentialRoads.push(...tileTriads); 
+    possible_roads.push(...checkAroundRoads(road))
+     
+    // code to add the road in the representation of the neighboring tile. For example, edge 3 
+	// on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
+    // the z-index of rendering, we must render the road on both.
+    const neighbor_index = edge_neighbors[road.tile_index as NeighborsKey][road.edge];
+    if(neighbor_index != -1 ){
+    	const neighbor_edge = edge_neighbors[neighbor_index as NeighborsKey].indexOf(road.tile_index);
+		const neighbor_road: road_meta_data = {
+			tile_index: neighbor_index,
+			edge: neighbor_edge as road_keys
+		}
+		current_game.gameboard.tiles[neighbor_road.tile_index].road_spaces[neighbor_road.edge] = player.color;
+		player.roads_owned.push(neighbor_road);
+		let NeighborTriads = potentialUpdatesRoad(neighbor_road, sessionId);
+		addedPotentialRoads.push(...NeighborTriads); 
+		possible_roads.push(...checkAroundRoads(neighbor_road))
+    } else {
+        findPotentialsOnBoardEdges(road, sessionId);
+        possible_roads.push(checkRoadsAroundOnEdges(road, sessionId))
+    }
+     
+    // add potential settlements by checking all roads around the bought road
+    if (possible_roads.length == 2) {
+        checkForPotentialSettlements([possible_roads[0], possible_roads[1]], sessionId)
+    }
+    if (possible_roads.length == 3) {
+        checkForPotentialSettlementsOnEdge(possible_roads, sessionId)
+    }
+    if (possible_roads.length == 4) {
+        checkForPotentialSettlements([possible_roads[0], possible_roads[3]], sessionId)
+        checkForPotentialSettlements([possible_roads[1], possible_roads[2]], sessionId)
+    }
 }
 
 /**
@@ -964,11 +984,6 @@ function vertexBetweenRoads(edge1: number, edge2: number){
      }
 }
 
-function initialRound(road_data: road_meta_data, sessionId: number){
-     const current_game = all_games[findGameIndexById(sessionId)];
-
-
-}
 
 /**
  * Checks each player's victory points and sets the game state's winner
