@@ -153,3 +153,5 @@ wss.on('connection', (ws, req) => {
     ws.on('close', () => {
     });
 });
+
+module.exports = app;
