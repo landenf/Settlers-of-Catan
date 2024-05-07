@@ -107,6 +107,8 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         },
         hasKnight: false,
         knightCards: 0,
+        hasLargestArmy: false,
+        hasMostRoads: false,
         ready: false
     };
     const player2: Player = {
@@ -207,6 +209,8 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         },
         hasKnight: false,
         knightCards: 0,
+        hasLargestArmy: false,
+        hasMostRoads: false,
         ready: false
     };
     const player3: Player = {
@@ -306,6 +310,8 @@ import { GameState, Player, road_meta_data } from "@shared/types";
             }
         },
         hasKnight: false,
+        hasLargestArmy: false,
+        hasMostRoads: false,
         knightCards: 0,
         ready: false
     };

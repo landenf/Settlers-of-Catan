@@ -32,6 +32,17 @@ export type Player = {
     vp: number;
 
     /**
+     * Whether this player has the largest army.
+     */
+    hasLargestArmy: boolean;
+
+
+    /**
+    * Whether this player has most roads.
+    */
+    hasMostRoads: boolean;
+
+    /**
      * A dictionary of resources cards currently held in the player's hand.
      */
     hand: resource_counts;
@@ -151,6 +162,17 @@ export type LimitedPlayer = {
      * The player's total count of victory points.
      */
     vp: number;
+
+    /**
+     * Whether this player has the largest army.
+     */
+        hasLargestArmy: boolean;
+
+
+    /**
+    * Whether this player has most roads.
+    */
+    hasMostRoads: boolean;
 
     /**
      * Total resources held by a player.
@@ -370,12 +392,12 @@ export type GameState = {
     /**
      * The player who currently holds the largest army card.
      */
-    current_largest_army: string
+    current_largest_army?: Player
 
     /**
      * The player who currently holds the longest road card.
      */
-    current_longest_road: string
+    current_longest_road?: Player
 
     /**
      * The current gameboard with its representations of player buildings
@@ -449,12 +471,12 @@ export type LimitedSession = {
     /**
      * The player who currently holds the largest army card.
      */
-    current_largest_army: string
+    current_largest_army?: LimitedPlayer
 
     /**
      * The player who currently holds the longest road card.
      */
-    current_longest_road: string
+    current_longest_road?: LimitedPlayer
 
     /**
      * The current gameboard with its representations of player buildings
