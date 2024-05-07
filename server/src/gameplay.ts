@@ -978,10 +978,11 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
  */
 function findRelativeNeighboringVertexFromVertex (community: community_meta_data){
      //given tile 5 vertex 3
-     let tileOne = edge_neighbors[community.tile_index as NeighborsKey][community.vertex - 1];
+     let tileOneVertex = (community.vertex == 0) ? edge_neighbors[community.tile_index as NeighborsKey].length - 1 : community.vertex - 1;
+     let tileOne = edge_neighbors[community.tile_index as NeighborsKey][tileOneVertex];
      let tileTwo = edge_neighbors[community.tile_index as NeighborsKey][community.vertex];
      let returnCommuntiies : community_meta_data[] = []
-     
+
      if(tileOne != -1){
           //for tile one find the edge that touches the origional tile
           let tileOneEdge = edge_neighbors[tileOne as NeighborsKey].indexOf(community.tile_index);
@@ -1405,7 +1406,6 @@ function updateStarted(sessionId: number) {
 function startGame(sessionId: number) {
      const current_game = all_games[findGameIndexById(sessionId)]
      current_game.isStarted = true;
-     console.log(current_game.roundNumber);
      return getGamestate(sessionId)
 }
 
