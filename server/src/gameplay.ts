@@ -1071,7 +1071,6 @@ function awardLargestArmy(sessionId: number){
  * property accordingly.
  */
 function checkWinState(sessionId: number) {
-
      const current_game = all_games[findGameIndexById(sessionId)]
 
      var winner: Player | undefined = undefined;
@@ -1172,7 +1171,8 @@ function translateToLimitedState(sessionId: number) {
           isValid: current_game.isValid,
           canStart: current_game.canStart,
           isStarted: current_game.isStarted,
-		roundNumber: current_game.roundNumber
+		roundNumber: current_game.roundNumber,
+          winner: current_game.winner
      }
      return limited_state
      
