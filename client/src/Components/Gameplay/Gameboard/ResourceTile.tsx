@@ -124,10 +124,8 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                     vertex: i
                 });
             }
-
             let isValidPotientialRoadEdge = gamestate.client.potential_roads.some(road => 
                 road.tile_index === index && road.edge === i);
-
             newRoads.push({
                 startX: startX, 
                 startY: startY, 
