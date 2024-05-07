@@ -35,7 +35,7 @@ const PlayerBarComponent = (props: PlayerBarProp) => {
             hasLargestArmy={player.hasLargestArmy}
             hasMostRoads={player.hasMostRoads}
             resources={player.resources}
-            ready={player.ready}        
+            ready={player.ready}
             />
 
     );
