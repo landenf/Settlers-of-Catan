@@ -64,12 +64,12 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   }
   
   const updatePotentialSettlements = (selected: string) => {
-    if (selected === 'settlements') {
+    if (selected == 'settlements') {
       setshowPotenialBuildOptions(prevState => ({
         roads: false,  
         settlements: !prevState.settlements  // Toggle settlements
       }));
-    } else if (selected === 'roads') {
+    } else if (selected == 'roads') {
       setshowPotenialBuildOptions(prevState => ({
         roads: !prevState.roads,  // Toggle roads
         settlements: false  

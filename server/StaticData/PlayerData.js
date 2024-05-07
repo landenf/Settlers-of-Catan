@@ -26,7 +26,7 @@ const player1 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [road_one, road_two],
+    potential_roads: [],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -128,7 +128,7 @@ const player2 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [road_one, road_two],
+    potential_roads: [],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -230,7 +230,7 @@ const player3 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [road_one, road_two],
+    potential_roads: [],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,

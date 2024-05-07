@@ -184,6 +184,8 @@ export type LimitedPlayer = {
      * ready to start the game.
      */
     ready: boolean;
+
+
 }
 
 /**

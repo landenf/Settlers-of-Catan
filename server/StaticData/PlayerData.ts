@@ -26,7 +26,7 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
+        potential_roads: [],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -128,7 +128,7 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
+        potential_roads: [],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,
@@ -230,7 +230,7 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         communities_owned: [],
         potential_communities: [],
         roads_owned: [],
-        potential_roads: [road_one as road_meta_data, road_two as road_meta_data],
+        potential_roads: [],
         player_stats: {
             total_wins: 0,
             largest_armies: 0,

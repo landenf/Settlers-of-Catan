@@ -51,6 +51,7 @@ interface InitialPlacementMenuComponentProps {
     state: state
     }
     
+    
     const handleButtonClick = async (action: string, body: BackendRequest) => {
 
         callBackend(action, body)

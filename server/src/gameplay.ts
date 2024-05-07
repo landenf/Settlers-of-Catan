@@ -110,18 +110,18 @@ function findGameIndexById(sessionId: number) {
 
 function initialRoundRoad(road: road_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)];
-	const player = current_game.current_player;
 	const roadSpaceAvailable = current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] === "white";
 	if(roadSpaceAvailable){
 		addingRoad(road, sessionId);
 	}
+
+     return getGamestate(sessionId);
 }
 
 function initialRoundSettlement(settlement: community_meta_data, sessionId: number){
-	const current_game = all_games[findGameIndexById(sessionId)]
-	const player = current_game.current_player;
-
 	addingSettlement(settlement, sessionId);
+
+     return getGamestate(sessionId);
 }
 /**
  * Function to roll the dice and distribute resources based upon the result.
@@ -314,8 +314,8 @@ function compareRoads(road1: road_meta_data, road2: road_meta_data) {
 
      let sameRoad = false;
 
-     if (road1.edge === road2.edge) {
-          if (road1.tile_index === road1.tile_index) {
+     if (road1.edge == road2.edge) {
+          if (road1.tile_index == road2.tile_index) {
                sameRoad = true;
           }
      }
@@ -354,7 +354,7 @@ function buyRoad(road: road_meta_data, sessionId: number) {
           player.hand["brick"] = player.hand["brick"] - 1;
           player.hand["wood"] = player.hand["wood"] - 1;
 
-		  addingRoad(road, sessionId);
+		addingRoad(road, sessionId);
      }
 
      awardMostRoads(sessionId);
@@ -373,16 +373,17 @@ function addingRoad(road: road_meta_data, sessionId: number){
 	const player = current_game.current_player;
    	player.roads_owned.push(road);
 
-	for (let i = 0; i < current_game.players.length; i++) {
-		 const loop_player = current_game.players[i]
-		 if (loop_player.color !== player.color) {
-			  loop_player.potential_roads = loop_player.potential_roads.filter(el_road => compareRoads(el_road, road))
-		 }
-	}
-
 	current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
+     current_game.players.forEach(loop_player => {
+          for (let i = 0; i < loop_player.potential_roads.length; i++){
+               if (loop_player.id != player.id && compareRoads(loop_player.potential_roads[i], road)){
+                    loop_player.potential_roads.splice(i, 1);
+               }
+          }
+     });
 	addAllPotentialsWithRoad(road, sessionId);
+
 }
 /**
  * Helper function to add all potentials when buying a road.
@@ -400,13 +401,14 @@ function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
     const possible_roads: triad_leg[] = [];
      
     let tileTriads = potentialUpdatesRoad(road, sessionId);
+
     addedPotentialRoads.push(...tileTriads); 
     possible_roads.push(...checkAroundRoads(road))
-     
     // code to add the road in the representation of the neighboring tile. For example, edge 3 
 	// on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
     // the z-index of rendering, we must render the road on both.
     const neighbor_index = edge_neighbors[road.tile_index as NeighborsKey][road.edge];
+
     if(neighbor_index != -1 ){
     	const neighbor_edge = edge_neighbors[neighbor_index as NeighborsKey].indexOf(road.tile_index);
 		const neighbor_road: road_meta_data = {
@@ -422,7 +424,7 @@ function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
         findPotentialsOnBoardEdges(road, sessionId);
         possible_roads.push(checkRoadsAroundOnEdges(road, sessionId))
     }
-     
+
     // add potential settlements by checking all roads around the bought road
     if (possible_roads.length == 2) {
         checkForPotentialSettlements([possible_roads[0], possible_roads[1]], sessionId)
@@ -546,7 +548,7 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
          tile_index: road.tile_index,
          edge: edgeNext as road_keys
      };
- 
+
      // Add and check for previous road if not already present
      if (player.potential_roads.indexOf(roadPrev) < 0 && current_game.gameboard.tiles[roadPrev.tile_index].road_spaces[roadPrev.edge] == 'white') {
           player.potential_roads.push(roadPrev);
@@ -580,6 +582,7 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
 function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number){
      const current_game = all_games[findGameIndexById(sessionId)]
      const player = current_game.current_player;
+
      //if there is a neighbor 
      let neighbor = edge_neighbors[road.tile_index as road_keys][road.edge];
      if(neighbor != -1){
@@ -589,12 +592,6 @@ function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number)
                edge: newEdge as road_keys
           }
           player.potential_roads.push(neighborPotentialRoad)
-          for (let i = 0; i < current_game.players.length; i++) {
-               const loop_player = current_game.players[i]
-               if (loop_player.color !== player.color) {
-                    loop_player.potential_roads = loop_player.potential_roads.filter(el_road => compareRoads(el_road, road))
-               }
-          }
      }
 }
 
@@ -904,7 +901,7 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
           player.hand["wood"] = player.hand["wood"] - 1;
           player.hand["sheep"] = player.hand["sheep"] - 1;
           player.hand["wheat"] = player.hand["wheat"] - 1;
-		  addingSettlement(settlement, sessionId);
+		addingSettlement(settlement, sessionId);
 
      }
      return getGamestate(sessionId);
@@ -915,7 +912,7 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
 	const player = current_game.current_player;
 
 	player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
-          
+     player.vp++;     
           
 	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
 
@@ -1120,7 +1117,6 @@ function passTurn(sessionId: number) {
 function switchClient(player_id: string, sessionId: number) {
 
      const current_game = all_games[findGameIndexById(sessionId)]
-
      let player_index = 0;
      for (let i = 0; i < current_game.players.length; i++) {
           if (player_id == current_game.players[i].id) {
@@ -1137,7 +1133,7 @@ function switchClient(player_id: string, sessionId: number) {
 function translateToLimitedState(sessionId: number) {
 
      const current_game = all_games[findGameIndexById(sessionId)]
-
+     
      var limited_players: LimitedPlayer[] = []
      current_game.players.forEach(player => {
           limited_players.push({
@@ -1149,7 +1145,7 @@ function translateToLimitedState(sessionId: number) {
 			   hasLargestArmy: player.hasLargestArmy,
 			   hasMostRoads: player.hasMostRoads,
                resources: player.resources,
-               ready: player.ready
+               ready: player.ready,
           })
      });
 
@@ -1162,9 +1158,8 @@ function translateToLimitedState(sessionId: number) {
 		  hasLargestArmy: current_game.current_player.hasLargestArmy,
 		  hasMostRoads: current_game.current_player.hasMostRoads,
           resources: current_game.current_player.resources,
-          ready: current_game.current_player.ready
+          ready: current_game.current_player.ready,
      }
-
      var limited_state: LimitedSession = {
           id: current_game.id,
           client: current_game.client,
@@ -1177,9 +1172,8 @@ function translateToLimitedState(sessionId: number) {
           isValid: current_game.isValid,
           canStart: current_game.canStart,
           isStarted: current_game.isStarted,
-		  roundNumber: current_game.roundNumber
+		roundNumber: current_game.roundNumber
      }
-
      return limited_state
      
 }
@@ -1415,6 +1409,7 @@ function startGame(sessionId: number) {
  * @returns an updated, limited gamestate
  */
 function getGamestate(sessionId: number) {
+     const current_game = all_games[findGameIndexById(sessionId)];
      updateResourceCounts(sessionId);
      checkWinState(sessionId);
      updateStarted(sessionId);
