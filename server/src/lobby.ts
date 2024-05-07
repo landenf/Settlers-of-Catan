@@ -16,7 +16,8 @@ var null_game: GameState = {
      },
      isValid: false,
      isStarted: false,
-     canStart: false
+     canStart: false,
+     roundNumber: 1
 }
 
 /**
@@ -62,7 +63,8 @@ export function newGame(all_games: GameState[], host: Player) {
          },
          isValid: true,
          isStarted: false,
-         canStart: false
+         canStart: false,
+         roundNumber: 1
     }
 
     return gamestate;
