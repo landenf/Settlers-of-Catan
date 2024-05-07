@@ -316,7 +316,6 @@ function compareRoads(road1: road_meta_data, road2: road_meta_data) {
 
      if (road1.edge == road2.edge) {
           if (road1.tile_index == road2.tile_index) {
-               console.log("same roads found");
                sameRoad = true;
           }
      }
@@ -376,6 +375,13 @@ function addingRoad(road: road_meta_data, sessionId: number){
 
 	current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
+     current_game.players.forEach(loop_player => {
+          for (let i = 0; i < loop_player.potential_roads.length; i++){
+               if (loop_player.id != player.id && compareRoads(loop_player.potential_roads[i], road)){
+                    loop_player.potential_roads.splice(i, 1);
+               }
+          }
+     });
 	addAllPotentialsWithRoad(road, sessionId);
 
 }
@@ -586,16 +592,6 @@ function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number)
                edge: newEdge as road_keys
           }
           player.potential_roads.push(neighborPotentialRoad)
-
-          current_game.players.forEach(loop_player => {
-               for (let i = 0; i < loop_player.potential_roads.length; i++){
-                    if (loop_player.id != player.id && compareRoads(loop_player.potential_roads[i], road)){
-                         console.log("problematic road:");
-                         console.log(loop_player.potential_roads[i]);
-                         loop_player.potential_roads.splice(i, 1);
-                    }
-               }
-          });
      }
 }
 
