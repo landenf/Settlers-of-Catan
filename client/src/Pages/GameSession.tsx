@@ -48,6 +48,8 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
+  const [selectedRoad, setSelectedRoad] = useState(false);
+  const [selectedSettlement, setSelectedSettlement] = useState(false);
 
   const updateState = (newState: LimitedSession) => {
     setState(newState);  
@@ -91,6 +93,8 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   const resetTurn = () => {
     setRolled(false);
     setBoughtDev(false);
+    setSelectedRoad(false);
+    setSelectedSettlement(false);
   }
 
   /**
@@ -129,6 +133,14 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
 
     if (type === "buyDevCard") {
       updateBoughtDev(true);
+    }
+
+    if (type === "initialRoadPlacement"){
+      setSelectedRoad(true);
+    }
+
+    if (type === "initialSettlementPlacement"){
+      setSelectedSettlement(true);
     }
 
     if (type === "passTurn") {
@@ -176,9 +188,8 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
             <div className={"ActionsBarComponent"}>
               <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
               boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}/>
-            </div>
-            <div className={"InitialRoundMenuComponent"}>
-              <InitialPlacementMenuComponent state={state} callBackend={callBackend} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}/>
+              
+              <InitialPlacementMenuComponent state={state} callBackend={callBackend} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements} selectedRoad={selectedRoad} selectedSettlement={selectedSettlement}/>
             </div>
         </div>
       </div>   

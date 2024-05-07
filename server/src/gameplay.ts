@@ -383,6 +383,7 @@ function addingRoad(road: road_meta_data, sessionId: number){
 	current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
 
 	addAllPotentialsWithRoad(road, sessionId);
+     console.log(player.potential_roads);
 }
 /**
  * Helper function to add all potentials when buying a road.

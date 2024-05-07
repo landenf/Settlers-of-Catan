@@ -29,10 +29,20 @@ interface InitialPlacementMenuComponentProps {
      * Updates whether or not potential settlements or roads should be displayed.
      */
     updatePotentialSettlements: (selected: string) => void;
+
+    /**
+     * This is true if a player has selected a road to place.
+     */
+    selectedRoad: boolean;
+
+    /**
+     * This is true if a player has selected a settlement to place.
+     */
+    selectedSettlement: boolean;
   
   }
 
-  const InitialPlacementMenuComponent: React.FC<InitialPlacementMenuComponentProps> = ({ state, callBackend, isCurrentPlayer, updatePotentialSettlements }) => {
+  const InitialPlacementMenuComponent: React.FC<InitialPlacementMenuComponentProps> = ({ state, callBackend, isCurrentPlayer, updatePotentialSettlements, selectedRoad, selectedSettlement }) => {
       /**
     * A null body with the gamestate. This'll probably be removed before
     * heading onto production.
@@ -47,16 +57,14 @@ interface InitialPlacementMenuComponentProps {
       };
     
     return (
-        <div aria-label="initial-bar" className={("absolute-container " + ((isCurrentPlayer && (state.roundNumber != 0))  ? "" : "disabled"))}>
+      <div aria-label="initial-bar" className={("absolute-container " + ((isCurrentPlayer && (state.roundNumber != 0))  ? "" : "disabled"))}>
         <div className="inner-container">
-        <h1 className="text-bold">BUILD</h1>
-        <div className="line-thick"></div>
-          <p className="button indented-text" aria-label="build-initial-road" onClick={() => updatePotentialSettlements('roads')}>Road</p>
-        <div className="line"></div>
-          <p className="button indented-text" aria-label="build-initial-settlement" onClick={() => updatePotentialSettlements('settlements')}>Settlement</p>
-        <div className="line-thick"></div>
-        <h1 className="button text-bold" aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
-        <div className="line-thick"></div>
+            <p className={"button text-bold " + (selectedRoad ? "buy-dark" : "")} aria-label="build-initial-road" onClick={() => updatePotentialSettlements('roads')}>Road</p>
+          <div className="line"></div>
+            <p className={"button text-bold " + (!selectedRoad || selectedSettlement ? "buy-dark" : "")} aria-label="build-initial-settlement" onClick={() => updatePotentialSettlements('settlements')}>Settlement</p>
+          <div className="line-thick"></div>
+          <h1 className={"button text-bold " + (selectedRoad && selectedSettlement ? "buy-dark" : "")} aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
+          <div className="line-thick"></div>
         </div>
     </div>
 
