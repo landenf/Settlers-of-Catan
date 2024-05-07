@@ -83,7 +83,6 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
             if (userProfileDoc.exists()) {
 
               const user_data = userProfileDoc.data()
-              console.log(user_data)
 
               let photo_URL = user.photoURL
               if (photo_URL == null || photo_URL == "") {
