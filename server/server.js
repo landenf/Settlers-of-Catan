@@ -113,6 +113,12 @@ function handleRequest(request, body) {
         case "startGame":
             gameplay.startGame(body.state.id);
             break;
+        case "initialRoadPlacement":
+            gameplay.initialRoundRoad(body.roadData, body.state.id);
+            break;
+        case "initialSettlementPlacement":
+            gameplay.buyInitialRoundSettlement(body.settlementData, session_id);
+            break;
         default:
             throw new InvalidEndpointError(`Endpoint "${request}" is not valid!`);
     }

@@ -1,6 +1,7 @@
 import GameBoard from "../Components/Gameplay/Gameboard/GameBoard";
 import PlayerBarComponent from "../Components/Gameplay/Player/PlayerBarComponent";
 import ActionsBarComponent from "../Components/Gameplay/Menus/ActionsBarComponent";
+import InitialPlacementMenuComponent from "../Components/Gameplay/Menus/InitialPlacementMenuComponent";
 import Hand from "../Components/Gameplay/Player/Hand"
 import VictoryPointsComponent from "../Components/Gameplay/Player/victoryPointsComponent";
 import React, { Component, useEffect, useState } from "react";
@@ -175,6 +176,9 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
             <div className={"ActionsBarComponent"}>
               <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
               boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}/>
+            </div>
+            <div className={"InitialRoundMenuComponent"}>
+              <InitialPlacementMenuComponent state={state} callBackend={callBackend} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}/>
             </div>
         </div>
       </div>   

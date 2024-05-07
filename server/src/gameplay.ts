@@ -20,7 +20,8 @@ var null_game: GameState = {
      },
      isValid: false,
      canStart: false,
-     isStarted: false
+     isStarted: false,
+	 roundNumber: 1
 }
 
 /**
@@ -109,12 +110,21 @@ function findGameIndexById(sessionId: number) {
 }
  
 
-function initialRoundRoad(road_data: road_meta_data, sessionId: number){
+function initialRoundRoad(road: road_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)];
-
-
+	const player = current_game.current_player;
+	const roadSpaceAvailable = current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] === "white";
+	if(roadSpaceAvailable){
+		addingRoad(road, sessionId);
+	}
 }
 
+function initialRoundSettlement(settlement: community_meta_data, sessionId: number){
+	const current_game = all_games[findGameIndexById(sessionId)]
+	const player = current_game.current_player;
+
+	addingSettlement(settlement, sessionId);
+}
 /**
  * Function to roll the dice and distribute resources based upon the result.
  */
@@ -343,23 +353,36 @@ function buyRoad(road: road_meta_data, sessionId: number) {
           //decrease counts buy one for brick and wood and add the road to the player's list
           player.hand["brick"] = player.hand["brick"] - 1;
           player.hand["wood"] = player.hand["wood"] - 1;
-          player.roads_owned.push(road);
 
-          for (let i = 0; i < current_game.players.length; i++) {
-               const loop_player = current_game.players[i]
-               if (loop_player.color !== player.color) {
-                    loop_player.potential_roads = loop_player.potential_roads.filter(el_road => compareRoads(el_road, road))
-               }
-          }
-
-          current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
-
-          addAllPotentialsWithRoad(road, sessionId);
+		  addingRoad(road, sessionId);
      }
 
      return getGamestate(sessionId);
 }
 
+/**
+ * Adds the road to the current player, and takes away that road from the current player.
+ * 
+ * @param road the road you are adding
+ * @param sessionId 
+ */
+function addingRoad(road: road_meta_data, sessionId: number){
+	const current_game = all_games[findGameIndexById(sessionId)]
+
+	const player = current_game.current_player;
+   	player.roads_owned.push(road);
+
+	for (let i = 0; i < current_game.players.length; i++) {
+		 const loop_player = current_game.players[i]
+		 if (loop_player.color !== player.color) {
+			  loop_player.potential_roads = loop_player.potential_roads.filter(el_road => compareRoads(el_road, road))
+		 }
+	}
+
+	current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] = player.color;
+
+	addAllPotentialsWithRoad(road, sessionId);
+}
 /**
  * Helper function to add all potentials when buying a road.
  * 
@@ -880,68 +903,75 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
           player.hand["wood"] = player.hand["wood"] - 1;
           player.hand["sheep"] = player.hand["sheep"] - 1;
           player.hand["wheat"] = player.hand["wheat"] - 1;
-          player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
-          
-          
-          const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
+		  addingSettlement(settlement, sessionId);
 
-          //todo edge case fix: if there isnt two relative communities then only check one or errors. 
-          //removing potential communities that are on the same vertex.
-          player.potential_communities = player.potential_communities.filter(
-               (community) =>
-               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
-               (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
-               (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
-          );
-
-          // Function to check if a community is within one vertex (plus or minus)
-          const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
-               if (community.tile_index !== reference.tile_index) {
-                   return false;
-               }
-               const absDiff = Math.abs(community.vertex - reference.vertex);
-               return absDiff === 1 || absDiff === 5;
-           };
-          
-          // Get a list of all potential communities within one space (plus or minus one vertex)
-          const potentialCommunitiesToRemove = player.potential_communities.filter(
-               (community) =>
-               isWithinOneVertex(community, settlement) ||
-               isWithinOneVertex(community, relativeCommunities[0]) ||
-               isWithinOneVertex(community, relativeCommunities[1])
-          );
-
-          let allOneAway = findRelativeNeighboringVertexFromVertex(potentialCommunitiesToRemove[0]);
-          //removing those potential communties one away
-          player.potential_communities = player.potential_communities.filter(
-               (community) =>
-               (community.tile_index !== potentialCommunitiesToRemove[0].tile_index || community.vertex !== potentialCommunitiesToRemove[0].vertex) &&
-               (community.tile_index !== allOneAway[0].tile_index || community.vertex !== allOneAway[0].vertex) &&
-               (community.tile_index !== allOneAway[1].tile_index || community.vertex !== allOneAway[1].vertex)
-          );
-        
-          //increase level of the settlement
-          current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].level++;
-          current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].color = player.color; 
-
-          //find neighbor(s)
-          for(let i = -1; i < 1; i++) { 
-               const neighbor_index = edge_neighbors[settlement.tile_index as NeighborsKey][settlement.vertex + i]; // i is -1 and 0 need to get both neighbors
-               if(neighbor_index > -1 ){
-                    const neighbor_vertex = edge_neighbors[neighbor_index as NeighborsKey].indexOf(settlement.tile_index) + (1 + i); // offset vertex's
-                    const neighbor_settlement: community_meta_data = {
-                         tile_index: neighbor_index,
-                         vertex: neighbor_vertex as community_keys
-                    }
-                    let current = current_game.gameboard.tiles[neighbor_settlement.tile_index].community_spaces[neighbor_settlement.vertex]
-                    current.level++;
-                    current.color = player.color;
-               }
-          }
      }
      return getGamestate(sessionId);
 }
 
+function addingSettlement(settlement: community_meta_data, sessionId: number){
+	const current_game = all_games[findGameIndexById(sessionId)]
+	const player = current_game.current_player;
+
+	player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
+          
+          
+	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
+
+	//todo edge case fix: if there isnt two relative communities then only check one or errors. 
+	//removing potential communities that are on the same vertex.
+	player.potential_communities = player.potential_communities.filter(
+		 (community) =>
+		 (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
+		 (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
+		 (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
+	);
+
+	// Function to check if a community is within one vertex (plus or minus)
+	const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
+		 if (community.tile_index !== reference.tile_index) {
+			 return false;
+		 }
+		 const absDiff = Math.abs(community.vertex - reference.vertex);
+		 return absDiff === 1 || absDiff === 5;
+	 };
+	
+	// Get a list of all potential communities within one space (plus or minus one vertex)
+	const potentialCommunitiesToRemove = player.potential_communities.filter(
+		 (community) =>
+		 isWithinOneVertex(community, settlement) ||
+		 isWithinOneVertex(community, relativeCommunities[0]) ||
+		 isWithinOneVertex(community, relativeCommunities[1])
+	);
+
+	let allOneAway = findRelativeNeighboringVertexFromVertex(potentialCommunitiesToRemove[0]);
+	//removing those potential communties one away
+	player.potential_communities = player.potential_communities.filter(
+		 (community) =>
+		 (community.tile_index !== potentialCommunitiesToRemove[0].tile_index || community.vertex !== potentialCommunitiesToRemove[0].vertex) &&
+		 (community.tile_index !== allOneAway[0].tile_index || community.vertex !== allOneAway[0].vertex) &&
+		 (community.tile_index !== allOneAway[1].tile_index || community.vertex !== allOneAway[1].vertex)
+	);
+  
+	//increase level of the settlement
+	current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].level++;
+	current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].color = player.color; 
+
+	//find neighbor(s)
+	for(let i = -1; i < 1; i++) { 
+		 const neighbor_index = edge_neighbors[settlement.tile_index as NeighborsKey][settlement.vertex + i]; // i is -1 and 0 need to get both neighbors
+		 if(neighbor_index > -1 ){
+			  const neighbor_vertex = edge_neighbors[neighbor_index as NeighborsKey].indexOf(settlement.tile_index) + (1 + i); // offset vertex's
+			  const neighbor_settlement: community_meta_data = {
+				   tile_index: neighbor_index,
+				   vertex: neighbor_vertex as community_keys
+			  }
+			  let current = current_game.gameboard.tiles[neighbor_settlement.tile_index].community_spaces[neighbor_settlement.vertex]
+			  current.level++;
+			  current.color = player.color;
+		 }
+	}
+}
 /**
  * Helper function to find relative vertices at the same spot for the other two tiles given one tile. 
  */
@@ -1021,6 +1051,7 @@ function passTurn(sessionId: number) {
      let next_player_index: number;
      if (current_player_index == (current_game.players.length - 1)) {
           next_player_index = 0;
+		  current_game.roundNumber++;
      } else {
           next_player_index = current_player_index + 1;
      }
@@ -1088,7 +1119,8 @@ function translateToLimitedState(sessionId: number) {
           gameboard: current_game.gameboard,
           isValid: current_game.isValid,
           canStart: current_game.canStart,
-          isStarted: current_game.isStarted
+          isStarted: current_game.isStarted,
+		  roundNumber: current_game.roundNumber
      }
 
      return limited_state
@@ -1341,4 +1373,4 @@ function getNullGame() {
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, buySettlement, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame }
+     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement }

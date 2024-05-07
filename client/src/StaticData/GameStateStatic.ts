@@ -19,7 +19,8 @@ export const MockGameState: GameState = {
     },
     isValid: false,
     canStart: false,
-    isStarted: false
+    isStarted: false,
+    roundNumber: 1
 }
 
 export const MockLimitedGameState: LimitedSession = {
@@ -38,5 +39,6 @@ export const MockLimitedGameState: LimitedSession = {
     },
     isValid: false,
     canStart: false,
-    isStarted: false
+    isStarted: false,
+    roundNumber: 1
 }

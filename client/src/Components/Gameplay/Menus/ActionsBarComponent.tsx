@@ -68,7 +68,7 @@ const KnightBody: StealRequest = {
   };
 
   return (
-    <div aria-label="actions-bar" className={("absolute-container " + (isCurrentPlayer ? "" : "disabled"))}>
+    <div aria-label="actions-bar" className={("absolute-container " + ((isCurrentPlayer && state.roundNumber > 2) ? "" : "disabled"))}>
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>

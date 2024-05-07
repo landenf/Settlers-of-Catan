@@ -185,7 +185,11 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
             state: gamestate
         }
 
-        callBackend("buyRoad", body)
+        if(gamestate.roundNumber > 2){
+            callBackend("buyRoad", body)
+        } else {
+            callBackend("initialRoadPlacement", body);
+        }
     };
 
      //handle buying a settlement
@@ -200,8 +204,13 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 settlementData: settlement,
                 state: gamestate
             }
+            if(gamestate.roundNumber > 2){
 
-            callBackend("buySettlement", body)
+                callBackend("buySettlement", body)
+            } else {
+                callBackend("initialSettlementPlacement", body);
+
+            }
         }
     };
 
