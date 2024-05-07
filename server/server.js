@@ -140,6 +140,7 @@ function updateFrontend(session_id) {
 wss.on('connection', (ws, req) => {
     ws.id = client_id;
     client_id++;
+    console.log(ws.id);
 
     ws.on('message', message => {
         let request = JSON.parse(message)
@@ -154,4 +155,8 @@ wss.on('connection', (ws, req) => {
     });
 });
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+  });
+  
 module.exports = app;
