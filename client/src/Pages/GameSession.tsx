@@ -1,6 +1,7 @@
 import GameBoard from "../Components/Gameplay/Gameboard/GameBoard";
 import PlayerBarComponent from "../Components/Gameplay/Player/PlayerBarComponent";
 import ActionsBarComponent from "../Components/Gameplay/Menus/ActionsBarComponent";
+import InitialPlacementMenuComponent from "../Components/Gameplay/Menus/InitialPlacementMenuComponent";
 import Hand from "../Components/Gameplay/Player/Hand"
 import VictoryPointsComponent from "../Components/Gameplay/Player/victoryPointsComponent";
 import React, { Component, useEffect, useState } from "react";
@@ -47,6 +48,8 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   const [rolled, setRolled] = useState(false);
   const [boughtDev, setBoughtDev] = useState(false);
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
+  const [selectedRoad, setSelectedRoad] = useState(false);
+  const [selectedSettlement, setSelectedSettlement] = useState(false);
 
   const updateState = (newState: LimitedSession) => {
     setState(newState);  
@@ -90,6 +93,8 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   const resetTurn = () => {
     setRolled(false);
     setBoughtDev(false);
+    setSelectedRoad(false);
+    setSelectedSettlement(false);
   }
 
   /**
@@ -130,6 +135,14 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
       updateBoughtDev(true);
     }
 
+    if (type === "initialRoadPlacement"){
+      setSelectedRoad(true);
+    }
+
+    if (type === "initialSettlementPlacement"){
+      setSelectedSettlement(true);
+    }
+
     if (type === "passTurn") {
       resetTurn();
     }
@@ -163,6 +176,7 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
                           updateState={ updateState } 
                           showPotenialBuildOptions={showPotenialBuildOptions}  
                           callBackend={callBackend}
+                          selectedRoad={selectedRoad}
                         />
                 </div>
                 <div className="user-info">
@@ -175,6 +189,8 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
             <div className={"ActionsBarComponent"}>
               <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
               boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}/>
+              
+              <InitialPlacementMenuComponent state={state} callBackend={callBackend} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements} selectedRoad={selectedRoad} selectedSettlement={selectedSettlement}/>
             </div>
         </div>
       </div>   

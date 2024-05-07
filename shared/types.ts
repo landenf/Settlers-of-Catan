@@ -420,6 +420,11 @@ export type GameState = {
      * Flag set once the game has started.
      */
     isStarted: boolean;
+
+    /**
+     * The number for which round we are currently on in the game.
+     */
+    roundNumber: number;
 }
 
 /**
@@ -493,4 +498,10 @@ export type LimitedSession = {
      * Flag set once the game has started.
      */
     isStarted: boolean;
+
+
+    /**
+     * The number for which round we are currently on in the game.
+     */
+    roundNumber: number;
 }

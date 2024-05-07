@@ -78,7 +78,7 @@ function handleRequest(request, body) {
             gameplay.buyRoad(body.roadData, body.state.id);
             break;
         case "buySettlement":
-            gameplay.buySettlement(body.settlementData, session_id);
+            gameplay.buySettlement(body.settlementData, body.state.id);
             break;
         case "steal":
             gameplay.handleKnight(body.victim, body.state.id);
@@ -112,6 +112,12 @@ function handleRequest(request, body) {
             break;
         case "startGame":
             gameplay.startGame(body.state.id);
+            break;
+        case "initialRoadPlacement":
+            gameplay.initialRoundRoad(body.roadData, body.state.id);
+            break;
+        case "initialSettlementPlacement":
+            gameplay.initialRoundSettlement(body.settlementData, body.state.id);
             break;
         default:
             throw new InvalidEndpointError(`Endpoint "${request}" is not valid!`);

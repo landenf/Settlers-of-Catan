@@ -43,6 +43,10 @@ interface HexProp {
     showPotenialBuildOptions: GameBoardActionsDisplay;
 
     /**
+     * Boolean to show if a road has been selected already.
+     */
+    selectedRoad: boolean;
+    /**
      * Function to call the backend through the main websocket.
      */
     callBackend: (type: string, body: BackendRequest) => void;
@@ -69,7 +73,7 @@ interface Settlement_Display_Data {
  * @param props information about the tile passed through, typically from the backend server.
  */
 const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateState, 
-    showPotenialBuildOptions, callBackend }) => {
+    showPotenialBuildOptions, selectedRoad, callBackend }) => {
 
 
     /**
@@ -176,16 +180,23 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
     const handleEdgeClick = async (idx: road_keys, e: any) => {
         e.stopPropagation(); 
 
-        const road : road_meta_data = {
-            tile_index: index,
-            edge: idx
-        }
-        const body: RoadRequest = {
-            roadData: road,
-            state: gamestate
+        if(!selectedRoad){
+            const road : road_meta_data = {
+                tile_index: index,
+                edge: idx
+            }
+            const body: RoadRequest = {
+                roadData: road,
+                state: gamestate
+            }
+
+            if(gamestate.roundNumber > 2){
+                callBackend("buyRoad", body)
+            } else {
+                callBackend("initialRoadPlacement", body);
+            }  
         }
 
-        callBackend("buyRoad", body)
     };
 
      //handle buying a settlement
@@ -200,8 +211,13 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 settlementData: settlement,
                 state: gamestate
             }
+            if(gamestate.roundNumber > 2){
 
-            callBackend("buySettlement", body)
+                callBackend("buySettlement", body)
+            } else {
+                callBackend("initialSettlementPlacement", body);
+
+            }
         }
     };
 
