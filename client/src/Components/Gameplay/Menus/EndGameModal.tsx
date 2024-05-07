@@ -58,10 +58,10 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
 
                     await updateDoc(userProfileRef, {
                         GamesWon: storedData.GamesWon + ((gamestate.winner && gamestate.winner.name === storedData.username) ? 1 : 0),
-                        LargestArmy: storedData.LargestArmy + (gamestate.current_largest_army == storedData.username ? 1 : 0), 
-                        MostRoads: storedData.MostRoads + (gamestate.current_longest_road == storedData.username ? 1 : 0), //Refactor when elena changes type to player - add .name to current longest road
+                        LargestArmy: storedData.LargestArmy + ((gamestate.current_largest_army && gamestate.current_largest_army.name == storedData.username) ? 1 : 0),
+                        MostRoads: storedData.MostRoads + ((gamestate.current_longest_road && gamestate.current_longest_road.name == storedData.username) ? 1 : 0), 
                         VictoryPoints: storedData.VictoryPoints + client.vp,
-                        TotalWheat: storedData.VictoryPoints + client.vp,
+                        TotalWheat: storedData.VictoryPoints + client.hand.wheat,
                         TotalStone: storedData.TotalStone + client.hand.stone,
                         TotalWood: storedData.TotalWood + client.hand.wood,
                         TotalBrick: storedData.TotalBrick + client.hand.brick,
