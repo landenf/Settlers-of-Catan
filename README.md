@@ -9,13 +9,15 @@
 - **Mission Statement**: We will build an accessible web application version of the board game Settlers of Catan by providing an intuitive, interactive, and enjoyable game that will provide players with  the opportunity to think strategically while also having fun and competing with friends and strangers. 
 
 ## Tech Stack | Architecture
-  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="50">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" width="50">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" width="50">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" width="50">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" width="50">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Touchicon-180.png" width="50">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" width="50">
+<p>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="50" alt="React">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" width="50" alt="TypeScript">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" width="50" alt="HTML5">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" width="50" alt="Express">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" width="50" alt="Node.js">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Touchicon-180.png" width="50" alt="Firebase">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" width="50" alt="AWS">
+</p>
 
 ### Technologies Used
 - **Frontend**: The game's frontend is developed using **TypeScript** and **React**. This combination offers a robust framework for building interactive UIs efficiently.
