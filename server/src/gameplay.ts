@@ -314,8 +314,8 @@ function compareRoads(road1: road_meta_data, road2: road_meta_data) {
 
      let sameRoad = false;
 
-     if (road1.edge === road2.edge) {
-          if (road1.tile_index === road1.tile_index) {
+     if (road1.edge == road2.edge) {
+          if (road1.tile_index == road2.tile_index) {
                console.log("same roads found");
                sameRoad = true;
           }
