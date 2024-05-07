@@ -10,8 +10,11 @@ import { MockGameState, MockLimitedGameState } from "./StaticData/GameStateStati
 import AuthenticationPage from "./Pages/Authentication";
 import LandingPage from "./Pages/LandingPage";
 
-//Will cause errors if undefined but ! alievates typescript errors. -- add server url to .env file. 
-const backend = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL!); 
+// ------Use if you have added AWS server to your env file-----------
+//const backend = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL!); 
+
+//-------Use if you are using the local server.---------------------
+const backend = new WebSocket("ws://localhost:5000");
 
 
 function App() {
