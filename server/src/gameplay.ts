@@ -901,7 +901,7 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
           player.hand["wood"] = player.hand["wood"] - 1;
           player.hand["sheep"] = player.hand["sheep"] - 1;
           player.hand["wheat"] = player.hand["wheat"] - 1;
-		  addingSettlement(settlement, sessionId);
+		addingSettlement(settlement, sessionId);
 
      }
      return getGamestate(sessionId);
@@ -912,7 +912,7 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
 	const player = current_game.current_player;
 
 	player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
-          
+     player.vp++;     
           
 	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
 
