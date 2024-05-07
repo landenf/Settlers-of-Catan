@@ -1405,6 +1405,7 @@ function updateStarted(sessionId: number) {
 function startGame(sessionId: number) {
      const current_game = all_games[findGameIndexById(sessionId)]
      current_game.isStarted = true;
+     console.log(current_game.roundNumber);
      return getGamestate(sessionId)
 }
 

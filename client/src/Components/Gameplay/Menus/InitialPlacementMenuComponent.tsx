@@ -47,7 +47,7 @@ interface InitialPlacementMenuComponentProps {
       };
     
     return (
-        <div aria-label="actions-bar" className={("absolute-container " + ((isCurrentPlayer && (state.roundNumber > 2))  ? "disabled" : ""))}>
+        <div aria-label="initial-bar" className={("absolute-container " + ((isCurrentPlayer && (state.roundNumber != 0))  ? "" : "disabled"))}>
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
