@@ -28,6 +28,7 @@ interface LandingProps {
  * @returns Landing page for the user.
  */
 const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
+  const [setupNeeded, setSetupNeeded] = useState(true);
   const [roomPanelOpen, setOpenPanel] = useState(false);
   const [buttonsActive, setButtonsActive] = useState(true);
   const [instructionsModalEnabled, setInstructionsModal] = useState(false);
@@ -38,7 +39,10 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
     if (state.isStarted) {
       navigate("/session")
     }
-    generateUser();
+    if (setupNeeded) {
+      generateUser();
+      setSetupNeeded(false);
+    }
   })
 
   const updateInstructionsModal = () => {
@@ -79,22 +83,16 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
             if (userProfileDoc.exists()) {
 
               const user_data = userProfileDoc.data()
-
-              let player_name = user.displayName
-              if (player_name == null) {
-                player_name = ""
-              }
+              console.log(user_data)
 
               let photo_URL = user.photoURL
               if (photo_URL == null) {
                 photo_URL = ""
               }
 
-              console.log(user.uid)
-
               const player: Player = {
-                id: user.uid,
-                name: player_name,
+                id: user_data.uid,
+                name: user_data.username,
                 image: photo_URL,
                 color: "red",
                 vp: 0,
@@ -117,8 +115,24 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
                 },
                 ready: false
               }
-              console.log(player)
-              return player
+              const newState: LimitedSession = {
+                id: MockLimitedGameState.id,
+                client: player,
+                diceNumber: {
+                  number1: 0,
+                  number2: 0
+                },
+                players: [],
+                current_player: MockLimitedGameState.current_player,
+                gameboard: {
+                  tiles: []
+                },
+                isValid: false,
+                canStart: false,
+                isStarted: false,
+                roundNumber: 0
+              }
+              setState(newState);
             } 
         } catch (error: any) {
             console.log(error.message);
