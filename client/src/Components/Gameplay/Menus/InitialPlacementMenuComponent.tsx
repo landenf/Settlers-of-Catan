@@ -57,15 +57,15 @@ interface InitialPlacementMenuComponentProps {
       };
     
     return (
-      <div aria-label="initial-bar" className={("absolute-container " + ((isCurrentPlayer && (state.roundNumber != 0))  ? "" : "disabled"))}>
-        {/* <div className="inner-container">
-          <h1 className={"button text-bold " + (selectedRoad ? "buy-dark" : "")} aria-label="build-initial-road" onClick={() => updatePotentialSettlements('roads')}>Changing to see what happens woot</h1>
+      <div aria-label="initial-bar" className={("absolute-container " + ((isCurrentPlayer && (state.roundNumber  <= 2))  ? "" : "disabled"))}>
+        <div className="inner-container">
+          <h1 className={"button text-bold " + (selectedRoad ? "buy-dark" : "")} aria-label="build-initial-road" onClick={() => updatePotentialSettlements('roads')}>Road</h1>
           <div className="line"></div>
           <h1 className={"button text-bold " + ((!selectedRoad || selectedSettlement) ? "buy-dark" : "")} aria-label="build-initial-settlement" onClick={() => updatePotentialSettlements('settlements')}>Settlement</h1>
           <div className="line-thick"></div>
-          <h1 className={"button text-bold " + ((selectedRoad && selectedSettlement) ? "buy-dark" : "")} aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
+          <h1 className={"button text-bold " + ((!selectedRoad && !selectedSettlement) ? "buy-dark" : "")} aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
           <div className="line-thick"></div>
-        </div> */}
+        </div>
     </div>
 
     );
