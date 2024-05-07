@@ -12,7 +12,7 @@ interface GameBoardProp {
   gamestate: LimitedSession,
   updateState: (newState: LimitedSession) => void;
   showPotenialBuildOptions: GameBoardActionsDisplay;
-  
+  selectedRoad: boolean;
   /**
    * Function to call the backend through the main websocket.
    */
@@ -24,7 +24,7 @@ interface GameBoardProp {
  * it shows each individual tile, their resource type, and their number to roll.
  * @param props a boardstate often retrieved and modified in the backend
  */
-const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, showPotenialBuildOptions, callBackend }) => {
+const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, showPotenialBuildOptions, callBackend, selectedRoad }) => {
   // generate hexagonal grid
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
   const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
@@ -49,6 +49,7 @@ const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, sho
               updateState={updateState}
               showPotenialBuildOptions={showPotenialBuildOptions}
               callBackend={callBackend}
+              selectedRoad={selectedRoad}
               />
           ))}
         </Layout>

@@ -176,6 +176,7 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
                           updateState={ updateState } 
                           showPotenialBuildOptions={showPotenialBuildOptions}  
                           callBackend={callBackend}
+                          selectedRoad={selectedRoad}
                         />
                 </div>
                 <div className="user-info">
