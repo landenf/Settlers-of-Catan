@@ -936,59 +936,46 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
 
      if (relativeCommunities.length == 2) {
           //removing potential communities that are on the same vertex.
-	     player.potential_communities = player.potential_communities.filter(
-               (community) =>
-               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
-               (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
-               (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
-          );
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter(
+                    (community) =>
+                    (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
+                    (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
+                    (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
+               );
+          });
 
           // Function to check if a community is within one vertex (plus or minus)
           const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
                if (community.tile_index !== reference.tile_index) {
-                    console.log(`${community.tile_index} not found!`)
                     return false;
                }
                const absDiff = Math.abs(community.vertex - reference.vertex);
-               console.log(`${community.tile_index}.${community.vertex} is one vertex away from ${reference.tile_index}.${reference.vertex}`)
-               console.log(absDiff === 1 || absDiff === 5)
                return absDiff === 1 || absDiff === 5;
           };
 
-          console.log("----------------------")
-     
-          // Get a list of all potential communities within one space (plus or minus one vertex)
-
-          const all_communities_and_neighbors: community_meta_data[] = []
-          player.potential_communities.forEach(community => {
-               all_communities_and_neighbors.push(community)
-               vertex_neighbors[community.tile_index][community.vertex].forEach(neighbor => {
-                    all_communities_and_neighbors.push({tile_index: neighbor[0], vertex: neighbor[1] as community_keys})
-               })
-          })
-
+          // all potential communities that are within one space of the bought settlement
           const tempCommunitiesToRemove = player.potential_communities.filter(
                (community) =>
-               isWithinOneVertex(community, settlement)
+               isWithinOneVertex(community, settlement) ||
+		     isWithinOneVertex(community, relativeCommunities[0]) ||
+		     isWithinOneVertex(community, relativeCommunities[1])
           );
 
+          // all potential communities (and neighbors) that are within one space of the bought settlement
           const potentialCommunitiesToRemove: community_meta_data[] = []
           tempCommunitiesToRemove.forEach(community => {
                potentialCommunitiesToRemove.push(community)
                potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[0])
                potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[1])
           })
-
-          console.log(potentialCommunitiesToRemove)
-          console.log(player.potential_communities)
           
-          const to_remove = player.potential_communities.filter((community) => 
-               containsCommunity(player.potential_communities, community)
-          
-          )
-
-          console.log(to_remove)
-          console.log("----------------------")
+          // remove list of affected potential communities from all players
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter((community) => 
+                    !containsCommunity(potentialCommunitiesToRemove, community)
+               )
+          })
 
      } else if (relativeCommunities.length == 1) {
           //removing potential communities that are on the same vertex.
@@ -1026,11 +1013,16 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
  * @param community community to check for
  */
 function containsCommunity (communities: community_meta_data[], community: community_meta_data) {
-     
+
      let containsCommunity = false;
+
      communities.forEach(element => {
-          if (element.tile_index === community.tile_index) {
-               if (element.vertex === community.vertex) {
+          let validSet = true;
+          if (element == undefined || community == undefined) {
+               validSet = false; 
+          } 
+          if (validSet && element.tile_index == community.tile_index) {
+               if (element.vertex == community.vertex) {
                     containsCommunity = true;
                }
           }
