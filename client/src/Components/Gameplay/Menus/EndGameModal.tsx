@@ -61,7 +61,7 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
                         LargestArmy: storedData.LargestArmy + ((gamestate.current_largest_army && gamestate.current_largest_army.name == storedData.username) ? 1 : 0),
                         MostRoads: storedData.MostRoads + ((gamestate.current_longest_road && gamestate.current_longest_road.name == storedData.username) ? 1 : 0), 
                         VictoryPoints: storedData.VictoryPoints + client.vp,
-                        TotalWheat: storedData.VictoryPoints + client.hand.wheat,
+                        TotalWheat: storedData.TotalWheat + client.hand.wheat,
                         TotalStone: storedData.TotalStone + client.hand.stone,
                         TotalWood: storedData.TotalWood + client.hand.wood,
                         TotalBrick: storedData.TotalBrick + client.hand.brick,
