@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import {auth} from '../../firebase-config.js';
 import '../../Styles/LandingAuth/AuthenticationStyles.css'; 
 import { useNavigate } from 'react-router-dom';
+import { Player } from '@shared/types.js';
 
 interface SignInComponentProps {
   onSwitch: () => void;

@@ -10,7 +10,7 @@ const road_two = {
     edge: 2,
 };
 const player1 = {
-    id: 0,
+    id: "0",
     name: "steven",
     image: "empty-avatar",
     color: "red",
@@ -112,7 +112,7 @@ const player1 = {
     ready: false
 };
 const player2 = {
-    id: 0,
+    id: "0",
     name: "steve",
     image: "empty-avatar",
     color: "orange",
@@ -214,7 +214,7 @@ const player2 = {
     ready: false
 };
 const player3 = {
-    id: 0,
+    id: "0",
     name: "stevie",
     image: "empty-avatar",
     color: "green",
