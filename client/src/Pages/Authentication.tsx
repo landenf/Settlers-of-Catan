@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SignIn from '../Components/Authentication/SignIn';
 import SignUp from '../Components/Authentication/Signup';
 import '../Styles/LandingAuth/AuthenticationStyles.css'; 
@@ -11,7 +11,7 @@ const AuthenticationPage: React.FC = () => {
   return (
     <div className="auth-page">
       <div className="red-box">
-        {isSigningIn ? <SignIn onSwitch={toggleAuthMode} /> : <SignUp onSwitch={toggleAuthMode} />}
+        {isSigningIn ? <SignIn onSwitch={toggleAuthMode}/> : <SignUp onSwitch={toggleAuthMode} />}
       </div>
     </div>
   );

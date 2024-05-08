@@ -68,7 +68,7 @@ const KnightBody: StealRequest = {
   };
 
   return (
-    <div aria-label="actions-bar" className={("absolute-container " + (isCurrentPlayer ? "" : "disabled"))}>
+    <div aria-label="actions-bar" className={("absolute-container " + ((isCurrentPlayer && state.roundNumber > 2) ? "" : "disabled"))}>
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
@@ -76,8 +76,6 @@ const KnightBody: StealRequest = {
         <div className="line"></div>
           <p className="button indented-text" aria-label="build-settlement" onClick={() => updatePotentialSettlements('settlements')}>Settlement</p>
         <div className="line"></div>
-          <p className="button indented-text" onClick={() => handleButtonClick('buildCity', NullBody)}>City</p>
-        <div className="line-thick"></div>
         <h1 className="text-bold">TRADE</h1>
         <div className="line-thick"></div>
           <p className="button indented-text" aria-label="trade" onClick={() => setTradeModal(true)}>Bank</p>

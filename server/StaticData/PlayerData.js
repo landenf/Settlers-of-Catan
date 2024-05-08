@@ -10,7 +10,7 @@ const road_two = {
     edge: 2,
 };
 const player1 = {
-    id: 0,
+    id: "0",
     name: "steven",
     image: "empty-avatar",
     color: "red",
@@ -26,7 +26,7 @@ const player1 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [road_one, road_two],
+    potential_roads: [],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -107,10 +107,12 @@ const player1 = {
     },
     hasKnight: false,
     knightCards: 0,
+    hasLargestArmy: false,
+    hasMostRoads: false,
     ready: false
 };
 const player2 = {
-    id: 0,
+    id: "0",
     name: "steve",
     image: "empty-avatar",
     color: "orange",
@@ -126,7 +128,7 @@ const player2 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [road_one, road_two],
+    potential_roads: [],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -207,10 +209,12 @@ const player2 = {
     },
     hasKnight: false,
     knightCards: 0,
+    hasLargestArmy: false,
+    hasMostRoads: false,
     ready: false
 };
 const player3 = {
-    id: 0,
+    id: "0",
     name: "stevie",
     image: "empty-avatar",
     color: "green",
@@ -226,7 +230,7 @@ const player3 = {
     communities_owned: [],
     potential_communities: [],
     roads_owned: [],
-    potential_roads: [road_one, road_two],
+    potential_roads: [],
     player_stats: {
         total_wins: 0,
         largest_armies: 0,
@@ -306,6 +310,8 @@ const player3 = {
         }
     },
     hasKnight: false,
+    hasLargestArmy: false,
+    hasMostRoads: false,
     knightCards: 0,
     ready: false
 };

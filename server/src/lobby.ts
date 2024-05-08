@@ -11,14 +11,13 @@ var null_game: GameState = {
      diceNumber: { number1: 1, number2: 1 },
      players: players,
      current_player: players[0],
-     current_largest_army: "",
-     current_longest_road: "",
      gameboard: {
           tiles: tiles
      },
      isValid: false,
      isStarted: false,
-     canStart: false
+     canStart: false,
+     roundNumber: 1
 }
 
 /**
@@ -59,14 +58,13 @@ export function newGame(all_games: GameState[], host: Player) {
          diceNumber: { number1: 1, number2: 1 },
          players: [host],
          current_player: host,
-         current_largest_army: "",
-         current_longest_road: "",
          gameboard: {
               tiles: tiles
          },
          isValid: true,
          isStarted: false,
-         canStart: false
+         canStart: false,
+         roundNumber: 1
     }
 
     return gamestate;

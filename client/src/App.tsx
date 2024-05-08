@@ -4,9 +4,8 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
-import { MockGameState, MockLimitedGameState } from "./StaticData/GameStateStatic";
+import { MockLimitedGameState } from "./StaticData/GameStateStatic";
 import AuthenticationPage from "./Pages/Authentication";
 import LandingPage from "./Pages/LandingPage";
 

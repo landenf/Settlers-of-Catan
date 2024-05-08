@@ -9,6 +9,12 @@
     position: relative;
     align-items: center;
 }
+.initial-bar{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    align-items: center;
+}
 
 .inner-box {
     width: 99.7%; 
