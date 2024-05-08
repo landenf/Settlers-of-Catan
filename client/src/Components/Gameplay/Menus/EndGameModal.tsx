@@ -106,6 +106,9 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
         }
         callBackend("endGame", request);
         navigate("/home");
+
+        // need to change isValid to false
+        // should send null game state to the front end, should kick the player back to the landing page
         
         
     }
