@@ -40,6 +40,11 @@ interface ActionsBarComponentProps {
    */
   updatePotentialSettlements: (selected: string) => void;
 
+  /**
+   * This is true if the button has already been rolled.
+   */
+  rollButtonState: boolean
+
 }
 
 /**
@@ -47,7 +52,7 @@ interface ActionsBarComponentProps {
  * cards. Appears on a player's game turn.
  */
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, callBackend, setTradeModal, 
-  boughtDev, isCurrentPlayer, updatePotentialSettlements }) => {
+  boughtDev, isCurrentPlayer, updatePotentialSettlements, rollButtonState }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -68,7 +73,7 @@ const KnightBody: StealRequest = {
   };
 
   return (
-    <div aria-label="actions-bar" className={("absolute-container " + ((isCurrentPlayer && state.roundNumber > 2) ? "" : "disabled"))}>
+    <div aria-label="actions-bar" className={("absolute-container " + ((isCurrentPlayer && state.roundNumber > 2 && rollButtonState == true) ? "" : "disabled"))}>
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
