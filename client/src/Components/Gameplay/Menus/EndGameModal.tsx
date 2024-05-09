@@ -98,18 +98,15 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
      * Function to exit the end game modal and potentially the application or game lobby.
      */
     const handleExitGame = () => {
-        console.log("hello");
-        setEndGameModal(false);
-
         const request: BackendRequest = {
             state: gamestate
         }
-        callBackend("endGame", request);
-        navigate("/home");
-
-        // need to change isValid to false
-        // should send null game state to the front end, should kick the player back to the landing page
         
+        setEndGameModal(false);
+
+        callBackend("endGame", request);
+        navigate("/home");      
+  
         
     }
     return (

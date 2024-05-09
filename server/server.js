@@ -119,6 +119,9 @@ function handleRequest(request, body) {
         case "initialSettlementPlacement":
             gameplay.initialRoundSettlement(body.settlementData, body.state.id);
             break;
+        case "endGame":
+            gameplay.endGame(body.state.id);
+            break;
         default:
             throw new InvalidEndpointError(`Endpoint "${request}" is not valid!`);
     }

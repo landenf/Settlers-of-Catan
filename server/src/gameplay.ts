@@ -1083,6 +1083,16 @@ function checkWinState(sessionId: number) {
 }
 
 /**
+ * Ends the current game.
+ */
+function endGame(sessionId: number){
+     const current_game = all_games[findGameIndexById(sessionId)] 
+     current_game.isValid = false;
+
+     all_games = all_games.splice(findGameIndexById(sessionId), 1);
+}
+
+/**
  * Passes the turn to the next player. 
  */
 function passTurn(sessionId: number) {
@@ -1426,4 +1436,4 @@ function getNullGame() {
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, buySettlement, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement }
+     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement, endGame }
