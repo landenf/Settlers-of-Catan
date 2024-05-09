@@ -10,7 +10,7 @@ const road_two = {
 
 import { GameState, Player, road_meta_data } from "@shared/types";
     const player1: Player = {
-        id: 0,
+        id: "0",
         name: "steven",
         image: "empty-avatar",
         color: "red",
@@ -112,7 +112,7 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         ready: false
     };
     const player2: Player = {
-        id: 0,
+        id: "0",
         name: "steve",
         image: "empty-avatar",
         color: "orange",
@@ -214,7 +214,7 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         ready: false
     };
     const player3: Player = {
-        id: 0,
+        id: "0",
         name: "stevie",
         image: "empty-avatar",
         color: "green",

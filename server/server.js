@@ -42,15 +42,12 @@ app.use(cors("*"))
 
 // open app server.
 // TODO: Run API on online hosting.
-const server = app.listen(port, () => {console.log("Server Started")} )
+const server = app.listen(port, '0.0.0.0', () => {console.log("Server Started")} )
 
 
-// setup for Websocket Server
+// setup for Websocket Servers
 // this connects our wss to the server we are already using. This means we can run everything on the same 5000 port.
 const wss = new WebSocket.Server({ server: server});
-
-// should increment for each additional client that joins. TODO: get this when we set up landing page and game start!
-var client_id = 1;
 
 // objects representing all players. TODO: get this when we set up the landing page and game start!
 const clients = player_data.players
@@ -144,14 +141,12 @@ function updateFrontend(session_id) {
 
 // initialize socket connection
 wss.on('connection', (ws, req) => {
-    ws.id = client_id;
-    client_id++;
+    ws.id = 0;
 
     ws.on('message', message => {
         let request = JSON.parse(message)
-        if (request.body.state.client.id == 0) {
-            request.body.state.client = gameplay.assignClientId(request.body.state.client, ws.id)
-        }
+        ws.id = request.body.state.client.id
+        console.log('Client Connected with ID:', ws.id);
         handleRequest(request.endpoint, request.body)
       });    
 
@@ -159,3 +154,9 @@ wss.on('connection', (ws, req) => {
     ws.on('close', () => {
     });
 });
+
+app.get('/', (req, res) => {
+    res.send('Catan - Server');
+  });
+  
+module.exports = app;

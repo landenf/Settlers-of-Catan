@@ -10,18 +10,19 @@ const road_two = {
 
 import { GameState, Player, road_meta_data } from "@shared/types";
     const player1: Player = {
-        id: 0,
+        id: "0",
         name: "steven",
         image: "empty-avatar",
         color: "red",
         vp: 1,
-        resources: 1000,
+
+        resources: 0,
         hand: {
-            wheat: 200,
-            brick: 200,
-            stone: 200,
-            sheep: 200,
-            wood: 200
+            wheat: 0,
+            brick: 0,
+            stone: 0,
+            sheep: 0,
+            wood: 0
         },
         communities_owned: [],
         potential_communities: [],
@@ -112,7 +113,7 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         ready: false
     };
     const player2: Player = {
-        id: 0,
+        id: "0",
         name: "steve",
         image: "empty-avatar",
         color: "orange",
@@ -214,7 +215,7 @@ import { GameState, Player, road_meta_data } from "@shared/types";
         ready: false
     };
     const player3: Player = {
-        id: 0,
+        id: "0",
         name: "stevie",
         image: "empty-avatar",
         color: "green",

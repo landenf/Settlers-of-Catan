@@ -9,7 +9,7 @@ export type Player = {
     /**
      * A unique user ID.
      */
-    id: number;
+    id: string;
 
     /**
      * The player's screen name.
@@ -141,7 +141,7 @@ export type LimitedPlayer = {
     /**
      * A unique user ID.
      */
-    id: number;
+    id: string;
 
     /**
      * The player's screen name.

@@ -1124,8 +1124,8 @@ function passTurn(sessionId: number) {
 /**
  * Used to switch clients. 
  */
-function switchClient(player_id: number, sessionId: number) {
-     
+function switchClient(player_id: string, sessionId: number) {
+
      const current_game = all_games[findGameIndexById(sessionId)]
      let player_index = 0;
      for (let i = 0; i < current_game.players.length; i++) {
@@ -1228,7 +1228,7 @@ function translateToNumberKey(toTranslate: number) {
  * @param newId the new ID to apply
  * @returns the player object with an updated client ID
  */
-function assignClientId(player: Player, newId: number) {
+function assignClientId(player: Player, newId: string) {
      player.id = newId;
      return player;
 }
@@ -1346,7 +1346,7 @@ function leaveGame(sessionId: number, client: Player) {
  * @param clientId the ID of the player to search for
  * @returns true if the player was found, false if the player was not.
  */
-function findPlayerInGame(sessionId: number, clientId: number) {
+function findPlayerInGame(sessionId: number, clientId: string) {
      let isInGame = false;
      const game = all_games[findGameIndexById(sessionId)]
      game.players.forEach(player => {
@@ -1365,7 +1365,7 @@ function findPlayerInGame(sessionId: number, clientId: number) {
  * who have failed to find a game
  * @returns true if the player can't join the game
  */
-function findPlayerCantJoin(clientId: number) {
+function findPlayerCantJoin(clientId: string) {
      if (failed_to_connect.some(player => player.id === clientId)) {
           failed_to_connect = failed_to_connect.filter(player => player.id !== clientId)
           return true
