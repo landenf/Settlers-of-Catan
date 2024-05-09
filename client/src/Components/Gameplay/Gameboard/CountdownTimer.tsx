@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CountdownCircleTimer, useCountdown } from 'react-countdown-circle-timer'
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../../../Enums/requests";
 
@@ -22,7 +22,7 @@ const CountdownTimer: React.FC<CountdownCircleTimerProps> = ({ state, callBacken
     return (
         
         <CountdownCircleTimer
-            isPlaying
+            isPlaying={true}
             duration={duration}
             colors={'#004777'}
             onComplete={() => {  
