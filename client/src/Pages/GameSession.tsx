@@ -180,7 +180,7 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
                         />
                 </div>
                 <div className="user-info">
-                  <VictoryPointsComponent vp={state.client.vp}/>
+                  <VictoryPointsComponent vp={state.client.vp} color={state.client.color}/>
                   <Hand gamestate={state} />
                   <RollButton callBackend={callBackend} state={state} rolled={rolled} updateRolled={updateRolled} 
                   isCurrentPlayer={isCurrentPlayer}/>
