@@ -1430,7 +1430,7 @@ function getGamestate(sessionId: number) {
  * Used when we can't find a game, typically due to trying to join a game
  * via ID when it's already full.
  */
-function getNullGame() {
+function getNullGame(sessionId: number) {
      return null_game;
 }
 
