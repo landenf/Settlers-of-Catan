@@ -1097,8 +1097,9 @@ function checkWinState(sessionId: number) {
  */
 function endGame(sessionId: number){
      let current_game = all_games[findGameIndexById(sessionId)] 
+     current_game.isValid = false;
+     current_game.isStarted = false;
      current_game = null_game;
-
      all_games = all_games.splice(findGameIndexById(sessionId), 1);
 }
 
