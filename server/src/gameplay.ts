@@ -122,6 +122,7 @@ function initialRoundSettlement(settlement: community_meta_data, sessionId: numb
 	addingSettlement(settlement, sessionId);
      return getGamestate(sessionId);
 }
+
 /**
  * Function to roll the dice and distribute resources based upon the result.
  */
@@ -320,24 +321,6 @@ function compareRoads(road1: road_meta_data, road2: road_meta_data) {
      }
 
      return sameRoad;
-}
-
-/**
- * Compares value of communities and returns true if both values match.
- * @param community1 the community to compare to
- * @param community2 to community to compare
- */
-function compareCommunities(community1: community_meta_data, community2: community_meta_data) {
-
-     let sameCommunity = false;
-
-     if (community1.vertex == community2.vertex) {
-          if (community1.tile_index == community2.tile_index) {
-               sameCommunity = true;
-          }
-     }
-
-     return sameCommunity;
 }
 
 
