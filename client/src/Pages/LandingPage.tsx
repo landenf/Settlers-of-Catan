@@ -6,13 +6,14 @@ import { LimitedSession, Player } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import RoomPanel from "../Components/LandingPage/RoomPanel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import InstructionsModal from "../Components/LandingPage/InstructionsModal";
 import PlayerStatisticsComponent from "../Components/LandingPage/PlayerStatisticsComponent";
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../firebase-config";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { signOut } from "firebase/auth";
 
 interface LandingProps {
   backend: WebSocket,
@@ -47,6 +48,15 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
 
   const updateInstructionsModal = () => {
     setInstructionsModal(!instructionsModalEnabled);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   /**
@@ -149,6 +159,10 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
         <div onClick={updateInstructionsModal} className="info-button">
           <FontAwesomeIcon className="info-icon" icon={faCircleInfo} />
         </div>
+        <div onClick={handleLogout} className="info-button">
+          <FontAwesomeIcon className="logout-icon" icon={faSignOut} />
+        </div>
+
         <p className="catanTitle">CATAN</p>
         <MenuToggleComponent
           callBackend={callBackend}
