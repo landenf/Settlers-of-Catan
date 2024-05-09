@@ -1085,8 +1085,9 @@ function checkWinState(sessionId: number) {
 
      var winner: Player | undefined = undefined;
      current_game.players.forEach(player => {
-          if (player.vp >= 3) {
+          if (player.vp >= 10) {
                winner = player;
+               endGame(sessionId);
           }
      });
      current_game.winner = winner;

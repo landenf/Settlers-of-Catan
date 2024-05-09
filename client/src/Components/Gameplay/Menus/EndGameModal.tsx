@@ -104,7 +104,6 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
         
         setEndGameModal(false);
 
-        callBackend("endGame", request);
         navigate("/home");      
   
         
