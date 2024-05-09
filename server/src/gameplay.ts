@@ -1085,7 +1085,7 @@ function checkWinState(sessionId: number) {
 
      var winner: Player | undefined = undefined;
      current_game.players.forEach(player => {
-          if (player.vp >= 4) {
+          if (player.vp >= 3) {
                winner = player;
           }
      });
@@ -1096,8 +1096,8 @@ function checkWinState(sessionId: number) {
  * Ends the current game.
  */
 function endGame(sessionId: number){
-     const current_game = all_games[findGameIndexById(sessionId)] 
-     current_game.isValid = false;
+     let current_game = all_games[findGameIndexById(sessionId)] 
+     current_game = null_game;
 
      all_games = all_games.splice(findGameIndexById(sessionId), 1);
 }
@@ -1446,4 +1446,4 @@ function getNullGame() {
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, buySettlement, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement, endGame }
+     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement, endGame, findGameIndexById }
