@@ -888,6 +888,50 @@ function cleanPotentials(settlement: community_meta_data, sessionId: number) {
                )
           })
           
+     } else {
+          //removing potential communities that are on the same vertex.
+	     player.potential_communities = player.potential_communities.filter(
+               (community) =>
+               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex)
+          );
+
+          // Function to check if a community is within one vertex (plus or minus)
+          const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
+               if (community.tile_index !== reference.tile_index) {
+                    return false;
+               }
+               const absDiff = Math.abs(community.vertex - reference.vertex);
+               return absDiff === 1 || absDiff === 5;
+          };
+
+          // all potential communities that are within one space of the bought settlement
+          const tempCommunitiesToRemove = player.potential_communities.filter(
+               (community) =>
+               isWithinOneVertex(community, settlement)
+          );
+
+          console.log("----------------")
+          console.log(tempCommunitiesToRemove)
+
+          // all potential communities (and neighbors) that are within one space of the bought settlement
+          const potentialCommunitiesToRemove: community_meta_data[] = []
+          tempCommunitiesToRemove.forEach(community => {
+               potentialCommunitiesToRemove.push(community)
+               potentialCommunitiesToRemove.push({
+                    tile_index: vertex_neighbors[community.tile_index][community.vertex][0][0],
+                    vertex: vertex_neighbors[community.tile_index][community.vertex][0][1] as community_keys
+               })
+               console.log(`${community.tile_index}.${community.vertex}`)
+          })
+          
+          // remove list of affected potential communities from all players
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter((community) => 
+                    !containsCommunity(potentialCommunitiesToRemove, community)
+               )
+          })
+          console.log(current_game.current_player.potential_communities)
+          console.log("----------------")
      }
 }
 
@@ -1172,6 +1216,7 @@ function findRelativeNeighboringVertexFromVertex (community: community_meta_data
           //for tile one find the edge that touches the origional tile
           let tileOneEdge = edge_neighbors[tileOne as NeighborsKey].indexOf(community.tile_index);
           let tileOneEdgeTwo = edge_neighbors[tileOne as NeighborsKey].indexOf(tileTwo);
+
           returnCommuntiies.push({
                tile_index: tileOne,
                vertex: vertexBetweenRoads(tileOneEdge, tileOneEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
@@ -1185,7 +1230,7 @@ function findRelativeNeighboringVertexFromVertex (community: community_meta_data
           returnCommuntiies.push({
                tile_index: tileTwo,
                vertex: vertexBetweenRoads(tileTwoEdge, tileTwoEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
-          })       
+          })
      }
 
      return returnCommuntiies;
