@@ -104,7 +104,7 @@ const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, col
       {backendCall === "joinGameByID" && (
           <div className="form-game-id">
             <form onSubmit={handleSubmit} className="game-id-container">
-              <input className="input-game-id" type="number" value={joinId}
+              <input className="input-game-id" type="number" value={joinId} placeholder="Enter Game Code"
                 onChange={(e) => setJoinId(e.target.value)} disabled={!buttonsActive}/>
               <button type="submit" className={"button-game-id " + (buttonsActive ? "" : "side-button-disabled")} 
                 disabled={!buttonsActive}>

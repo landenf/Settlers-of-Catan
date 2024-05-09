@@ -12,12 +12,13 @@ export const MockGameState: GameState = {
     players: players,
     winner: undefined,
     current_player: players[0],
-    current_largest_army: "",
-    current_longest_road: "",
     gameboard: {
         tiles: tiles
     },
-    isValid: false
+    isValid: false,
+    canStart: false,
+    isStarted: false,
+    roundNumber: 1
 }
 
 export const MockLimitedGameState: LimitedSession = {
@@ -29,10 +30,11 @@ export const MockLimitedGameState: LimitedSession = {
     },
     players: players,
     current_player: players[0],
-    current_largest_army: "",
-    current_longest_road: "",
     gameboard: {
         tiles: []
     },
-    isValid: false
+    isValid: false,
+    canStart: false,
+    isStarted: false,
+    roundNumber: 1
 }

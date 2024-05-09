@@ -1,0 +1,57 @@
+.instructions-modal {
+  height: 80vh;
+  width: 80vw;
+  top: 10%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%);
+  z-index: 5;
+  background-color: hsla(0, 0%, 100%, 1);
+  outline: 5px solid rgb(60, 0, 0);
+  text-align: center;
+  display: grid;
+  grid-template-rows: 10% 10% 50% 30%;
+  padding: 1vh;
+}
+
+.disabled {
+  display: none;
+}
+
+.title {
+  position: relative;
+  font-size: 50px;
+  padding: 0;
+  margin: 0;
+  height: 5vh;
+}
+.rules {
+  position: relative;
+  width: 100%;
+  top: 0;
+  height: 70vh;
+  text-align: left;
+  line-height: 1.1;
+  overflow-y: auto;
+  margin: 0;
+}
+
+.list {
+  text-indent: 2vw;
+}
+
+.sub-list {
+  text-indent: 3vw;
+}
+
+@media (max-height: 650px) {
+  .title {
+    font-size: 40px;
+  }
+}
+
+@media (max-height: 580px) {
+  .title {
+    font-size: 30px;
+  }
+}

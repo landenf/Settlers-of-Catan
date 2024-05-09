@@ -9,6 +9,11 @@ export interface VPProp {
    * The current user's score of victory points.
    */
   vp: number
+
+  /**
+   * The current player's designated color.
+   */
+  color: string
 }
 
 /**
@@ -18,7 +23,7 @@ export interface VPProp {
 const VictoryPointsComponent = (props: VPProp) => {
   return (
     <div className="victoryPoints">
-      <div className="victoryPointBackground" />
+      <div className="victoryPointBackground" style={{ background: props.color }}/>
       <div className="victoryPointsLabel">victory points</div>
       <div className="victoryPointsNumber">{props.vp}</div>
     </div>

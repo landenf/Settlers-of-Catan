@@ -19,6 +19,40 @@
   background-color: #c3332b;
 }
 
+.info-icon {
+  background-image: url("https://fontawesome.com/icons/circle-info?f=classic&s=solid");
+  top: 1vh;
+  left: 1vh;
+  position: relative;
+  color: white;
+  width: 25px;
+  height: 25px;
+}
+
+.logout-icon {
+  position: fixed; 
+  bottom: 1vh; 
+  left: 1vh; 
+  width: 50px; 
+  height: 50px; 
+  display: flex; 
+  align-items: center;
+  justify-content: center; 
+  color: black; 
+  border-radius: 50%;
+  cursor: pointer; 
+  transform: rotate(180deg); /* Applies the rotation only to the SVG inside the .home-icon */
+}
+
+
+.info-button:active {
+  opacity: 0.9;
+}
+
+.info-button:hover {
+  cursor: pointer;
+}
+
 .catanTitle {
   top: 3vh;
   left: 50%;

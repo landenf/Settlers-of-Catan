@@ -43,10 +43,15 @@
   margin: 0 auto;
 }
 
+.taller-box {
+  top: 15vh;
+  height: 65vh;
+}
+
 .players-in-room {
   color: #fdfdfd;
   margin: 0 auto;
-  font-size: 50px;
+  font-size: 40px;
   text-align: center;
   font-family: Inter;
   font-weight: 375;
@@ -62,8 +67,8 @@
 .buttons {
   width: 85%;
   display: flex;
-  margin-top: 2%;
 }
+
 .leave-button,
 .ready-button {
   width: 9vw;
@@ -120,7 +125,7 @@
   display: grid;
   align-items: center;
   text-align: center;
-  height: 65%;
+  height: 50%;
   box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
     0 17px 50px 0 rgba(0, 0, 0, 0.19);
   border-radius: 10px;
@@ -151,6 +156,9 @@
   .player-color-banner {
     font-size: 20px;
   }
+  .players-in-room {
+    font-size: 30px;
+  }
 }
 
 @media (max-width: 1170px) {
@@ -168,7 +176,7 @@
     font-size: 50px;
   }
   .players-in-room {
-    font-size: 40px;
+    font-size: 25px;
   }
 }
 
@@ -184,7 +192,7 @@
     width: 10vw;
   }
   .players-in-room {
-    font-size: 30px;
+    font-size: 20px;
   }
 }
 
@@ -200,7 +208,7 @@
     width: 11vw;
   }
   .players-in-room {
-    font-size: 30px;
+    font-size: 15px;
     font-weight: 400;
   }
   .main-content-box {
@@ -214,7 +222,7 @@
     width: 12vw;
   }
   .players-in-room {
-    font-size: 30px;
+    font-size: 10px;
     font-weight: 400;
   }
   .main-content-box {
