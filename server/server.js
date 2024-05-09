@@ -141,14 +141,12 @@ function updateFrontend(session_id) {
 
 // initialize socket connection
 wss.on('connection', (ws, req) => {
-    ws.id = client_id;
-    client_id++;
-    console.log('Client Connected with ID:', ws.id);
     ws.id = 0;
 
     ws.on('message', message => {
         let request = JSON.parse(message)
         ws.id = request.body.state.client.id
+        console.log('Client Connected with ID:', ws.id);
         handleRequest(request.endpoint, request.body)
       });    
 
