@@ -1,4 +1,4 @@
-import { GameState, Player, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer, community_keys, community_spaces } from "@shared/types";
+import { GameState, Player, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer, community_keys, community_spaces, resource_counts } from "@shared/types";
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
 import { InvalidResourceError } from "./errors";
@@ -120,7 +120,6 @@ function initialRoundRoad(road: road_meta_data, sessionId: number){
 
 function initialRoundSettlement(settlement: community_meta_data, sessionId: number){
 	addingSettlement(settlement, sessionId);
-
      return getGamestate(sessionId);
 }
 /**
@@ -910,11 +909,22 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
 function addingSettlement(settlement: community_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)]
 	const player = current_game.current_player;
-
 	player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
-     player.vp++;     
-          
+     player.vp++;
+     const tile = current_game.gameboard.tiles[(settlement.tile_index)];
+     const diceRoll = tile.number_roll as ResourceGainKey;
+     const type = tile.type as keyof resource_counts;
+     player.resource_gain[diceRoll][type] = player.resource_gain[diceRoll][type] + 1;
+     
 	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
+     relativeCommunities.forEach(community => {
+          const nextTile = current_game.gameboard.tiles[(community.tile_index)];
+          const nextDiceRoll = nextTile.number_roll as ResourceGainKey;
+          const nextType = nextTile.type as keyof resource_counts;
+          player.resource_gain[nextDiceRoll][nextType] = player.resource_gain[nextDiceRoll][nextType] + 1;
+
+     })
+
 
 	//todo edge case fix: if there isnt two relative communities then only check one or errors. 
 	//removing potential communities that are on the same vertex.
