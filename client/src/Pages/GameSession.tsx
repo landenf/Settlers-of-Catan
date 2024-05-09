@@ -14,6 +14,7 @@ import StealModal from "../Components/Gameplay/Menus/StealModal";
 import Dice from "../Components/Gameplay/Gameboard/Dice";
 import { BackendRequest } from "../Enums/requests";
 import EndGameModal from "../Components/Gameplay/Menus/EndGameModal";
+import CountdownTimer from "../Components/Gameplay/Gameboard/CountdownTimer";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
@@ -163,6 +164,7 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   <div>
     <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} callBackend={callBackend}/>
     <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} callBackend={callBackend}/>
+    <CountdownTimer state={state} callBackend={callBackend}></CountdownTimer>
     { endGameModalEnabled && <EndGameModal setEndGameModal={setEndGameModal} endGameModalState={endGameModalEnabled} gamestate={state} callBackend={callBackend}/>}
       <div className="background-container">
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
