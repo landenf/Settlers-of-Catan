@@ -1,19 +1,27 @@
-"use strict";
+const road_one = {
+    tile_index: 6,
+    edge: 5,
+};
 
-import { Player } from "@shared/types";
+const road_two = {
+    tile_index: 5,
+    edge: 2,
+};
+
+import { GameState, Player, road_meta_data } from "@shared/types";
     const player1: Player = {
         id: 0,
         name: "steven",
         image: "empty-avatar",
-        color: "black",
+        color: "red",
         vp: 1,
-        resources: 25,
+        resources: 1000,
         hand: {
-            wheat: 5,
-            brick: 5,
-            stone: 5,
-            sheep: 5,
-            wood: 5
+            wheat: 200,
+            brick: 200,
+            stone: 200,
+            sheep: 200,
+            wood: 200
         },
         communities_owned: [],
         potential_communities: [],
@@ -27,87 +35,87 @@ import { Player } from "@shared/types";
         },
         resource_gain: {
             2: {
-                wheat: 1,
-                brick: 3,
-                stone: 2,
+                wheat: 0,
+                brick: 0,
+                stone: 0,
                 sheep: 0,
                 wood: 0
             },
             3: {
-                wheat: 3,
-                brick: 3,
+                wheat: 0,
+                brick: 0,
                 stone: 0,
-                sheep: 2,
+                sheep: 0,
                 wood: 0
             },
             4: {
-                wheat: 1,
+                wheat: 0,
                 brick: 0,
-                stone: 3,
+                stone: 0,
                 sheep: 0,
-                wood: 4
+                wood: 0
             },
             5: {
-                wheat: 1,
+                wheat: 0,
                 brick: 0,
-                stone: 1,
+                stone: 0,
                 sheep: 0,
-                wood: 2
+                wood: 0
             },
             6: {
-                wheat: 1,
+                wheat: 0,
                 brick: 0,
-                stone: 1,
+                stone: 0,
                 sheep: 0,
-                wood: 1
+                wood: 0
             },
             8: {
-                wheat: 1,
+                wheat: 0,
                 brick: 0,
-                stone: 2,
+                stone: 0,
                 sheep: 0,
-                wood: 3
+                wood: 0
             },
             9: {
-                wheat: 4,
-                brick: 5,
-                stone: 1,
-                sheep: 2,
-                wood: 3
+                wheat: 0,
+                brick: 0,
+                stone: 0,
+                sheep: 0,
+                wood: 0
             },
             10: {
-                wheat: 1,
+                wheat: 0,
                 brick: 0,
-                stone: 1,
+                stone: 0,
                 sheep: 0,
                 wood: 0
             },
             11: {
-                wheat: 1,
+                wheat: 0,
                 brick: 0,
-                stone: 3,
+                stone: 0,
                 sheep: 0,
-                wood: 4
+                wood: 0
             },
             12: {
-                wheat: 1,
+                wheat: 0,
                 brick: 0,
-                stone: 3,
+                stone: 0,
                 sheep: 0,
-                wood: 2
+                wood: 0
             }
         },
         hasKnight: false,
         knightCards: 0,
-        ready: false,
         hasLargestArmy: false,
-        hasMostRoads: false
+        hasMostRoads: false,
+        ready: false
     };
     const player2: Player = {
         id: 0,
         name: "steve",
         image: "empty-avatar",
-        color: "null",
+        color: "orange",
         vp: 7,
         resources: 22,
         hand: {
@@ -129,17 +137,17 @@ import { Player } from "@shared/types";
         },
         resource_gain: {
             2: {
-                wheat: 1,
+                wheat: 0,
                 brick: 0,
-                stone: 2,
+                stone: 0,
                 sheep: 0,
-                wood: 3
+                wood: 0
             },
             3: {
                 wheat: 0,
-                brick: 3,
+                brick: 0,
                 stone: 0,
-                sheep: 3,
+                sheep: 0,
                 wood: 0
             },
             4: {
@@ -151,45 +159,45 @@ import { Player } from "@shared/types";
             },
             5: {
                 wheat: 0,
-                brick: 1,
+                brick: 0,
                 stone: 0,
-                sheep: 1,
+                sheep: 0,
                 wood: 0
             },
             6: {
-                wheat: 4,
+                wheat: 0,
                 brick: 0,
                 stone: 0,
-                sheep: 6,
+                sheep: 0,
                 wood: 0
             },
             8: {
                 wheat: 0,
-                brick: 4,
+                brick: 0,
                 stone: 0,
-                sheep: 2,
+                sheep: 0,
                 wood: 0
             },
             9: {
                 wheat: 0,
-                brick: 1,
+                brick: 0,
                 stone: 0,
-                sheep: 1,
+                sheep: 0,
                 wood: 0
             },
             10: {
                 wheat: 0,
-                brick: 2,
+                brick: 0,
                 stone: 0,
-                sheep: 3,
+                sheep: 0,
                 wood: 0
             },
             11: {
-                wheat: 2,
+                wheat: 0,
                 brick: 0,
-                stone: 3,
+                stone: 0,
                 sheep: 0,
-                wood: 3
+                wood: 0
             },
             12: {
                 wheat: 0,
@@ -201,15 +209,15 @@ import { Player } from "@shared/types";
         },
         hasKnight: false,
         knightCards: 0,
-        ready: false,
         hasLargestArmy: false,
-        hasMostRoads: false
+        hasMostRoads: false,
+        ready: false
     };
     const player3: Player = {
         id: 0,
         name: "stevie",
         image: "empty-avatar",
-        color: " ",
+        color: "green",
         vp: 7,
         resources: 52,
         hand: {
@@ -302,9 +310,9 @@ import { Player } from "@shared/types";
             }
         },
         hasKnight: false,
-        knightCards: 0,
-        ready: false,
         hasLargestArmy: false,
-        hasMostRoads: false
+        hasMostRoads: false,
+        knightCards: 0,
+        ready: false
     };
-    export const players = [player1]
+    export const players = [player1, player2, player3]

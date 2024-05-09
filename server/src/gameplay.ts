@@ -120,7 +120,6 @@ function initialRoundRoad(road: road_meta_data, sessionId: number){
 
 function initialRoundSettlement(settlement: community_meta_data, sessionId: number){
 	addingSettlement(settlement, sessionId);
-
      return getGamestate(sessionId);
 }
 /**
@@ -910,20 +909,20 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
 function addingSettlement(settlement: community_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)]
 	const player = current_game.current_player;
-
 	player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
      player.vp++;
      const tile = current_game.gameboard.tiles[(settlement.tile_index)];
      const diceRoll = tile.number_roll as ResourceGainKey;
      const type = tile.type as keyof resource_counts;
-     player.resource_gain[diceRoll][type] += 1;
+     player.resource_gain[diceRoll][type] = player.resource_gain[diceRoll][type] + 1;
      
 	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
      relativeCommunities.forEach(community => {
           const nextTile = current_game.gameboard.tiles[(community.tile_index)];
-          const nextDiceRoll = tile.number_roll as ResourceGainKey;
-          const nextType = tile.type as keyof resource_counts;
-          player.resource_gain[nextDiceRoll][nextType] += 1;
+          const nextDiceRoll = nextTile.number_roll as ResourceGainKey;
+          const nextType = nextTile.type as keyof resource_counts;
+          player.resource_gain[nextDiceRoll][nextType] = player.resource_gain[nextDiceRoll][nextType] + 1;
+
      })
 
 
