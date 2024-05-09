@@ -48,7 +48,8 @@ const MockGameSession = (props: MockDataProps) => {
             <RollButton callBackend={callBackend} state={props.state} rolled={rolled} 
             updateRolled={setRolled} isCurrentPlayer={isCurrentPlayer}/>
             <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={setTradeModal}
-            boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={setSelected}/>
+            boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={setSelected}
+            inBackground={false}/>
         </div>
     )
 }; export default MockGameSession

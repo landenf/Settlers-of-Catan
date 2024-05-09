@@ -21,6 +21,7 @@
     text-align: center;
     display: grid;
     grid-template-rows: 10% 10% 25% 10% 25% 15%;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 .header {
