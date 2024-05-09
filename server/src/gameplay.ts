@@ -423,7 +423,7 @@ function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
     addedPotentialRoads.push(...tileTriads); 
     possible_roads.push(...checkAroundRoads(road))
     // code to add the road in the representation of the neighboring tile. For example, edge 3 
-	// on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
+    // on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
     // the z-index of rendering, we must render the road on both.
     const neighbor_index = edge_neighbors[road.tile_index as NeighborsKey][road.edge];
 
@@ -439,8 +439,11 @@ function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
 		addedPotentialRoads.push(...NeighborTriads); 
 		possible_roads.push(...checkAroundRoads(neighbor_road))
     } else {
-        findPotentialsOnBoardEdges(road, sessionId);
-        possible_roads.push(checkRoadsAroundOnEdges(road, sessionId))
+          findPotentialsOnBoardEdges(road, sessionId);
+          const newleg = checkRoadsAroundOnEdges(road, sessionId)
+          if (newleg !== undefined) {
+               possible_roads.push(newleg)
+          }
     }
 
     // add potential settlements by checking all roads around the bought road
@@ -507,12 +510,16 @@ function findPotentialsOnBoardEdges(road: road_meta_data, sessionId: number) {
      let tile_index = edge_index;
      let tile_edge = road.edge;
 
+     let offset_vertex = 0;
+
      if (isClockwise) {
           tile_index = (tile_index + 1) % edge_tiles.length;
           tile_edge = (tile_edge + 5) % 6;
+          offset_vertex = (road.edge + 1) % 6;
      } else {
           tile_index = (tile_index + (edge_tiles.length - 1)) % edge_tiles.length;
           tile_edge = (tile_edge + 1) % 6
+          offset_vertex = (road.edge + 5) % 6;
      }
 
      const translated_edge = translateToNumberKey(tile_edge)
@@ -524,7 +531,15 @@ function findPotentialsOnBoardEdges(road: road_meta_data, sessionId: number) {
           potentialRoad: newRoad
      }
 
-     if (player.potential_roads.indexOf(newRoad) < 0 && current_game.gameboard.tiles[newRoad.tile_index].road_spaces[newRoad.edge] == 'white') {
+     const first_neighbors = vertex_neighbors[road.tile_index][road.edge]
+     const second_neighbors = vertex_neighbors[road.tile_index][offset_vertex]
+
+     let third_leg_needed = true
+     if (first_neighbors[0][0] == -1 && second_neighbors[0][0] == -1) {
+          third_leg_needed = false;
+     }
+
+     if (third_leg_needed && player.potential_roads.indexOf(newRoad) < 0 && current_game.gameboard.tiles[newRoad.tile_index].road_spaces[newRoad.edge] == 'white') {
           player.potential_roads.push(newRoad);
           const noncurrent_players = current_game.players.filter(element => element !== player)
           noncurrent_players.forEach(player => 
@@ -669,12 +684,16 @@ function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
      let tile_index = edge_index;
      let tile_edge = road.edge;
 
+     let offset_vertex = 0;
+
      if (isClockwise) {
           tile_index = (tile_index + 1) % edge_tiles.length;
           tile_edge = (tile_edge + 5) % 6;
+          offset_vertex = (road.edge + 1) % 6;
      } else {
           tile_index = (tile_index + (edge_tiles.length - 1)) % edge_tiles.length;
           tile_edge = (tile_edge + 1) % 6
+          offset_vertex = (road.edge + 5) % 6;
      }
 
      const translated_edge = translateToNumberKey(tile_edge)
@@ -686,7 +705,19 @@ function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
           potentialRoad: newRoad
      }
 
-     return newLeg;
+     const first_neighbors = vertex_neighbors[road.tile_index][road.edge]
+     const second_neighbors = vertex_neighbors[road.tile_index][offset_vertex]
+
+     let third_leg_needed = true
+     if (first_neighbors[0][0] == -1 && second_neighbors[0][0] == -1) {
+          third_leg_needed = false;
+     }
+
+     if (third_leg_needed) {
+          return newLeg;
+     } else {
+
+     }
      
 }
 
@@ -717,7 +748,7 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
 
      //function to see if there is valid potential communtiy
      function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
-           
+           console.log("--------------")
            // get all communities on the tile
            const currentTile = current_game.gameboard.tiles[currentRoad.tile_index];
 
@@ -725,14 +756,19 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
                .filter(([, value]) => value.color !== 'white') // Filter non-white spaces
                .map(([key,]) => parseInt(key)); // Extract and convert the key to a number
 
-           //if there is no settlement vertex by any player on that other vertex it passes
-           if (!allRelevantVertexes.includes(otherVertex as community_keys)) {
+               console.log(allRelevantVertexes)
+           // find out if there is a settlement by any player on that other vertex 
+           if (!allRelevantVertexes.includes(otherVertex as community_keys) && !allRelevantVertexes.includes(centerVertex as community_keys)) {
                 let potentialCommunity: community_meta_data = {
                      tile_index: currentRoad.tile_index, 
                      vertex: centerVertex as community_keys  
                  };
+
+                 // find out if there is a settlement by any player on 
+                 console.log(potentialCommunity)
                  newPotentialSettlements.push(potentialCommunity);
            }
+           console.log("--------------")
      }
 
      //if there is a third tile, find it, and add its vertex to the potential roads. 
@@ -749,6 +785,74 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
      //Add potential Settlement if all three legs pass!
      if(newPotentialSettlements.length > 0){
           current_game.current_player.potential_communities.push(...newPotentialSettlements);
+     }
+
+     current_game.players.forEach(player => {
+          player.communities_owned.forEach(community => {
+               cleanPotentials(community, sessionId)
+          });
+     }
+
+     )
+}
+
+/**
+ * Given a settlement and sessionID, cleans up potential settlements that aren't
+ * one away from each other.
+ * @param settlement the settlement to "clean up" around
+ * @param sessionID the current game's ID
+ */
+function cleanPotentials(settlement: community_meta_data, sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+     const player = current_game.current_player
+
+     const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
+
+     if (relativeCommunities.length == 2) {
+
+          //removing potential communities that are on the same vertex.
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter(
+                    (community) =>
+                    (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
+                    (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
+                    (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
+               );
+          });
+
+          // Function to check if a community is within one vertex (plus or minus)
+          const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
+               if (community.tile_index !== reference.tile_index) {
+                    return false;
+               }
+               const absDiff = Math.abs(community.vertex - reference.vertex);
+               return absDiff === 1 || absDiff === 5;
+          };
+
+          // all potential communities that are within one space of the bought settlement
+          const tempCommunitiesToRemove = player.potential_communities.filter(
+               (community) =>
+               isWithinOneVertex(community, settlement) ||
+		     isWithinOneVertex(community, relativeCommunities[0]) ||
+		     isWithinOneVertex(community, relativeCommunities[1])
+          );
+
+          // all potential communities (and neighbors) that are within one space of the bought settlement
+          const potentialCommunitiesToRemove: community_meta_data[] = []
+          tempCommunitiesToRemove.forEach(community => {
+               potentialCommunitiesToRemove.push(community)
+               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[0])
+               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[1])
+          })
+          
+          // remove list of affected potential communities from all players
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter((community) => 
+                    !containsCommunity(potentialCommunitiesToRemove, community)
+               )
+          })
+
      }
 }
 
