@@ -6,6 +6,7 @@ import { storage } from '../../firebase-config';
 import '../../Styles/LandingAuth/AuthenticationStyles.css';
 import { useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+
 interface SignUpComponentProps {
   onSwitch: () => void;
 }
@@ -15,6 +16,7 @@ const SignUpComponent: React.FC<SignUpComponentProps> = ({ onSwitch }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
+  const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
 
@@ -22,7 +24,8 @@ const SignUpComponent: React.FC<SignUpComponentProps> = ({ onSwitch }) => {
     if (!file) return null;
     const fileRef = ref(storage, `profile_pictures/${file.name}`);
     await uploadBytes(fileRef, file);
-    return await getDownloadURL(fileRef);
+    const url = await getDownloadURL(fileRef);
+    return url;
   };
 
   const handleSignUp = async () => {
@@ -81,16 +84,23 @@ const SignUpComponent: React.FC<SignUpComponentProps> = ({ onSwitch }) => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Enter your password"
       />
-      <label className="file-upload-container" htmlFor="profile-upload">
-        Upload Profile Picture
-        <input
-          id="profile-upload"
-          className="login-input"
-          type="file"
-          onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
-          style={{ display: 'none' }} 
-        />
-      </label>
+      {uploadSuccess ? (
+        <div style={{ paddingTop: '5px', color: 'white'}}>Profile Picture Uploaded Successfully!</div>
+      ) : (
+        <label className="file-upload-container" htmlFor="profile-upload">
+          Upload Profile Picture
+          <input
+            id="profile-upload"
+            className="login-input"
+            type="file"
+            onChange={(e) => {
+              setUploadSuccess(true);
+              setFile(e.target.files ? e.target.files[0] : null);
+            }}
+            style={{ display: 'none' }}
+          />
+        </label>
+      )}
 
       <button className="auth-button" onClick={handleSignUp}>Sign Up</button>
       {errorMessage && <p>{errorMessage}</p>}
