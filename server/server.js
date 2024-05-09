@@ -135,14 +135,10 @@ function updateFrontend(session_id) {
         if (client.readyState === WebSocket.OPEN && !no_games_left && gameplay.findPlayerInGame(session_id, client.id)) {
             let state = gameplay.switchClient(client.id, session_id);
             client.send(JSON.stringify(state));
-            console.log(state);
         } else if (gameplay.findPlayerCantJoin(client.id)) {
             client.send(JSON.stringify(gameplay.getNullGame()))
             no_games_left = false;
-            console.log("entered this one");
 
-        } else {
-            console.log("entered limbo");
         }
     });
 }
