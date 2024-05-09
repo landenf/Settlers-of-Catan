@@ -716,7 +716,7 @@ function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
      if (third_leg_needed) {
           return newLeg;
      } else {
-
+          return undefined;
      }
      
 }
@@ -748,7 +748,6 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
 
      //function to see if there is valid potential communtiy
      function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
-           console.log("--------------")
            // get all communities on the tile
            const currentTile = current_game.gameboard.tiles[currentRoad.tile_index];
 
@@ -756,7 +755,6 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
                .filter(([, value]) => value.color !== 'white') // Filter non-white spaces
                .map(([key,]) => parseInt(key)); // Extract and convert the key to a number
 
-               console.log(allRelevantVertexes)
            // find out if there is a settlement by any player on that other vertex 
            if (!allRelevantVertexes.includes(otherVertex as community_keys) && !allRelevantVertexes.includes(centerVertex as community_keys)) {
                 let potentialCommunity: community_meta_data = {
@@ -765,10 +763,8 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
                  };
 
                  // find out if there is a settlement by any player on 
-                 console.log(potentialCommunity)
                  newPotentialSettlements.push(potentialCommunity);
            }
-           console.log("--------------")
      }
 
      //if there is a third tile, find it, and add its vertex to the potential roads. 
@@ -853,6 +849,45 @@ function cleanPotentials(settlement: community_meta_data, sessionId: number) {
                )
           })
 
+     } else if (relativeCommunities.length == 1) {
+          //removing potential communities that are on the same vertex.
+	     player.potential_communities = player.potential_communities.filter(
+               (community) =>
+               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
+               (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex)
+          );
+
+          // Function to check if a community is within one vertex (plus or minus)
+          const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
+               if (community.tile_index !== reference.tile_index) {
+                    return false;
+               }
+               const absDiff = Math.abs(community.vertex - reference.vertex);
+               return absDiff === 1 || absDiff === 5;
+          };
+
+          // all potential communities that are within one space of the bought settlement
+          const tempCommunitiesToRemove = player.potential_communities.filter(
+               (community) =>
+               isWithinOneVertex(community, settlement) ||
+		     isWithinOneVertex(community, relativeCommunities[0])
+          );
+
+          // all potential communities (and neighbors) that are within one space of the bought settlement
+          const potentialCommunitiesToRemove: community_meta_data[] = []
+          tempCommunitiesToRemove.forEach(community => {
+               potentialCommunitiesToRemove.push(community)
+               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[0])
+               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[1])
+          })
+          
+          // remove list of affected potential communities from all players
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter((community) => 
+                    !containsCommunity(potentialCommunitiesToRemove, community)
+               )
+          })
+          
      }
 }
 
@@ -923,6 +958,12 @@ function checkForPotentialSettlementsOnEdge(possible_roads: triad_leg[], session
      if (newPotentialSettlements.length > 0){
           current_game.current_player.potential_communities.push(...newPotentialSettlements);
      }
+
+     current_game.players.forEach(player => {
+          player.communities_owned.forEach(community => {
+               cleanPotentials(community, sessionId)
+          })
+     })
 
 }
 
@@ -1038,16 +1079,13 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
           
 	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
 
-     if (relativeCommunities.length == 2) {
+     cleanPotentials(settlement, sessionId);
+
           //removing potential communities that are on the same vertex.
-          current_game.players.forEach(otherPlayer => {
-               otherPlayer.potential_communities = otherPlayer.potential_communities.filter(
-                    (community) =>
-                    (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
-                    (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
-                    (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
-               );
-          });
+	     player.potential_communities = player.potential_communities.filter(
+               (community) =>
+               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex)
+          );
 
           // Function to check if a community is within one vertex (plus or minus)
           const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
@@ -1061,17 +1099,13 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
           // all potential communities that are within one space of the bought settlement
           const tempCommunitiesToRemove = player.potential_communities.filter(
                (community) =>
-               isWithinOneVertex(community, settlement) ||
-		     isWithinOneVertex(community, relativeCommunities[0]) ||
-		     isWithinOneVertex(community, relativeCommunities[1])
+               isWithinOneVertex(community, settlement)
           );
 
           // all potential communities (and neighbors) that are within one space of the bought settlement
           const potentialCommunitiesToRemove: community_meta_data[] = []
           tempCommunitiesToRemove.forEach(community => {
                potentialCommunitiesToRemove.push(community)
-               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[0])
-               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[1])
           })
           
           // remove list of affected potential communities from all players
@@ -1080,16 +1114,6 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
                     !containsCommunity(potentialCommunitiesToRemove, community)
                )
           })
-
-     } else if (relativeCommunities.length == 1) {
-          //removing potential communities that are on the same vertex.
-	     player.potential_communities = player.potential_communities.filter(
-               (community) =>
-               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
-               (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex)
-          );
-          
-     }
   
 	//increase level of the settlement
 	current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].level++;
