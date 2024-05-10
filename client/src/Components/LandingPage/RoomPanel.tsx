@@ -51,7 +51,6 @@ const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoo
     setButtonsActive(true);
     setRoomPanel(false);
     setReady(false);
-
   }
 
   /**
