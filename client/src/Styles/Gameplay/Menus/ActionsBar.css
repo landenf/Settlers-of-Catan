@@ -80,7 +80,8 @@
 
 .buy-dark {
     background: hsla(0, 0%, 50%, 0.3);
-    color: hsla(0, 0%, 18%, 0.3)
+    color: hsla(0, 0%, 18%, 0.3);
+    pointer-events: none;
 }
 
 .buy-dark:hover {
