@@ -1,6 +1,7 @@
 import { GameState, LimitedPlayer, LimitedSession, Player } from "@shared/types";
 import { players } from "../StaticData/PlayerData";
 import { tiles } from "../StaticData/TileData";
+import { json } from "stream/consumers";
 
 /**
  * This is an empty game. 
@@ -59,7 +60,7 @@ export function newGame(all_games: GameState[], host: Player) {
          players: [host],
          current_player: host,
          gameboard: {
-              tiles: tiles
+              tiles: JSON.parse(JSON.stringify(tiles))
          },
          isValid: true,
          isStarted: false,
