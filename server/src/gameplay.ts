@@ -1560,11 +1560,14 @@ function leaveGame(sessionId: number, client: Player) {
 function findPlayerInGame(sessionId: number, clientId: string) {
      let isInGame = false;
      const game = all_games[findGameIndexById(sessionId)]
-     game.players.forEach(player => {
-          if (player.id === clientId) {
-               isInGame = true;
-          }
-     });
+     if(game != undefined){
+          game.players.forEach(player => {
+               if (player.id === clientId) {
+                    isInGame = true;
+               }
+          });
+     }
+
      return isInGame
 }
 
