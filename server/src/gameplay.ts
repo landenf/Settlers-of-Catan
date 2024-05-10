@@ -122,6 +122,7 @@ function initialRoundSettlement(settlement: community_meta_data, sessionId: numb
 	addingSettlement(settlement, sessionId);
      return getGamestate(sessionId);
 }
+
 /**
  * Function to roll the dice and distribute resources based upon the result.
  */
@@ -404,7 +405,7 @@ function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
     addedPotentialRoads.push(...tileTriads); 
     possible_roads.push(...checkAroundRoads(road))
     // code to add the road in the representation of the neighboring tile. For example, edge 3 
-	// on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
+    // on one tile might correspond to edge 2 on the neighboring tile, and in order to preserve
     // the z-index of rendering, we must render the road on both.
     const neighbor_index = edge_neighbors[road.tile_index as NeighborsKey][road.edge];
 
@@ -420,8 +421,11 @@ function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
 		addedPotentialRoads.push(...NeighborTriads); 
 		possible_roads.push(...checkAroundRoads(neighbor_road))
     } else {
-        findPotentialsOnBoardEdges(road, sessionId);
-        possible_roads.push(checkRoadsAroundOnEdges(road, sessionId))
+          findPotentialsOnBoardEdges(road, sessionId);
+          const newleg = checkRoadsAroundOnEdges(road, sessionId)
+          if (newleg !== undefined) {
+               possible_roads.push(newleg)
+          }
     }
 
     // add potential settlements by checking all roads around the bought road
@@ -435,6 +439,12 @@ function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
         checkForPotentialSettlements([possible_roads[0], possible_roads[3]], sessionId)
         checkForPotentialSettlements([possible_roads[1], possible_roads[2]], sessionId)
     }
+
+    current_game.players.forEach(player => {
+     player.communities_owned.forEach(community => {
+          cleanPotentials(community, sessionId)
+     })
+    })
 }
 
 /**
@@ -450,7 +460,7 @@ function determineClockwiseRotation(road: road_meta_data) {
      const third_sector = [18, 15, 11];
      const fourth_sector = [11, 6, 2];
      const fifth_sector = [2, 1, 0];
-     const sixth_sector = [1, 0, 3]
+     const sixth_sector = [0, 3, 7]
 
      const sectors = [first_sector, second_sector, third_sector, fourth_sector, fifth_sector, sixth_sector];
 
@@ -488,24 +498,34 @@ function findPotentialsOnBoardEdges(road: road_meta_data, sessionId: number) {
      let tile_index = edge_index;
      let tile_edge = road.edge;
 
+     let offset_vertex = 0;
+
      if (isClockwise) {
           tile_index = (tile_index + 1) % edge_tiles.length;
           tile_edge = (tile_edge + 5) % 6;
+          offset_vertex = (road.edge + 1) % 6;
      } else {
           tile_index = (tile_index + (edge_tiles.length - 1)) % edge_tiles.length;
           tile_edge = (tile_edge + 1) % 6
+          offset_vertex = (road.edge + 5) % 6;
      }
 
-     const translated_edge = translateToNumberKey(tile_edge)
-
-     const newRoad: road_meta_data = {tile_index: edge_tiles[tile_index], edge: translated_edge}
+     const newRoad: road_meta_data = {tile_index: edge_tiles[tile_index], edge: tile_edge as community_keys}
 
      const newLeg : triad_leg = {
           builtRoad : road,
           potentialRoad: newRoad
      }
 
-     if (player.potential_roads.indexOf(newRoad) < 0 && current_game.gameboard.tiles[newRoad.tile_index].road_spaces[newRoad.edge] == 'white') {
+     const first_neighbors = vertex_neighbors[road.tile_index][road.edge]
+     const second_neighbors = vertex_neighbors[road.tile_index][offset_vertex]
+
+     let third_leg_needed = true
+     if (first_neighbors[0][0] == -1 && second_neighbors[0][0] == -1) {
+          third_leg_needed = false;
+     }
+
+     if (third_leg_needed && player.potential_roads.indexOf(newRoad) < 0 && current_game.gameboard.tiles[newRoad.tile_index].road_spaces[newRoad.edge] == 'white') {
           player.potential_roads.push(newRoad);
           const noncurrent_players = current_game.players.filter(element => element !== player)
           noncurrent_players.forEach(player => 
@@ -650,12 +670,16 @@ function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
      let tile_index = edge_index;
      let tile_edge = road.edge;
 
+     let offset_vertex = 0;
+
      if (isClockwise) {
           tile_index = (tile_index + 1) % edge_tiles.length;
           tile_edge = (tile_edge + 5) % 6;
+          offset_vertex = (road.edge + 1) % 6;
      } else {
           tile_index = (tile_index + (edge_tiles.length - 1)) % edge_tiles.length;
           tile_edge = (tile_edge + 1) % 6
+          offset_vertex = (road.edge + 5) % 6;
      }
 
      const translated_edge = translateToNumberKey(tile_edge)
@@ -667,7 +691,19 @@ function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
           potentialRoad: newRoad
      }
 
-     return newLeg;
+     const first_neighbors = vertex_neighbors[road.tile_index][road.edge]
+     const second_neighbors = vertex_neighbors[road.tile_index][offset_vertex]
+
+     let third_leg_needed = true
+     if (first_neighbors[0][0] == -1 && second_neighbors[0][0] == -1) {
+          third_leg_needed = false;
+     }
+
+     if (third_leg_needed) {
+          return newLeg;
+     } else {
+          return undefined;
+     }
      
 }
 
@@ -698,7 +734,6 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
 
      //function to see if there is valid potential communtiy
      function check(currentRoad: road_meta_data, centerVertex: number, otherVertex: number | undefined){
-           
            // get all communities on the tile
            const currentTile = current_game.gameboard.tiles[currentRoad.tile_index];
 
@@ -706,12 +741,14 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
                .filter(([, value]) => value.color !== 'white') // Filter non-white spaces
                .map(([key,]) => parseInt(key)); // Extract and convert the key to a number
 
-           //if there is no settlement vertex by any player on that other vertex it passes
-           if (!allRelevantVertexes.includes(otherVertex as community_keys)) {
+           // find out if there is a settlement by any player on that other vertex 
+           if (!allRelevantVertexes.includes(otherVertex as community_keys) && !allRelevantVertexes.includes(centerVertex as community_keys)) {
                 let potentialCommunity: community_meta_data = {
                      tile_index: currentRoad.tile_index, 
                      vertex: centerVertex as community_keys  
                  };
+
+                 // find out if there is a settlement by any player on 
                  newPotentialSettlements.push(potentialCommunity);
            }
      }
@@ -731,7 +768,138 @@ function checkForPotentialSettlements(triad_legs: triad_leg[], sessionId: number
      if(newPotentialSettlements.length > 0){
           current_game.current_player.potential_communities.push(...newPotentialSettlements);
      }
+
+     current_game.players.forEach(player => {
+          player.communities_owned.forEach(community => {
+               cleanPotentials(community, sessionId)
+          });
+     }
+
+     )
 }
+
+/**
+ * Given a settlement and sessionID, cleans up potential settlements that aren't
+ * one away from each other.
+ * @param settlement the settlement to "clean up" around
+ * @param sessionID the current game's ID
+ */
+function cleanPotentials(settlement: community_meta_data, sessionId: number) {
+
+     const current_game = all_games[findGameIndexById(sessionId)]
+     const player = current_game.current_player
+
+     const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
+
+     if (relativeCommunities.length == 2) {
+
+          //removing potential communities that are on the same vertex.
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter(
+                    (community) =>
+                    (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
+                    (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
+                    (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
+               );
+          });
+
+          // all potential communities that are within one space of the bought settlement
+          const tempCommunitiesToRemove = player.potential_communities.filter(
+               (community) =>
+               isWithinOneVertex(community, settlement) ||
+		     isWithinOneVertex(community, relativeCommunities[0]) ||
+		     isWithinOneVertex(community, relativeCommunities[1])
+          );
+
+          // all potential communities (and neighbors) that are within one space of the bought settlement
+          const potentialCommunitiesToRemove: community_meta_data[] = []
+          tempCommunitiesToRemove.forEach(community => {
+               potentialCommunitiesToRemove.push(community)
+               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[0])
+               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[1])
+          })
+          
+          // remove list of affected potential communities from all players
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter((community) => 
+                    !containsCommunity(potentialCommunitiesToRemove, community)
+               )
+          })
+
+     } else if (relativeCommunities.length == 1) {
+          //removing potential communities that are on the same vertex.
+	     player.potential_communities = player.potential_communities.filter(
+               (community) =>
+               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
+               (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex)
+          );
+
+          // all potential communities that are within one space of the bought settlement
+          const tempCommunitiesToRemove = player.potential_communities.filter(
+               (community) =>
+               isWithinOneVertex(community, settlement) ||
+		     isWithinOneVertex(community, relativeCommunities[0])
+          );
+
+          // all potential communities (and neighbors) that are within one space of the bought settlement
+          const potentialCommunitiesToRemove: community_meta_data[] = []
+          tempCommunitiesToRemove.forEach(community => {
+               potentialCommunitiesToRemove.push(community)
+               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[0])
+               potentialCommunitiesToRemove.push(findRelativeNeighboringVertexFromVertex(community)[1])
+          })
+          
+          // remove list of affected potential communities from all players
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter((community) => 
+                    !containsCommunity(potentialCommunitiesToRemove, community)
+               )
+          })
+          
+     } else {
+          //removing potential communities that are on the same vertex.
+	     player.potential_communities = player.potential_communities.filter(
+               (community) =>
+               (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex)
+          );
+
+          // all potential communities that are within one space of the bought settlement
+          const tempCommunitiesToRemove = player.potential_communities.filter(
+               (community) =>
+               isWithinOneVertex(community, settlement)
+          );
+
+          // all potential communities (and neighbors) that are within one space of the bought settlement
+          const potentialCommunitiesToRemove: community_meta_data[] = []
+          tempCommunitiesToRemove.forEach(community => {
+               potentialCommunitiesToRemove.push(community)
+               potentialCommunitiesToRemove.push({
+                    tile_index: vertex_neighbors[community.tile_index][community.vertex][0][0],
+                    vertex: vertex_neighbors[community.tile_index][community.vertex][0][1] as community_keys
+               })
+          })
+          
+          // remove list of affected potential communities from all players
+          current_game.players.forEach(otherPlayer => {
+               otherPlayer.potential_communities = otherPlayer.potential_communities.filter((community) => 
+                    !containsCommunity(potentialCommunitiesToRemove, community)
+               )
+          })
+     }
+}
+
+/**
+ * Function to check if a community is within one vertex (plus or minus)
+ * @param community the community to check for
+ * @param reference the community to check against
+ */ 
+const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
+     if (community.tile_index !== reference.tile_index) {
+          return false;
+     }
+     const absDiff = Math.abs(community.vertex - reference.vertex);
+     return absDiff === 1 || absDiff === 5;
+};
 
 /**
  * Checks for potential settlements on the board's edge given three roads
@@ -800,6 +968,12 @@ function checkForPotentialSettlementsOnEdge(possible_roads: triad_leg[], session
      if (newPotentialSettlements.length > 0){
           current_game.current_player.potential_communities.push(...newPotentialSettlements);
      }
+
+     current_game.players.forEach(player => {
+          player.communities_owned.forEach(community => {
+               cleanPotentials(community, sessionId)
+          })
+     })
 
 }
 
@@ -916,7 +1090,6 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
      const type = tile.type as keyof resource_counts;
      player.resource_gain[diceRoll][type] = player.resource_gain[diceRoll][type] + 1;
      
-     
 	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
      relativeCommunities.forEach(community => {
           const nextTile = current_game.gameboard.tiles[(community.tile_index)];
@@ -981,6 +1154,30 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
 		 }
 	}
 }
+
+/**
+ * Checks if a given list has the community
+ * @param communities list of communities to check against
+ * @param community community to check for
+ */
+function containsCommunity (communities: community_meta_data[], community: community_meta_data) {
+
+     let containsCommunity = false;
+
+     communities.forEach(element => {
+          let validSet = true;
+          if (element == undefined || community == undefined) {
+               validSet = false; 
+          } 
+          if (validSet && element.tile_index == community.tile_index) {
+               if (element.vertex == community.vertex) {
+                    containsCommunity = true;
+               }
+          }
+     })
+     return containsCommunity;
+}
+
 /**
  * Helper function to find relative vertices at the same spot for the other two tiles given one tile. 
  */
@@ -995,6 +1192,7 @@ function findRelativeNeighboringVertexFromVertex (community: community_meta_data
           //for tile one find the edge that touches the origional tile
           let tileOneEdge = edge_neighbors[tileOne as NeighborsKey].indexOf(community.tile_index);
           let tileOneEdgeTwo = edge_neighbors[tileOne as NeighborsKey].indexOf(tileTwo);
+
           returnCommuntiies.push({
                tile_index: tileOne,
                vertex: vertexBetweenRoads(tileOneEdge, tileOneEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
@@ -1008,7 +1206,7 @@ function findRelativeNeighboringVertexFromVertex (community: community_meta_data
           returnCommuntiies.push({
                tile_index: tileTwo,
                vertex: vertexBetweenRoads(tileTwoEdge, tileTwoEdgeTwo) as community_keys //The max of any two edges will be their vertex inbetween
-          })       
+          })
      }
 
      return returnCommuntiies;
@@ -1082,16 +1280,27 @@ function awardLargestArmy(sessionId: number){
  * property accordingly.
  */
 function checkWinState(sessionId: number) {
-
      const current_game = all_games[findGameIndexById(sessionId)]
 
      var winner: Player | undefined = undefined;
      current_game.players.forEach(player => {
           if (player.vp >= 10) {
                winner = player;
+               endGame(sessionId);
           }
      });
      current_game.winner = winner;
+}
+
+/**
+ * Ends the current game.
+ */
+function endGame(sessionId: number){
+     let current_game = all_games[findGameIndexById(sessionId)] 
+     current_game.isValid = false;
+     current_game.isStarted = false;
+     current_game = null_game;
+     all_games = all_games.splice(findGameIndexById(sessionId), 1);
 }
 
 /**
@@ -1183,7 +1392,8 @@ function translateToLimitedState(sessionId: number) {
           isValid: current_game.isValid,
           canStart: current_game.canStart,
           isStarted: current_game.isStarted,
-		roundNumber: current_game.roundNumber
+		roundNumber: current_game.roundNumber,
+          winner: current_game.winner
      }
      return limited_state
      
@@ -1431,10 +1641,10 @@ function getGamestate(sessionId: number) {
  * Used when we can't find a game, typically due to trying to join a game
  * via ID when it's already full.
  */
-function getNullGame() {
+function getNullGame(sessionId: number) {
      return null_game;
 }
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, buySettlement, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement }
+     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement, endGame, findGameIndexById }

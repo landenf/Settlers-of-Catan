@@ -1,6 +1,6 @@
 @keyframes onEmptyHover {
-    0% {filter: brightness(100%)};
-    100% {filter: brightness(50%)};
+    0% {filter: brightness(150%)};
+    100% {filter: brightness(180%)};
   }
 
 .steal-modal {
@@ -16,6 +16,7 @@
     text-align: center;
     display: grid;
     grid-template-rows: 10% 10% 50% 30%;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 .header {
@@ -36,13 +37,28 @@
     margin: auto;
 }
 
+.avatar-name {
+    text-align: center;
+    position: absolute;
+    z-index: 5;
+    font-size: 20px;
+    margin-top: 23%;
+}
+
 .players {
     margin: auto;
     margin-top: 4%;
     display: grid;
     grid-template-columns: 100%;
     width: 30%;
-    height: auto;
+    height: 100%;
+}
+
+.player-box {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    display: flex;
 }
 
 .two {

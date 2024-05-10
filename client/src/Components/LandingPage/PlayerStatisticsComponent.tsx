@@ -33,7 +33,7 @@ const PlayerStatisticsComponent = () => {
     if (loading || !userProfile) return <div>Loading...</div>;
     if (error || profileError) return <div>Error: {error?.message || profileError}</div>;
     if (!user) return <div>Please login to view your profile.</div>;
-    const player_image = `/images/empty-avatar.jpg`;
+    const player_image = user.photoURL? user.photoURL : "/images/empty-avatar.jpg";
 
     return (
         <div className="Profile">

@@ -76,9 +76,10 @@ const EmptyResourceCard: React.FC<EmptyResourceCardProp> = ({ type, cardIsSelect
   }
 
   return (
-    <div className={"resourceCard empty " + (isSelected ? "selected" : "")} style={{ position: "relative"}} onClick={() => setIfNoSelection()}>
-    <img className="resourceImage" src={`./images/resources/${cardType}.jpg`} alt={cardType} />
-      </div>
+    <div className={"resourceCard empty " + (isSelected ? "selected" : "")} onClick={() => setIfNoSelection()}>
+      <p className={"resources-to-give-label " + (isSelected ? "" : "disabled")}>{tradeType === "offer" ? "3" : "1"}</p>
+      <img className="resourceImage" src={`./images/resources/${cardType}.jpg`} alt={cardType} />
+    </div>
   );
 };
 
