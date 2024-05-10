@@ -1,7 +1,7 @@
 # Settlers of Catan
 
 ## Overview
-- **Brief Description**: Overview at its core, Catan is a settlement-building game. You and up to three other players will compete to earn resources and construct buildings across a small island. You’ll be trading with other players to grab the resources you most need, and placing down new roads and settlements to earn Victory Points (VP).
+- **Brief Description**: At its core, Catan is a settlement-building game. You and up to three other players will compete to earn resources and construct buildings across a small island. You’ll be trading with other players to grab the resources you most need, and placing down new roads and settlements to earn Victory Points (VP).
 - **Key Features**: Our version of online catan is a multi-player online video game based on the origional board game. It will feature up to four players, the ability to buy roads and settlements, as well as obtaining victory points. 
 
 ## Task
@@ -35,7 +35,7 @@ This structure ensures a seamless and dynamic gaming experience, capable of hand
 ## How to Play
 
 ### Online
-Play Online (Link)
+[Play Online](https://catan-4dea2.web.app/)  
 
 ### Locally
 
