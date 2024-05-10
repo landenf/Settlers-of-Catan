@@ -1089,7 +1089,9 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
      const tile = current_game.gameboard.tiles[(settlement.tile_index)];
      const diceRoll = tile.number_roll as ResourceGainKey;
      const type = tile.type as keyof resource_counts;
-     player.resource_gain[diceRoll][type] = player.resource_gain[diceRoll][type] + 1;
+     if (type !== "Desert" as keyof resource_counts) {
+          player.resource_gain[diceRoll][type] = player.resource_gain[diceRoll][type] + 1;
+     }
      
 	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
      relativeCommunities.forEach(community => {
