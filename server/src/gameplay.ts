@@ -1083,57 +1083,11 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
 function addingSettlement(settlement: community_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)]
 	const player = current_game.current_player;
-	player.communities_owned.push(settlement); //for VP purposes only add once not on neighbors -- todo check this 
-     player.vp++;
-     const tile = current_game.gameboard.tiles[(settlement.tile_index)];
-     const diceRoll = tile.number_roll as ResourceGainKey;
-     const type = tile.type as keyof resource_counts;
-     player.resource_gain[diceRoll][type] = player.resource_gain[diceRoll][type] + 1;
-     
-	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
-     relativeCommunities.forEach(community => {
-          const nextTile = current_game.gameboard.tiles[(community.tile_index)];
-          const nextDiceRoll = nextTile.number_roll as ResourceGainKey;
-          const nextType = nextTile.type as keyof resource_counts;
-          player.resource_gain[nextDiceRoll][nextType] = player.resource_gain[nextDiceRoll][nextType] + 1;
 
-     })
+	player.communities_owned.push(settlement); 
+     player.vp++;     
 
-
-	//todo edge case fix: if there isnt two relative communities then only check one or errors. 
-	//removing potential communities that are on the same vertex.
-	player.potential_communities = player.potential_communities.filter(
-		 (community) =>
-		 (community.tile_index !== settlement.tile_index || community.vertex !== settlement.vertex) &&
-		 (community.tile_index !== relativeCommunities[0].tile_index || community.vertex !== relativeCommunities[0].vertex) &&
-		 (community.tile_index !== relativeCommunities[1].tile_index || community.vertex !== relativeCommunities[1].vertex)
-	);
-
-	// Function to check if a community is within one vertex (plus or minus)
-	const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
-		 if (community.tile_index !== reference.tile_index) {
-			 return false;
-		 }
-		 const absDiff = Math.abs(community.vertex - reference.vertex);
-		 return absDiff === 1 || absDiff === 5;
-	 };
-	
-	// Get a list of all potential communities within one space (plus or minus one vertex)
-	const potentialCommunitiesToRemove = player.potential_communities.filter(
-		 (community) =>
-		 isWithinOneVertex(community, settlement) ||
-		 isWithinOneVertex(community, relativeCommunities[0]) ||
-		 isWithinOneVertex(community, relativeCommunities[1])
-	);
-
-	let allOneAway = findRelativeNeighboringVertexFromVertex(potentialCommunitiesToRemove[0]);
-	//removing those potential communties one away
-	player.potential_communities = player.potential_communities.filter(
-		 (community) =>
-		 (community.tile_index !== potentialCommunitiesToRemove[0].tile_index || community.vertex !== potentialCommunitiesToRemove[0].vertex) &&
-		 (community.tile_index !== allOneAway[0].tile_index || community.vertex !== allOneAway[0].vertex) &&
-		 (community.tile_index !== allOneAway[1].tile_index || community.vertex !== allOneAway[1].vertex)
-	);
+     cleanPotentials(settlement, sessionId);
   
 	//increase level of the settlement
 	current_game.gameboard.tiles[settlement.tile_index].community_spaces[settlement.vertex].level++;
