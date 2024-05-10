@@ -1086,6 +1086,19 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
 
 	player.communities_owned.push(settlement); 
      player.vp++;     
+     const tile = current_game.gameboard.tiles[(settlement.tile_index)];
+     const diceRoll = tile.number_roll as ResourceGainKey;
+     const type = tile.type as keyof resource_counts;
+     player.resource_gain[diceRoll][type] = player.resource_gain[diceRoll][type] + 1;
+     
+	const relativeCommunities = findRelativeNeighboringVertexFromVertex(settlement);
+     relativeCommunities.forEach(community => {
+          const nextTile = current_game.gameboard.tiles[(community.tile_index)];
+          const nextDiceRoll = nextTile.number_roll as ResourceGainKey;
+          const nextType = nextTile.type as keyof resource_counts;
+          player.resource_gain[nextDiceRoll][nextType] = player.resource_gain[nextDiceRoll][nextType] + 1;
+
+     })
 
      cleanPotentials(settlement, sessionId);
   
