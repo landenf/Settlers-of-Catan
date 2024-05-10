@@ -182,13 +182,14 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
                 <div className="user-info">
                   <VictoryPointsComponent vp={state.client.vp} color={state.client.color}/>
                   <Hand gamestate={state} />
-                  <RollButton callBackend={callBackend} state={state} rolled={rolled} updateRolled={updateRolled} 
-                  isCurrentPlayer={isCurrentPlayer}/>
+                  <RollButton callBackend={callBackend} state={state} rolled={rolled || tradeModalEnabled || stealModalEnabled} 
+                  updateRolled={updateRolled} isCurrentPlayer={isCurrentPlayer}/>
                 </div>
             </div>
             <div className={"ActionsBarComponent"}>
               <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
-              boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements} rollButtonState={rolled}/>
+              boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}
+              inBackground={tradeModalEnabled || stealModalEnabled} rollButtonState={rolled}/>
               
               <InitialPlacementMenuComponent state={state} callBackend={callBackend} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements} selectedRoad={selectedRoad} selectedSettlement={selectedSettlement}/>
             </div>

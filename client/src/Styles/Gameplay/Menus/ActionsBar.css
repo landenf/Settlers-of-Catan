@@ -88,3 +88,7 @@
     background: hsla(0, 0%, 50%, 0.3);
     cursor: default;
 }
+
+.in-background {
+    background: hsla(0, 0%, 50%, 0.3);
+}

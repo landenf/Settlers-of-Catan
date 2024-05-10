@@ -41,6 +41,11 @@ interface ActionsBarComponentProps {
   updatePotentialSettlements: (selected: string) => void;
 
   /**
+   * True when the actions bar should be in the background and not clickable.
+   */
+  inBackground: boolean;
+
+  /**
    * This is true if the button has already been rolled.
    */
   rollButtonState: boolean
@@ -52,7 +57,7 @@ interface ActionsBarComponentProps {
  * cards. Appears on a player's game turn.
  */
 const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, callBackend, setTradeModal, 
-  boughtDev, isCurrentPlayer, updatePotentialSettlements, rollButtonState }) => {
+  boughtDev, isCurrentPlayer, updatePotentialSettlements, rollButtonState, inBackground }) => {
 
   /**
  * A null body with the gamestate. This'll probably be removed before
@@ -68,12 +73,13 @@ const KnightBody: StealRequest = {
 }
   
   const handleButtonClick = async (action: string, body: BackendRequest) => {
-
-    callBackend(action, body)
+    if (!inBackground) {
+      callBackend(action, body)
+    }
   };
 
   return (
-    <div aria-label="actions-bar" className={("absolute-container " + ((isCurrentPlayer && state.roundNumber > 2 && rollButtonState == true) ? "" : "disabled"))}>
+    <div aria-label="actions-bar" className={("absolute-container " + ((isCurrentPlayer && state.roundNumber > 2 && rollButtonState == true && !inBackground) ? "" : "disabled"))}>
         <div className="inner-container">
         <h1 className="text-bold">BUILD</h1>
         <div className="line-thick"></div>
@@ -87,7 +93,7 @@ const KnightBody: StealRequest = {
         <div className="line"></div>
         <div className="line-thick"></div>
         <button className={"button text-bold " + (boughtDev ? "buy-dark" : "")} aria-label="buy-dev-card" 
-          disabled={boughtDev} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
+          disabled={boughtDev || inBackground} onClick={() => handleButtonClick('buyDevCard', NullBody)}>DEVELOPMENT CARD</button>
         <div className="line-thick"></div>
         <h1 className="button text-bold" aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
         <div className="line-thick"></div>
