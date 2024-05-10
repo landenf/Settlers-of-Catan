@@ -116,6 +116,9 @@ function handleRequest(request, body) {
         case "initialSettlementPlacement":
             gameplay.initialRoundSettlement(body.settlementData, body.state.id);
             break;
+        case "endGame":
+            gameplay.endGame(body.state.id);
+            break;
         default:
             throw new InvalidEndpointError(`Endpoint "${request}" is not valid!`);
     }
@@ -129,6 +132,7 @@ function handleRequest(request, body) {
 function updateFrontend(session_id, current_client) {
     wss.clients.forEach((client) => {
         if (client.readyState === WebSocket.OPEN && !no_games_left && gameplay.findPlayerInGame(session_id, client.id)) {
+
             let state = gameplay.switchClient(client.id, session_id)
             client.send(JSON.stringify(state))
         } 
@@ -137,6 +141,7 @@ function updateFrontend(session_id, current_client) {
             state.client = current_client;
             client.send(JSON.stringify(state))
             no_games_left = false;
+
         }
     });
 }

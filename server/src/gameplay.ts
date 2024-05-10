@@ -1081,16 +1081,27 @@ function awardLargestArmy(sessionId: number){
  * property accordingly.
  */
 function checkWinState(sessionId: number) {
-
      const current_game = all_games[findGameIndexById(sessionId)]
 
      var winner: Player | undefined = undefined;
      current_game.players.forEach(player => {
           if (player.vp >= 10) {
                winner = player;
+               endGame(sessionId);
           }
      });
      current_game.winner = winner;
+}
+
+/**
+ * Ends the current game.
+ */
+function endGame(sessionId: number){
+     let current_game = all_games[findGameIndexById(sessionId)] 
+     current_game.isValid = false;
+     current_game.isStarted = false;
+     current_game = null_game;
+     all_games = all_games.splice(findGameIndexById(sessionId), 1);
 }
 
 /**
@@ -1182,7 +1193,8 @@ function translateToLimitedState(sessionId: number) {
           isValid: current_game.isValid,
           canStart: current_game.canStart,
           isStarted: current_game.isStarted,
-		roundNumber: current_game.roundNumber
+		roundNumber: current_game.roundNumber,
+          winner: current_game.winner
      }
      return limited_state
      
@@ -1436,4 +1448,4 @@ function getNullGame(sessionId: number) {
 
 module.exports = { buyDevCard, handleDiceRoll, tradeWithBank, handleKnight, cancelSteal, 
      passTurn, switchClient, buyRoad, buySettlement, generateGame, assignClientId, joinGame,
-     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement }
+     findPlayerInGame, getNullGame, findPlayerCantJoin, leaveGame, handleReady, startGame, initialRoundRoad, initialRoundSettlement, endGame, findGameIndexById }

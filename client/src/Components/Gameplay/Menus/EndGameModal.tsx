@@ -98,10 +98,16 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
      * Function to exit the end game modal and potentially the application or game lobby.
      */
     const handleExitGame = () => {
+        const request: BackendRequest = {
+            state: gamestate
+        }
+        
         setEndGameModal(false);
-        navigate('/home');
-    }
 
+        navigate("/home");      
+  
+        
+    }
     return (
         <div className={"end-game-modal " + (endGameModalState ? "" : "disabled")}>
         <div className="header">Game Over</div>
