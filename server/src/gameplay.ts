@@ -1204,6 +1204,7 @@ function awardMostRoads(sessionId: number){
      if(current_game.current_longest_road == null){
           current_game.current_longest_road = player;
 		  player.hasMostRoads = true;
+            player.vp++;
      } else {
           if(current_game.current_longest_road != null && player.roads_owned.length > current_game.current_longest_road.roads_owned.length){
 			current_game.players.forEach(player => {
