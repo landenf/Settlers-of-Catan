@@ -40,6 +40,9 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
     if (state.isStarted) {
       navigate("/session")
     }
+    if(user == null){
+      navigate("/")
+    }
     if (setupNeeded) {
       generateUser();
       setSetupNeeded(false);
