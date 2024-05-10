@@ -52,7 +52,15 @@ npm start
 ```
 
 ## Demo
-- Presentation and Video
+Presentation and Demo video in /summary/Release 2
+
+<p align="center">
+  <img src="./summary/login.png" alt="Image 1 Description" width="300"/>
+  <img src="./summary/lobby.png" alt="Image 1 Description" width="300"/>
+  <img src="./summary/gameplay1.png" alt="Image 2 Description" width="300"/>
+  <img src="./summary/gameplay2.png" alt="Image 2 Description" width="300"/>
+  <img src="./summary/gameover.png" alt="Image 1 Description" width="300"/>
+</p>
 
 ## Contributors
 
