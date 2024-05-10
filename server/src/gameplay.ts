@@ -1098,8 +1098,9 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
           const nextTile = current_game.gameboard.tiles[(community.tile_index)];
           const nextDiceRoll = nextTile.number_roll as ResourceGainKey;
           const nextType = nextTile.type as keyof resource_counts;
-          player.resource_gain[nextDiceRoll][nextType] = player.resource_gain[nextDiceRoll][nextType] + 1;
-
+          if (nextType !== "Desert" as keyof resource_counts) {
+               player.resource_gain[nextDiceRoll][nextType] = player.resource_gain[nextDiceRoll][nextType] + 1;
+          }
      })
 
      cleanPotentials(settlement, sessionId);
