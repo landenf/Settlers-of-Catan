@@ -1,6 +1,7 @@
 import { GameState, LimitedPlayer, LimitedSession, Player } from "@shared/types";
 import { players } from "../StaticData/PlayerData";
 import { tiles } from "../StaticData/TileData";
+import { json } from "stream/consumers";
 
 /**
  * This is an empty game. 
@@ -11,12 +12,13 @@ var null_game: GameState = {
      diceNumber: { number1: 1, number2: 1 },
      players: players,
      current_player: players[0],
-     current_largest_army: "",
-     current_longest_road: "",
      gameboard: {
           tiles: tiles
      },
-     isValid: false
+     isValid: false,
+     isStarted: false,
+     canStart: false,
+     roundNumber: 1
 }
 
 /**
@@ -52,17 +54,18 @@ export function newGame(all_games: GameState[], host: Player) {
     host.color = "red"
 
     const gamestate: GameState = {
-        id: newId,
-        client: host,
-        diceNumber: {number1: 1, number2: 1},
-        players: [host],
-        current_player: host,
-        current_largest_army: "",
-        current_longest_road: "",
-        gameboard: {
-             tiles: tiles
-        },
-        isValid: true
+         id: newId,
+         client: host,
+         diceNumber: { number1: 1, number2: 1 },
+         players: [host],
+         current_player: host,
+         gameboard: {
+              tiles: JSON.parse(JSON.stringify(tiles))
+         },
+         isValid: true,
+         isStarted: false,
+         canStart: false,
+         roundNumber: 1
     }
 
     return gamestate;
@@ -105,16 +108,16 @@ export function assignPlayerColor(game: GameState, newPlayer: Player) {
  */
 export function reassignPlayers(game: GameState) {
 
-     const players = game.players
+     const gamePlayers = game.players
      const colors = ["red", "blue", "orange", "green"]
 
-     for (let i = 0; i < players.length; i++) {
-          players[i].color = colors[i]
+     for (let i = 0; i < gamePlayers.length; i++) {
+          gamePlayers[i].color = colors[i]
      }
 
-     game.players = players;
-     game.current_player = players[0];
+     game.players = gamePlayers;
+     game.current_player = gamePlayers[0];
 
-     return game
+     return game;
 
 }

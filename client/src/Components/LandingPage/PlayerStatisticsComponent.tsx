@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { query, collection, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../firebase-config';
+import "../../Styles/Gameplay/Player/PlayerStats.css";
 
 const PlayerStatisticsComponent = () => {
     const [user, loading, error] = useAuthState(auth);
     const [userProfile, setUserProfile] = useState<any>(null);
     const [profileError, setProfileError] = useState<string | null>(null);
-
     useEffect(() => {
         const fetchUserProfile = async () => {
             if (user) {
@@ -30,22 +30,33 @@ const PlayerStatisticsComponent = () => {
         fetchUserProfile();
     }, [user]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading || !userProfile) return <div>Loading...</div>;
     if (error || profileError) return <div>Error: {error?.message || profileError}</div>;
     if (!user) return <div>Please login to view your profile.</div>;
+    const player_image = user.photoURL ? user.photoURL : "/images/empty-avatar.jpg";
 
     return (
-        <div>
-            <h1>User Profile</h1>
-            {userProfile ? (
-                <div>
-                    <p>UID: {userProfile.UID}</p>
-                    <p>Game Wins: {userProfile.gameWins}</p>
+        <div className="Profile">
+            <div className="main-stats-box">
+            <img style={{ height: '15vh', width: '15vh', borderRadius: '90%'}} src={player_image} alt="Avatar Image" />
+            <div className="playerName">{userProfile.username}</div>
+                <div className="stats">
+                    <div className="stats-column">
+                        <p className="individual-stat">Total Victory Points: {userProfile.VictoryPoints}</p>
+                        <p className="individual-stat">Games Won: {userProfile.GamesWon}</p>
+                        <p className="individual-stat">Largest Army: {userProfile.LargestArmy}</p>
+                        <p className="individual-stat">Most Roads: {userProfile.MostRoads}</p>
+                    </div>
+                    <div className="stats-column">
+                        <p className="individual-stat">Total Wheat: {userProfile.TotalWheat}</p>
+                        <p className="individual-stat">Total Stone: {userProfile.TotalStone}</p>
+                        <p className="individual-stat">Total Wood: {userProfile.TotalWood}</p>
+                        <p className="individual-stat">Total Brick: {userProfile.TotalBrick}</p>
+                        <p className="individual-stat">Total Sheep: {userProfile.TotalSheep}</p>
+                    </div>
                 </div>
-            ) : (
-                <p>No profile data available.</p>
-            )}
-        </div>
+            </div>
+       </div>
     );
 };
 

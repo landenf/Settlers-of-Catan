@@ -13,11 +13,6 @@ import { LimitedPlayer } from "@shared/types";
 const PlayerComponent = (player: LimitedPlayer) => {
 
     /**
-     * The player's avatar URL. TODO: Connect to a database of user images.
-     */
-    const player_image = `/images/${player.image}.jpg`
-
-    /**
      * The player's screen name.
      */
     const player_name = player.name
@@ -41,7 +36,7 @@ const PlayerComponent = (player: LimitedPlayer) => {
     return(
         <div>
             <div className="playerBox">
-                <img src={player_image} className={avatar_color}></img>
+                <img src={player.image} className={avatar_color}></img>
                 <div>
                     <p className="heading">{player_name}</p>
                     <div className="statContainer">
@@ -57,8 +52,8 @@ const PlayerComponent = (player: LimitedPlayer) => {
                 </div>
             </div>
             <div className="playerAwards">
-                <img src="/images/temp_road.png" className="hidden"></img>
-                <img src="/images/temp_knight.png" className="hidden"></img>
+                <img src="/images/temp_road.png" className={player.hasMostRoads ? "" : "hidden"}></img>
+                <img src="/images/temp_knight.png" className={player.hasLargestArmy ? "" : "hidden"}></img>
             </div>
         </div>
     )

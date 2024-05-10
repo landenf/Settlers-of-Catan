@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 import {auth} from '../../firebase-config.js';
 import '../../Styles/LandingAuth/AuthenticationStyles.css'; 
 import { useNavigate } from 'react-router-dom';
+import { Player } from '@shared/types.js';
 
 interface SignInComponentProps {
   onSwitch: () => void;
@@ -14,27 +15,54 @@ const SignInComponent: React.FC<SignInComponentProps> = ({ onSwitch }) => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const navigate = useNavigate(); // For navigation
 
+  //function to handle firebase authentication and login.
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
       console.log(userCredential.user);
       setErrorMessage('');
-    } catch (error: any) { // Catching 'any' because Firebase errors are of type FirebaseError, which is not included by default
-      if (error.code === 'auth/invalid-login-credentials') {
+      navigate('/home'); 
+    } catch (error: any) { 
+      if (error.code === 'auth/invalid-email') {
         setErrorMessage('Invalid login credentials');
         setTimeout(() => {
           setErrorMessage('');
         }, 3000);
-      navigate('/home'); // Navigate on success
       } else {
-          alert(error.code); // Consider replacing alert with a more user-friendly error handling strategy
+        setErrorMessage(error.code);
       }
     }
   };
 
+  //function to handle reseting users password through firebase auth
+  const handleForgotPassword = async () => {
+    if (!loginEmail) {
+      setErrorMessage('Please enter your email address to reset your password.');
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, loginEmail);
+      setErrorMessage('Password reset email sent!');
+      setTimeout(() => {
+        setErrorMessage('');
+      }, 5000);
+    } catch (error: any) {
+      if (error.code === 'auth/invalid-email') {
+        setErrorMessage('Invalid login credentials');
+        setTimeout(() => {
+          setErrorMessage('');
+        }, 3000);
+      } else {
+        setErrorMessage(error.code);
+      }
+    }
+  };
+  
+
   return (
     <div className="auth-container">
       <div className="login-text">Sign In</div>
+      {errorMessage && <p>{errorMessage}</p>}
       <input
         className="login-input"
         type="email"
@@ -50,8 +78,8 @@ const SignInComponent: React.FC<SignInComponentProps> = ({ onSwitch }) => {
         placeholder="Enter your password"
       />
       <button className="auth-button" onClick={handleLogin}>Sign In</button>
-      {errorMessage && <p>{errorMessage}</p>}
       <div className="switch-auth" onClick={onSwitch}>Need an account? Sign Up</div>
+      <div className="switch-auth" onClick={handleForgotPassword}>Forgot Password?</div>
     </div>
 
   );

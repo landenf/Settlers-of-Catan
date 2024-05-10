@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../Styles/LandingAuth/JoinRoomWithCode.css";
 import { LimitedSession } from "@shared/types";
 import { BackendRequest } from "../../Enums/requests";
@@ -51,7 +51,6 @@ const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoo
     setButtonsActive(true);
     setRoomPanel(false);
     setReady(false);
-
   }
 
   /**
@@ -74,7 +73,7 @@ const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoo
       <div className="header-box">
         <p className="header-text"> ROOM: {state.id}</p>
       </div>
-      <div className="main-content-box">
+      <div className={("main-content-box")}>
         {players.map((player) => {
 
           const color = player.color === "red" ? "Red" :
@@ -86,7 +85,7 @@ const RoomPanel: React.FC<JoinRoomWithCodeProps> = ({ state, callBackend, setRoo
             <div className="lobby-players" key={player.color}>
               <div className={"player-color-banner banner-" + (player.color)}>{color}</div>
               <p className="players-in-room">
-                P{players.indexOf(player) + 1}: {player.name}
+                {player.name.length > 12 ?player.name.slice(0, 12) + '...' : player.name}
                 {(!player.ready && <FontAwesomeIcon icon={faBan} className="icon-not-ready"/>)}
                 {(player.ready && <FontAwesomeIcon icon={faCheck} className="icon-ready"/>)}
               </p>

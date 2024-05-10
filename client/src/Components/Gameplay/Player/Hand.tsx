@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ResourceCard from "./ResourceCard";
-import "../../../Styles/Gameplay/Player/Hand.css"
+import "../../../Styles/Gameplay/Player/Hand.css";
 import { LimitedSession, Player } from "@shared/types";
 
 /**
@@ -10,7 +10,7 @@ interface StateProp {
   /**
    * The current game session's state.
    */
-  gamestate: LimitedSession
+  gamestate: LimitedSession;
 }
 
 /**
@@ -21,7 +21,6 @@ interface StateProp {
  * @returns all cards in hand and victory points
  */
 const Hand = (props: StateProp) => {
-
   /**
    *get player resources
    */
@@ -31,7 +30,7 @@ const Hand = (props: StateProp) => {
    * the set of resources this player holds
    */
   let resources = [
-    { name: "sheep", value: hand["sheep"]},
+    { name: "sheep", value: hand["sheep"] },
     { name: "wheat", value: hand["wheat"] },
     { name: "wood", value: hand["wood"] },
     { name: "brick", value: hand["brick"] },
@@ -42,10 +41,19 @@ const Hand = (props: StateProp) => {
     <div className="personalCards">
       {/** Makes a card for each resource */}
       {resources.map((resource) => {
-        return <ResourceCard type={resource.name} value={resource.value} />;
+        return (
+          <ResourceCard
+            key={resource.name}
+            type={resource.name}
+            value={resource.value}
+          />
+        );
       })}
 
-      <ResourceCard type="developmentCard" value={props.gamestate.client.knightCards} />
+      <ResourceCard
+        type="developmentcard"
+        value={props.gamestate.client.knightCards}
+      />
     </div>
   );
 };

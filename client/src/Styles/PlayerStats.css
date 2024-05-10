@@ -1,0 +1,53 @@
+.Profile {
+    align-items: center;
+    height: 100%;
+    width: 60%;
+    position: relative;
+  }
+  
+.main-content-box {
+    top: 20vh;
+    width: 40vw;
+    height: 65vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #c3332b;
+    border-radius: 129px;
+    margin: 0 auto;
+    }
+  
+.stats {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%; /* Ensure the stats div uses full width of its parent */
+}
+
+.stats-column {
+    display: flex;
+    flex-direction: column;
+    width: 50%; /* Each column takes half of the stats div */
+    align-items: center; /* Center-align the items if desired */
+}
+
+.individual-stat {
+    color: white;
+    font-size: 25px;
+    font-family: 'Inter', sans-serif;
+    margin: 5px 0;
+    text-align: center;
+}
+
+  
+  .playerName {
+    position: relative;
+    color: white;
+    font-size: 80px;
+    font-family: Inter;
+    padding: 2vh;
+    font-weight: 400px;
+    word-wrap: break-word;
+  }
