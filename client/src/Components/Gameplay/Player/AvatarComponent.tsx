@@ -28,9 +28,7 @@ const AvatarComponent: React.FC<AvatarProps> = ({image, color, selected, setSele
     const playerChosen = color == playerSelected;
 
     return (
-        <div>
-            <img src={player_image} className={(playerChosen ? "chosen": "") + " player avatar " + color} onClick={() => handleClick()}></img>
-        </div>
+        <img src={player_image} className={(playerChosen ? "chosen": "") + " player avatar " + color} onClick={() => handleClick()}></img>
     )
 }
 

@@ -106,10 +106,17 @@ const StealModal: React.FC<StealModalProp> = ({stealModalState, setStealModal, g
         <div className={"steal-modal " + (stealModalState ? "" : "disabled")}>
             <div className="header">KNIGHT CARD</div>
             <div className="description">Please select a player to steal from:</div>
-            <div className={"players " + player_count_class}>
-                {players_to_steal.map((player) => {
-                    return <AvatarComponent key={player.id} image={player.image} color={player.color} selected={isSelected} setSelected={(updateSelection)} playerSelected={playerSelected} setPlayerSelected={updatePlayerSelection}/>
-                })}
+            <div>
+                <div className={"players " + player_count_class}>
+                    {players_to_steal.map((player) => {
+                        return <div className="player-box">
+                            <p className="avatar-name">{player.name}</p>
+                            <AvatarComponent key={player.id} image={player.image} color={player.color} 
+                                selected={isSelected} setSelected={(updateSelection)} playerSelected={playerSelected} 
+                                setPlayerSelected={updatePlayerSelection}/>
+                        </div>
+                    })}
+                </div>
             </div>
             <div className="stealButtons">
                 <button className={"denySteal"} onClick={() => cancel_steal()}>Cancel</button>
