@@ -69,7 +69,7 @@ interface InitialPlacementMenuComponentProps {
           <div className="line"></div>
           <h1 className={"button text-bold " + ((!selectedRoad || selectedSettlement) ? "buy-dark" : "")} aria-label="build-initial-settlement" onClick={() => updatePotentialSettlements('settlements')}>Settlement</h1>
           <div className="line-thick"></div>
-          <h1 className={"button text-bold " + ((!selectedRoad && !selectedSettlement) ? "buy-dark" : "")} aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
+          <h1 className={"button text-bold " + ((!selectedRoad || !selectedSettlement) ? "buy-dark" : "")} aria-label="passTurn" onClick={() => handleButtonClick('passTurn', NullBody)}>PASS TURN</h1>
           <div className="line-thick"></div>
         </div>
     </div>
