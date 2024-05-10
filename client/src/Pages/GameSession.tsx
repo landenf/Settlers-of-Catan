@@ -14,6 +14,9 @@ import StealModal from "../Components/Gameplay/Menus/StealModal";
 import Dice from "../Components/Gameplay/Gameboard/Dice";
 import { BackendRequest } from "../Enums/requests";
 import EndGameModal from "../Components/Gameplay/Menus/EndGameModal";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase-config";
+import { useNavigate } from "react-router-dom";
 
 /**
  * An interface that provides strong typing to a game session's game state prop.
@@ -50,6 +53,15 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   const [isCurrentPlayer, setCurrentPlayer] = useState(state.client.color === state.current_player.color);
   const [selectedRoad, setSelectedRoad] = useState(false);
   const [selectedSettlement, setSelectedSettlement] = useState(false);
+  const [user, loading, error] = useAuthState(auth);
+  const navigate = useNavigate(); // For navigation
+
+  useEffect(() => {
+    if (user == null) {
+      navigate('/');
+    }
+  }, []);
+
 
   const updateState = (newState: LimitedSession) => {
     setState(newState);  

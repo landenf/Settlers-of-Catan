@@ -36,9 +36,13 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate(); // For navigation
 
+
   useEffect(() => {
     if (state.isStarted) {
       navigate("/session")
+    }
+    if(user == null){
+      navigate("/")
     }
     if (setupNeeded) {
       generateUser();
