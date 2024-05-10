@@ -51,7 +51,7 @@ const Hand = (props: StateProp) => {
       })}
 
       <ResourceCard
-        type="developmentCard"
+        type="developmentcard"
         value={props.gamestate.client.knightCards}
       />
     </div>
