@@ -114,8 +114,8 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
         <div className="description">Results: {gamestate.winner ? gamestate.winner.name : "No Winner (Error)"}</div>
         <div className="content">
             <div className="personal-info">
-                <img style={{ height: '15vh', width: '15vh', borderRadius: '90%'}} src={'/images/empty-avatar.jpg'} alt="Avatar Image" />
-                <p>Total Victory Points: {gamestate.current_player.vp}</p>
+                <img style={{ height: '15vh', width: '15vh', borderRadius: '90%'}} src={gamestate.client.image} alt="Avatar Image" />
+                <p>Total Victory Points: {gamestate.client.vp}</p>
             </div>
             <div className="leaderboard">
                 <div className="description">Leaderboard:</div>
