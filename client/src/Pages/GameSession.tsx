@@ -126,6 +126,12 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
     }
 
     setCurrentPlayer(newState.client.color === newState.current_player.color);
+    if (!isCurrentPlayer) {
+      setshowPotenialBuildOptions({
+        roads: false,  
+        settlements: false
+      })
+    }
   });
 
 
