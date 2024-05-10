@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../../Styles/Gameplay/Menus/ActionsBar.css'; 
 import { LimitedSession } from '@shared/types';
 import { BackendRequest } from '../../../Enums/requests';
@@ -51,16 +51,21 @@ interface InitialPlacementMenuComponentProps {
     state: state
     }
     
+    const [roadButton, setRoadButton] = useState("Road");
+    const buttonClickRoads = () => {
+      setRoadButton("Choose a Road");
+    }
     
     const handleButtonClick = async (action: string, body: BackendRequest) => {
 
         callBackend(action, body)
+        setRoadButton("Road");
       };
     
     return (
       <div aria-label="initial-bar" className={("absolute-container " + ((isCurrentPlayer && (state.roundNumber  <= 2))  ? "" : "disabled"))}>
         <div className="inner-container">
-          <h1 className={"button text-bold " + (selectedRoad ? "buy-dark" : "")} aria-label="build-initial-road" onClick={() => updatePotentialSettlements('roads')}>Road</h1>
+          <h1 className={"button text-bold " + (selectedRoad ? "buy-dark" : "")} aria-label="build-initial-road" onClick={buttonClickRoads}>{roadButton}</h1>
           <div className="line"></div>
           <h1 className={"button text-bold " + ((!selectedRoad || selectedSettlement) ? "buy-dark" : "")} aria-label="build-initial-settlement" onClick={() => updatePotentialSettlements('settlements')}>Settlement</h1>
           <div className="line-thick"></div>
