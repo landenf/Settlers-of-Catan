@@ -1215,7 +1215,7 @@ function awardMostRoads(sessionId: number){
 		   });
             current_game.current_longest_road = player;
             player.vp++;
-			player.hasMostRoads = true;
+		  player.hasMostRoads = true;
           }
      }
 }
@@ -1228,7 +1228,7 @@ function awardLargestArmy(sessionId: number){
      const player = current_game.current_player
      if(current_game.current_largest_army == undefined){
           current_game.current_largest_army = player;
-		  current_game.current_largest_army.vp++;
+		  player.vp++;
 		  player.hasLargestArmy = true;
      } else {
         if(current_game.current_largest_army != undefined && player.knightCards > current_game.current_largest_army.knightCards){    
@@ -1240,7 +1240,7 @@ function awardLargestArmy(sessionId: number){
 				}
 		   });
        		current_game.current_largest_army = player;
-       		current_game.current_largest_army.vp++;
+       		player.vp++;
 			player.hasLargestArmy = true;
         }
      }
