@@ -17,34 +17,10 @@ const backend = new WebSocket("ws://localhost:5000");
 
 
 function App() {
-  const [loading, setLoading] = useState(true); // State to track loading state
-
-  useEffect(() => {
-    // WebSocket connection setup
-    backend.onopen = () => {
-      console.log('WebSocket connected');
-      setLoading(false); // Once connection is successful, set loading to false
-    };
-
-    backend.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    // Close WebSocket connection on unmount
-    return () => {
-      backend.close();
-    };
-  }, []);
-
   const [state, setState] = useState(MockLimitedGameState);
 
   return (
     <Router>
-      {loading ? (
-        // Display loading indicator while loading
-        <div>Loading...</div>
-      ) : (
-        // Once loading is complete, render routes
         <Routes>
           {/* This will be our home page - unathenticated users*/}
           <Route path="/" element={<AuthenticationPage />} />
@@ -53,7 +29,6 @@ function App() {
           {/* This will be for routing to game session - users in game*/}
           <Route path="/session" element={<GameSession state={state} setState={setState} backend={backend} />} />
         </Routes>
-      )}
     </Router>
   );
 }
