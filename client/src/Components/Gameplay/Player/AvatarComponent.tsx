@@ -10,8 +10,6 @@ interface AvatarProps {
 }
 
 const AvatarComponent: React.FC<AvatarProps> = ({image, color, selected, setSelected, playerSelected, setPlayerSelected}) => {
-    const player_image = `/images/${image}.jpg`
-
     /**
      * Lets the player select another player by clicking on their avatar.
      */
@@ -28,7 +26,9 @@ const AvatarComponent: React.FC<AvatarProps> = ({image, color, selected, setSele
     const playerChosen = color == playerSelected;
 
     return (
-        <img src={player_image} className={(playerChosen ? "chosen": "") + " player avatar " + color} onClick={() => handleClick()}></img>
+        <div>
+            <img src={image} className={(playerChosen ? "chosen": "") + " player avatar " + color} onClick={() => handleClick()}></img>
+        </div>
     )
 }
 

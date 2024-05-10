@@ -96,7 +96,7 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
 
               let photo_URL = user.photoURL
               if (photo_URL == null || photo_URL == "") {
-                photo_URL = "empty-avatar"
+                photo_URL = "./images/empty-avatar.jpg"
               }
 
               const player: Player = {

@@ -189,7 +189,7 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
             <div className={"ActionsBarComponent"}>
               <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
               boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}
-              inBackground={tradeModalEnabled || stealModalEnabled}/>
+              inBackground={tradeModalEnabled || stealModalEnabled} rollButtonState={rolled}/>
               
               <InitialPlacementMenuComponent state={state} callBackend={callBackend} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements} selectedRoad={selectedRoad} selectedSettlement={selectedSettlement}/>
             </div>

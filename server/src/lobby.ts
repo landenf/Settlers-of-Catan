@@ -107,16 +107,16 @@ export function assignPlayerColor(game: GameState, newPlayer: Player) {
  */
 export function reassignPlayers(game: GameState) {
 
-     const players = game.players
+     const gamePlayers = game.players
      const colors = ["red", "blue", "orange", "green"]
 
-     for (let i = 0; i < players.length; i++) {
-          players[i].color = colors[i]
+     for (let i = 0; i < gamePlayers.length; i++) {
+          gamePlayers[i].color = colors[i]
      }
 
-     game.players = players;
-     game.current_player = players[0];
+     game.players = gamePlayers;
+     game.current_player = gamePlayers[0];
 
-     return game
+     return game;
 
 }

@@ -85,3 +85,22 @@
     justify-content: center;
     text-align: center;
 }
+
+/* Styles for the file upload label */
+.file-upload-container {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: grey;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+  margin: 10px 0;
+  transition: background-color 0.3s;
+}
+
+.file-upload-container:hover {
+  background-color: rgb(227, 94, 94);
+}

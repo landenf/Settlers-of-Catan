@@ -119,21 +119,23 @@ function handleRequest(request, body) {
         default:
             throw new InvalidEndpointError(`Endpoint "${request}" is not valid!`);
     }
-    updateFrontend(body.state.id);
+    updateFrontend(body.state.id, body.state.client);
 }
 
 /**
  * Function used to send a limited gamestate to every client
  * using the websocket.
  */
-function updateFrontend(session_id) {
+function updateFrontend(session_id, current_client) {
     wss.clients.forEach((client) => {
-
         if (client.readyState === WebSocket.OPEN && !no_games_left && gameplay.findPlayerInGame(session_id, client.id)) {
             let state = gameplay.switchClient(client.id, session_id)
             client.send(JSON.stringify(state))
-        } else if (gameplay.findPlayerCantJoin(client.id)) {
-            client.send(JSON.stringify(gameplay.getNullGame()))
+        } 
+        else if (gameplay.findPlayerCantJoin(client.id)) {
+            let state = gameplay.getNullGame();
+            state.client = current_client;
+            client.send(JSON.stringify(state))
             no_games_left = false;
         }
     });
