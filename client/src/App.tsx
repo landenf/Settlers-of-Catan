@@ -5,7 +5,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import { MockLimitedGameState } from "./StaticData/GameStateStatic";
+import { MockLimitedGameState } from "@shared/StaticData/GameStateStatic";
 import AuthenticationPage from "./Pages/Authentication";
 import LandingPage from "./Pages/LandingPage";
 

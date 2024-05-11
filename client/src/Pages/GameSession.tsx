@@ -5,7 +5,7 @@ import InitialPlacementMenuComponent from "../Components/Gameplay/Menus/InitialP
 import Hand from "../Components/Gameplay/Player/Hand"
 import VictoryPointsComponent from "../Components/Gameplay/Player/victoryPointsComponent";
 import React, { useEffect, useState } from "react";
-import { tiles } from "../StaticData/GameBoardStatic";
+import { tiles } from "@shared/StaticData/GameBoardStatic";
 import "../Styles/Gameplay/GameSession.css";
 import { LimitedPlayer, LimitedSession, Player } from "@shared/types";
 import RollButton from "../Components/Gameplay/Gameboard/RollButton";

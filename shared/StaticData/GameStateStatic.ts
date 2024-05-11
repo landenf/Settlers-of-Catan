@@ -1,6 +1,6 @@
-import { GameState, LimitedSession } from "@shared/types";
+import { GameState, LimitedSession } from "../types";
 import { players } from "./PlayerData";
-import { tiles } from "../StaticData/GameBoardStatic";
+import { tiles } from "./GameBoardStatic";
 
 /**
  * A mocked gamestate that holds all possible information about all players.
