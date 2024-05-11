@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../../Styles/Gameplay/Gameboard/Dice.css"
 
 /**
@@ -13,7 +13,7 @@ interface DieProps {
 }
 
 /**
- * The dice component rendered in the center of the screen.
+ * A die component rendered in the center of the screen.
  */
 const SingleDie = (props: DieProps) => {
     const imgUrl = `./images/dice/${props.displayNumber}.png`;

@@ -3,9 +3,7 @@ import '../../../Styles/Gameplay/Player/PlayerComponent.css';
 import { LimitedPlayer } from "@shared/types";
 
 /**
- * A React component corresponding to a specific Catan player. Created using 
- * information gathered from its prop, a player type. Displays character color, 
- * avatar, total VP, total resources, and current game awards.
+ * A component corresponding to a specific Catan player.
  * @param player A player type. Holds necessary render information including 
  * total VP, resources, and avatar.
  * @returns a front-end component representing a player and their current stats.

@@ -1,14 +1,4 @@
-const road_one = {
-    tile_index: 6,
-    edge: 5,
-};
-
-const road_two = {
-    tile_index: 5,
-    edge: 2,
-};
-
-import { GameState, Player, road_meta_data } from "@shared/types";
+import { Player } from "@shared/types";
     const player1: Player = {
         id: "0",
         name: "steven",

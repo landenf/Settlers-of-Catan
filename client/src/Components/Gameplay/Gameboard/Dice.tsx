@@ -13,6 +13,9 @@ interface DiceProp {
     numberRolled: {number1: number, number2: number};
 }
 
+/**
+ * The combination of both dice in the center of the screen.
+ */
 const Dice = (props: DiceProp) => {
 
     var die1Number = props.numberRolled.number1;

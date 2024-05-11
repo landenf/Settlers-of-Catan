@@ -1,7 +1,6 @@
 import { GameState, Player, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer, community_keys, community_spaces, resource_counts } from "@shared/types";
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
-import { InvalidResourceError } from "./errors";
 import { assignPlayerColor, newGame, reassignPlayers } from "./lobby";
 
 /**
@@ -24,7 +23,6 @@ var null_game: GameState = {
 
 /**
  * List of all games currently being played.
- * TODO: Replace example game with games from the landing page / join page!
  */
 var all_games: GameState[] = []
 
@@ -273,7 +271,7 @@ function handleKnight(victimId: number, sessionId: number) {
      }
 
      // select the resource from the hand and exchange it between players
-     const stolen_resource = translateToResourcesKey(player_hand[card_index_stolen])
+     const stolen_resource = player_hand[card_index_stolen] as ResourcesKey
 
      victim.hand[stolen_resource]--;
      thief.hand[stolen_resource]++;
@@ -682,7 +680,7 @@ function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
           offset_vertex = (road.edge + 5) % 6;
      }
 
-     const translated_edge = translateToNumberKey(tile_edge)
+     const translated_edge = tile_edge as community_keys
 
      const newRoad: road_meta_data = {tile_index: edge_tiles[tile_index], edge: translated_edge}
 
@@ -989,8 +987,8 @@ function tradeWithBank(resourceOffer: string, resourceGain: string, sessionId: n
 
      const player = current_game.current_player;
 
-     let translatedOffer = translateToResourcesKey(resourceOffer)
-     let translatedGain = translateToResourcesKey(resourceGain)
+     let translatedOffer = resourceOffer as ResourcesKey
+     let translatedGain = resourceGain as ResourcesKey
 
      if (player.hand[translatedOffer] >= 3){
           player.hand[translatedOffer] -= 3;
@@ -1001,35 +999,6 @@ function tradeWithBank(resourceOffer: string, resourceGain: string, sessionId: n
 
      return getGamestate(sessionId);
 
-}
-
-/**
- * Translates a string literal (typically from a JSON object) 
- * to the ResourcseKey type.
- * @param toTranslate the string to translate
- */
-function translateToResourcesKey(toTranslate: string) {
-     var translation: ResourcesKey
-     switch (toTranslate) {
-          case "wheat":
-               translation = "wheat"
-               break;
-          case "brick":
-               translation = "brick"
-               break;
-          case "stone":
-               translation = "stone"
-               break;
-          case "sheep":
-               translation = "sheep"
-               break;
-          case "wood":
-               translation = "wood"
-               break;
-          default:
-               throw new InvalidResourceError(`The resource type '${toTranslate}' isn't recognized by the system!`);
-     }
-     return translation
 }
 
 /**
@@ -1369,40 +1338,6 @@ function translateToLimitedState(sessionId: number) {
      return limited_state
      
 }
-
-type numberKey = keyof community_spaces
-
-/**
-     * Translates a number into a community space or road space's index.
-     * @param toTranslate the index to translate to number key
-     * @returns a number key that provides strong 0-5 typing to the index.
-     */
-function translateToNumberKey(toTranslate: number) {
-     var translation: numberKey
-     switch (toTranslate) {
-         case 0:
-             translation = 0;
-             break;
-         case 1:
-             translation = 1;
-             break;
-         case 2: 
-             translation = 2;
-             break;
-         case 3: 
-             translation = 3;
-             break;
-         case 4: 
-             translation = 4;
-             break;
-         case 5:
-             translation = 5;
-             break;
-         default:
-             throw new InvalidResourceError("Tried accessing an invalid index of a community space!")
-     }
-     return translation
- }
 
 /**
  * Assigns a unique client ID to the user.

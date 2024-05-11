@@ -4,7 +4,7 @@ import ActionsBarComponent from "../Components/Gameplay/Menus/ActionsBarComponen
 import InitialPlacementMenuComponent from "../Components/Gameplay/Menus/InitialPlacementMenuComponent";
 import Hand from "../Components/Gameplay/Player/Hand"
 import VictoryPointsComponent from "../Components/Gameplay/Player/victoryPointsComponent";
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { tiles } from "../StaticData/GameBoardStatic";
 import "../Styles/Gameplay/GameSession.css";
 import { LimitedPlayer, LimitedSession, Player } from "@shared/types";
@@ -38,11 +38,28 @@ export interface StateProp {
   setState: (newState: LimitedSession) => void;
 }
 
+/**
+ * An interface that provides strong typing to a list of booleans
+ * that determine which set of potentials is showing (either roads
+ * or settlements).
+ */
 export interface GameBoardActionsDisplay {
+
+  /**
+   * When set to true, potential roads will appear on the gameboard.
+   */
   roads: boolean,
+
+  /**
+   * When set to true, potential settlements wlil appear on the gameboard.
+   */
   settlements: boolean
 }
 
+/**
+ * The major component of the Catan game. Holds all necessary components needed to play a full 
+ * game of Catan.
+ */
 const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
   const [tradeModalEnabled, setTradeModal] = useState(false);
   const [stealModalEnabled, setStealModal] = useState(false);
@@ -62,19 +79,11 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
     }
   }, []);
 
-
-  const updateState = (newState: LimitedSession) => {
-    setState(newState);  
-  }
-
-  const updateTradeModal = (newState: boolean) => {
-    setTradeModal(newState)
-  }
-
-  const updateStealModal = (newState: boolean) => {
-    setStealModal(newState);
-  }
-  
+  /**
+   * Function used to update whether or not potential roads / settlements are
+   * being rendered on the frontend.
+   * @param selected the type of potential structure to display
+   */
   const updatePotentialSettlements = (selected: string) => {
     if (selected == 'settlements') {
       setshowPotenialBuildOptions(prevState => ({
@@ -88,10 +97,6 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
       }));
     }
   };
-
-  const updateRolled = (newState: boolean) => {
-    setRolled(newState);
-  }
 
   const updateBoughtDev = (newState: boolean) => {
     setBoughtDev(newState);
@@ -115,7 +120,7 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
    */
   websocket.addEventListener("message", (msg) => {
     const newState: LimitedSession = JSON.parse(msg.data)
-    updateState(newState)
+    setState(newState)
     
     if (newState.client.hasKnight) {
       setStealModal(true);
@@ -179,9 +184,9 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
 
   return (
   <div>
-    <TradeModal setTradeModal={updateTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} callBackend={callBackend}/>
-    <StealModal setStealModal={updateStealModal} stealModalState={stealModalEnabled} gamestate={state} callBackend={callBackend}/>
-    { endGameModalEnabled && <EndGameModal setEndGameModal={setEndGameModal} endGameModalState={endGameModalEnabled} gamestate={state} callBackend={callBackend}/>}
+    <TradeModal setTradeModal={setTradeModal} tradeModalState={tradeModalEnabled} gamestate={state} callBackend={callBackend}/>
+    <StealModal setStealModal={setStealModal} stealModalState={stealModalEnabled} gamestate={state} callBackend={callBackend}/>
+    { endGameModalEnabled && <EndGameModal setEndGameModal={setEndGameModal} endGameModalState={endGameModalEnabled} gamestate={state}/>}
       <div className="background-container">
         <div className={"game-container " + (tradeModalEnabled || stealModalEnabled ? "in-background" : "")}>
             <div className="PlayerbarComponent"><PlayerBarComponent players={players_to_render}/></div>
@@ -191,7 +196,6 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
                       <GameBoard 
                           tiles={tiles}
                           gamestate={ state }
-                          updateState={ updateState } 
                           showPotenialBuildOptions={showPotenialBuildOptions}  
                           callBackend={callBackend}
                           selectedRoad={selectedRoad}
@@ -201,11 +205,11 @@ const GameSession: React.FC<StateProp> = ({state, backend, setState}) => {
                   <VictoryPointsComponent vp={state.client.vp} color={state.client.color}/>
                   <Hand gamestate={state} />
                   <RollButton callBackend={callBackend} state={state} rolled={rolled || tradeModalEnabled || stealModalEnabled} 
-                  updateRolled={updateRolled} isCurrentPlayer={isCurrentPlayer}/>
+                  setRolled={setRolled} isCurrentPlayer={isCurrentPlayer}/>
                 </div>
             </div>
             <div className={"ActionsBarComponent"}>
-              <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={updateTradeModal}
+              <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={setTradeModal}
               boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={updatePotentialSettlements}
               inBackground={tradeModalEnabled || stealModalEnabled} rollButtonState={rolled}/>
               

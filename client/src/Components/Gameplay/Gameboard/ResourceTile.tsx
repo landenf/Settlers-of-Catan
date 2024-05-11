@@ -1,12 +1,9 @@
 import { Hexagon, Text, Hex } from 'react-hexgrid';
 import React from 'react';
-import { LimitedSession, Tile, community_keys, community_meta_data, road_keys, road_meta_data, road_spaces } from '@shared/types';
+import { LimitedSession, Tile, community_keys, community_meta_data, road_keys, road_meta_data } from '@shared/types';
 import { useEffect, useState } from 'react';
 import { BackendRequest, RoadRequest, SettlementRequest } from '../../../Enums/requests';
-import { GameState } from '@shared/types';
-import { InvalidIndexError } from '../../../Enums/errors';
 import { GameBoardActionsDisplay } from '../../../Pages/GameSession';
-import { players } from '../../../StaticData/PlayerData';
 
 /**
  * An interface that provides strong typing to a resource tile's hexagon prop.
@@ -31,11 +28,6 @@ interface HexProp {
      * The backend information related to the game state.
      */
     gamestate: LimitedSession;
-
-    /**
-     * The function to update the gamestate from this component.
-     */
-    updateState: (newState: LimitedSession) => void;
 
     /**
      * Boolean to show or hide potential build options.
@@ -72,7 +64,7 @@ interface Settlement_Display_Data {
  * resource type and a number associated.
  * @param props information about the tile passed through, typically from the backend server.
  */
-const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateState, 
+const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, 
     showPotenialBuildOptions, selectedRoad, callBackend }) => {
 
 
@@ -99,13 +91,12 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
             const endX = edgeLength * Math.cos(angleRad + Math.PI / 3);
             const endY = edgeLength * Math.sin(angleRad + Math.PI / 3);
 
-            let key = translateToNumberKey(i);
-            let communitySpaceData = gamestate.gameboard.tiles[index].community_spaces[key];
+            let communitySpaceData = gamestate.gameboard.tiles[index].community_spaces[i as numberKey];
 
             let isValidPotientialCommunityVertex = gamestate.client.potential_communities.some(community => 
                 community.tile_index === index && community.vertex === i);
 
-            //if there is a potential community
+            //if there is a potential community, draw it
             if ((showPotenialBuildOptions.settlements && isValidPotientialCommunityVertex)) {
                  newSettlements.push({
                     x: startX, 
@@ -114,7 +105,8 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                     color: 'grey',
                     vertex: i
                 });
-            //owned communtiy
+
+            // if there is a built community, draw it
             } else if (communitySpaceData.level > 0){
                 newSettlements.push({
                     x: startX, 
@@ -132,7 +124,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 endX: endX, 
                 endY: endY,
                 color:  (showPotenialBuildOptions.roads && isValidPotientialRoadEdge) ? 'grey' : 
-                    gamestate.gameboard.tiles[index].road_spaces[translateToNumberKey(i)]
+                    gamestate.gameboard.tiles[index].road_spaces[i as numberKey]
             })
         }
 
@@ -141,40 +133,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
     }, [gamestate, showPotenialBuildOptions.settlements, showPotenialBuildOptions.roads]); 
 
 
-    /**
-     * Translates a number into a community space or road space's index.
-     * @param toTranslate the index to translate to number key
-     * @returns a number key that provides strong 0-5 typing to the index.
-     */
-    function translateToNumberKey(toTranslate: number) {
-        var translation: numberKey
-        switch (toTranslate) {
-            case 0:
-                translation = 0;
-                break;
-            case 1:
-                translation = 1;
-                break;
-            case 2: 
-                translation = 2;
-                break;
-            case 3: 
-                translation = 3;
-                break;
-            case 4: 
-                translation = 4;
-                break;
-            case 5:
-                translation = 5;
-                break;
-            default:
-                throw new InvalidIndexError("Tried accessing an invalid index of a community space!")
-        }
-        return translation
-    }
-
-
-    //handle buying a road
+    // handle buying a road
     const handleEdgeClick = async (idx: road_keys, e: any) => {
         e.stopPropagation(); 
 
@@ -188,6 +147,8 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
                 state: gamestate
             }
 
+            // if the game has moved past the first two rounds of initial placement,
+            // simply call the backend to buy a road
             if(gamestate.roundNumber > 2){
                 callBackend("buyRoad", body)
             } else {
@@ -197,7 +158,7 @@ const ResourceTile: React.FC<HexProp> = ({ hex, index, tile, gamestate, updateSt
 
     };
 
-     //handle buying a settlement
+     // handle buying a settlement
      const handleVertexClick = async (idx: community_keys, e: any) => {
         e.stopPropagation(); 
         if(showPotenialBuildOptions.settlements){ // were in 'buy' mode

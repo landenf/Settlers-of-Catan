@@ -2,6 +2,9 @@ import { GameState, LimitedSession } from "@shared/types";
 import { players } from "./PlayerData";
 import { tiles } from "../StaticData/GameBoardStatic";
 
+/**
+ * A mocked gamestate that holds all possible information about all players.
+ */
 export const MockGameState: GameState = {
     id: 0,
     client: players[0],
@@ -21,6 +24,10 @@ export const MockGameState: GameState = {
     roundNumber: 1
 }
 
+/**
+ * A limited game state that holds less information about players other than
+ * the client.
+ */
 export const MockLimitedGameState: LimitedSession = {
     id: 0,
     client: players[0],

@@ -3,8 +3,10 @@ import MenuButtonComponent from "./MenuButtonComponent";
 import "../../Styles/LandingAuth/MenuOptions.css";
 import { BackendRequest } from "../../Enums/requests";
 import { LimitedSession } from "@shared/types";
-import { useNavigate } from "react-router-dom";
 
+/**
+ * An interface providing strong typing to the menu toggle component's props
+ */
 interface MenuToggleProps {
 
   /**
@@ -37,8 +39,6 @@ interface MenuToggleProps {
 /**
  * Creates all of the buttons that the landing page
  * will toggle between.
- *
- * @returns All menu button options.
  */
 const MenuToggleComponent: React.FC<MenuToggleProps> = ({ callBackend, state, setRoomPanel, buttonsActive, setButtonsActive }) => {
 
@@ -62,6 +62,9 @@ const MenuToggleComponent: React.FC<MenuToggleProps> = ({ callBackend, state, se
 
   })
 
+  /**
+   * Function to call the backend and start the game once all players have readied up.
+   */
   const handleGameStart = () => {
     const request: BackendRequest = {
       state: state

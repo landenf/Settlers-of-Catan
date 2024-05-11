@@ -7,12 +7,33 @@ import { LimitedSession, Tile } from '@shared/types';
 import { GameBoardActionsDisplay } from '../../../Pages/GameSession';
 import { BackendRequest } from '../../../Enums/requests';
 
+/**
+ * Interface providing strong typing to the props passed to the
+ * gameboard.
+ */
 interface GameBoardProp {
+
+  /**
+   * The set of resource tiles which comprise this game board.
+   */
   tiles: Tile[],
+
+  /**
+   * The gamestate that this gameboard is a part of.
+   */
   gamestate: LimitedSession,
-  updateState: (newState: LimitedSession) => void;
+
+  /**
+   * An object of booleans which tells the frontend which set of potentials
+   * to display: either potential settlements or roads.
+   */
   showPotenialBuildOptions: GameBoardActionsDisplay;
+
+  /**
+   * Set to true if a road has been purchased by a user this turn.
+   */
   selectedRoad: boolean;
+
   /**
    * Function to call the backend through the main websocket.
    */
@@ -24,7 +45,7 @@ interface GameBoardProp {
  * it shows each individual tile, their resource type, and their number to roll.
  * @param props a boardstate often retrieved and modified in the backend
  */
-const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, showPotenialBuildOptions, callBackend, selectedRoad }) => {
+const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, showPotenialBuildOptions, callBackend, selectedRoad }) => {
   // generate hexagonal grid
   const BoardGenerator = GridGenerator.getGenerator('hexagon');
   const initialHexagons = BoardGenerator.apply(null, GameBoardConfiguration.mapProps as any);
@@ -46,7 +67,6 @@ const GameBoard: React.FC<GameBoardProp> = ({ tiles, gamestate, updateState, sho
               index={i} 
               tile={tiles[i]}
               gamestate={ gamestate }
-              updateState={updateState}
               showPotenialBuildOptions={showPotenialBuildOptions}
               callBackend={callBackend}
               selectedRoad={selectedRoad}

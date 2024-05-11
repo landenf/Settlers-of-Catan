@@ -7,10 +7,23 @@ import '../../Styles/LandingAuth/AuthenticationStyles.css';
 import { useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
+/**
+ * Set of props used to provide outside functionality to the sign
+ * up component.
+ */
 interface SignUpComponentProps {
+
+  /**
+   * Function that determines behavior for what happens when a player
+   * switches between the sign up and sign in components.
+   */
   onSwitch: () => void;
 }
 
+/**
+ * Component used to sign up for the game by creating a new user account
+ * with password, email, display name, and photo.
+ */
 const SignUpComponent: React.FC<SignUpComponentProps> = ({ onSwitch }) => {
   const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');

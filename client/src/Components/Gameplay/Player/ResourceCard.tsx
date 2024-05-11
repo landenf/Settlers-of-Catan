@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 
 /**
  * An interface that provides strong typing to a resource card prop.
@@ -17,6 +16,9 @@ export interface ResourceCardProp {
   value: number;
 }
 
+/**
+ * A component representing a single type of resource card with resource counts
+ */
 const ResourceCard = (props: ResourceCardProp) => {
   const cardType = props.type;
   return (

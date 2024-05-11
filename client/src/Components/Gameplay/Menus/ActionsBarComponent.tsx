@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../../Styles/Gameplay/Menus/ActionsBar.css'; 
 import { LimitedSession } from '@shared/types';
-import { BackendRequest, StealRequest } from '../../../Enums/requests';
+import { BackendRequest } from '../../../Enums/requests';
 
 /**
  * An interface that provides strong typing to props passed to the action bar.
@@ -65,11 +65,6 @@ const ActionsBarComponent: React.FC<ActionsBarComponentProps> = ({ state, callBa
  */
 const NullBody: BackendRequest = {
   state: state
-}
-
-const KnightBody: StealRequest = {
-  state: state,
-  victim: 1
 }
   
   const handleButtonClick = async (action: string, body: BackendRequest) => {

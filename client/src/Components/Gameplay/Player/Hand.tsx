@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import ResourceCard from "./ResourceCard";
 import "../../../Styles/Gameplay/Player/Hand.css";
-import { LimitedSession, Player } from "@shared/types";
+import { LimitedSession } from "@shared/types";
 
 /**
  * An interface that provides strong typing to a game state prop.
@@ -17,8 +17,6 @@ interface StateProp {
  * Component that displays the amount of victory points a player has as well as
  * the numbers of all 5 resource cards and the number of development cards currently
  * in a player's hand
- *
- * @returns all cards in hand and victory points
  */
 const Hand = (props: StateProp) => {
   /**
@@ -39,7 +37,6 @@ const Hand = (props: StateProp) => {
 
   return (
     <div className="personalCards">
-      {/** Makes a card for each resource */}
       {resources.map((resource) => {
         return (
           <ResourceCard
