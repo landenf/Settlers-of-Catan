@@ -46,7 +46,7 @@ const MockGameSession = (props: MockDataProps) => {
                 (buyingSettlement ? "settlement-found" : "")}></div>
             <div aria-label="test-trade-modal" className={(tradeModalEnabled ? "tradeModalOn" : "tradeModalOff")}></div>
             <RollButton callBackend={callBackend} state={props.state} rolled={rolled} 
-            updateRolled={setRolled} isCurrentPlayer={isCurrentPlayer}/>
+            setRolled={setRolled} isCurrentPlayer={isCurrentPlayer}/>
             <ActionsBarComponent state={state} callBackend={callBackend} setTradeModal={setTradeModal}
             boughtDev={boughtDev} isCurrentPlayer={isCurrentPlayer} updatePotentialSettlements={setSelected}
             inBackground={false} rollButtonState={rolled}/>

@@ -42,8 +42,13 @@ interface InitialPlacementMenuComponentProps {
   
   }
 
-  const InitialPlacementMenuComponent: React.FC<InitialPlacementMenuComponentProps> = ({ state, callBackend, isCurrentPlayer, updatePotentialSettlements, selectedRoad, selectedSettlement }) => {
-      /**
+  /**
+   * A reduced version of the actions bar component which allows the user to build roads and settlements
+   * during the initial two rounds of the game.
+   */
+  const InitialPlacementMenuComponent: React.FC<InitialPlacementMenuComponentProps> = ({ state, 
+    callBackend, isCurrentPlayer, updatePotentialSettlements, selectedRoad, selectedSettlement }) => {
+  /**
     * A null body with the gamestate. This'll probably be removed before
     * heading onto production.
     */

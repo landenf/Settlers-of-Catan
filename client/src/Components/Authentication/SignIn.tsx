@@ -3,12 +3,23 @@ import { sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/aut
 import {auth} from '../../firebase-config.js';
 import '../../Styles/LandingAuth/AuthenticationStyles.css'; 
 import { useNavigate } from 'react-router-dom';
-import { Player } from '@shared/types.js';
 
+/**
+ * Set of props used to provide functionality to the sign in component.
+ */
 interface SignInComponentProps {
+
+  /**
+   * Function used to determine what happens when a user switches
+   * between the sign in component and the sign up component
+   */
   onSwitch: () => void;
 }
 
+/**
+ * Component used to sign in to the game if the player already has an
+ * account.
+ */
 const SignInComponent: React.FC<SignInComponentProps> = ({ onSwitch }) => {
   const [loginEmail, setLoginEmail] = useState<string>('');
   const [loginPassword, setLoginPassword] = useState<string>('');
@@ -19,7 +30,6 @@ const SignInComponent: React.FC<SignInComponentProps> = ({ onSwitch }) => {
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-      console.log(userCredential.user);
       setErrorMessage('');
       navigate('/home'); 
     } catch (error: any) { 

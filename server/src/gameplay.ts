@@ -1,7 +1,6 @@
 import { GameState, Player, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer, community_keys, community_spaces, resource_counts } from "@shared/types";
 import { tiles } from "../StaticData/TileData"
 import { players } from "../StaticData/PlayerData";
-import { InvalidResourceError } from "./errors";
 import { assignPlayerColor, newGame, reassignPlayers } from "./lobby";
 
 /**
@@ -24,7 +23,6 @@ var null_game: GameState = {
 
 /**
  * List of all games currently being played.
- * TODO: Replace example game with games from the landing page / join page!
  */
 var all_games: GameState[] = []
 
@@ -107,7 +105,12 @@ function findGameIndexById(sessionId: number) {
      return index;
 }
  
-
+/**
+ * Lets the players go through the first two initial rounds of placing a road for free.
+ * @param road the road to place
+ * @param sessionId the session of the game the client is trying to play in
+ * @returns the gamestate with the road added in the correct spot
+ */
 function initialRoundRoad(road: road_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)];
 	const roadSpaceAvailable = current_game.gameboard.tiles[road.tile_index].road_spaces[road.edge] === "white";
@@ -118,6 +121,12 @@ function initialRoundRoad(road: road_meta_data, sessionId: number){
      return getGamestate(sessionId);
 }
 
+/**
+ * Lets the players go through the first two initial rounds of placing a settlement for free.
+ * @param settlement the settlement to place
+ * @param sessionId the session of the game the client is trying to play in
+ * @returns the gamestate with the settlement added in the correct spot
+ */
 function initialRoundSettlement(settlement: community_meta_data, sessionId: number){
 	addingSettlement(settlement, sessionId);
      return getGamestate(sessionId);
@@ -125,6 +134,7 @@ function initialRoundSettlement(settlement: community_meta_data, sessionId: numb
 
 /**
  * Function to roll the dice and distribute resources based upon the result.
+ * @param sessionId the session of the game the client is trying to roll dice in
  */
 function handleDiceRoll(sessionId: number) {
 
@@ -145,6 +155,7 @@ function handleDiceRoll(sessionId: number) {
 
 /**
  * Updates every player's resources counts.
+ * @param sessionId the session of the game that the player is trying to get resources in
  */
 function updateResourceCounts(sessionId: number) {
 
@@ -160,7 +171,6 @@ function updateResourceCounts(sessionId: number) {
 
 /**
  * Function for distributing resources to the players based on the number rolled.
- * NOTE: This function may have to change depending on what what data types is in the players function!
  * 
  * @param {ResourceGainKey} numRolled the number rolled
  */
@@ -182,6 +192,7 @@ function distributeCards(numRolled: ResourceGainKey, sessionId: number) {
 
 /**
  * Rolls two dice and updates it in the current_game.
+ * @param sessionId the session to update the dice number field in
  */
 function rollDice(sessionId: number) {
 
@@ -194,9 +205,13 @@ function rollDice(sessionId: number) {
 
 /**
  * Determines if a player receives a knight or vp.
+ * @param player the player to determine the benefit for
+ * @param sessionId the session that this player belongs to
  */
 function determineDevBenefit(player: Player, sessionId: number) {
      const probability = Math.floor(Math.random() * 10) + 1;
+
+     // there's a 40% chance of VP card and a 60% chance of knight card
      if (probability < 4) {
           player.vp++;
      } else {
@@ -207,6 +222,11 @@ function determineDevBenefit(player: Player, sessionId: number) {
      }
 }
 
+/**
+ * Lets the current player purchase a development card
+ * @param sessionId the session in which to purchase a development card
+ * @returns the gamestate with the updated development card information
+ */
 function buyDevCard(sessionId: number) {
 
      const current_game = all_games[findGameIndexById(sessionId)]
@@ -240,6 +260,7 @@ function buyDevCard(sessionId: number) {
 /**
  * Handles the stealing part of the knight card.
  * @param victimId the index of the player who's being stolen from
+ * @param sessionId the session of the game in which players are stealing from one another
  */
 function handleKnight(victimId: number, sessionId: number) {
 
@@ -273,7 +294,7 @@ function handleKnight(victimId: number, sessionId: number) {
      }
 
      // select the resource from the hand and exchange it between players
-     const stolen_resource = translateToResourcesKey(player_hand[card_index_stolen])
+     const stolen_resource = player_hand[card_index_stolen] as ResourcesKey
 
      victim.hand[stolen_resource]--;
      thief.hand[stolen_resource]++;
@@ -287,6 +308,8 @@ function handleKnight(victimId: number, sessionId: number) {
 /**
  * Updates the backend to reflect the user choosing to not steal
  * from any players as a result of their development card.
+ * @param sessionId the session in which the current player wishes to cancel
+ * their steal.
  */
 function cancelSteal(sessionId: number) {
 
@@ -329,6 +352,7 @@ function compareRoads(road1: road_meta_data, road2: road_meta_data) {
  * Using the meta data from that road, we will find the neighbor necessary.
  * 
  * @param road the road the player is trying to buy
+ * @param sessionId the session in which the player is trying to build a road
  * @returns the updated gamestate
  */
 function buyRoad(road: road_meta_data, sessionId: number) {
@@ -365,7 +389,7 @@ function buyRoad(road: road_meta_data, sessionId: number) {
  * Adds the road to the current player, and takes away that road from the current player.
  * 
  * @param road the road you are adding
- * @param sessionId 
+ * @param sessionId the session in which the road should be added
  */
 function addingRoad(road: road_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)]
@@ -389,7 +413,7 @@ function addingRoad(road: road_meta_data, sessionId: number){
  * Helper function to add all potentials when buying a road.
  * 
  * @param road road meta data
- * @param player the current player whos potentials you are updating
+ * @param sessionId the session in which to add the potential roads
  */
 function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)]
@@ -422,7 +446,7 @@ function addAllPotentialsWithRoad(road: road_meta_data, sessionId: number){
 		possible_roads.push(...checkAroundRoads(neighbor_road))
     } else {
           findPotentialsOnBoardEdges(road, sessionId);
-          const newleg = checkRoadsAroundOnEdges(road, sessionId)
+          const newleg = checkRoadsAroundOnEdges(road)
           if (newleg !== undefined) {
                possible_roads.push(newleg)
           }
@@ -540,6 +564,7 @@ function findPotentialsOnBoardEdges(road: road_meta_data, sessionId: number) {
 /**
  * Helper function to update potential roads from the roads that have been bought.
  * @param road the road you are updating based on
+ * @param sessionId the session in which to update the potential roads
  */
 function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
 
@@ -597,6 +622,7 @@ function potentialUpdatesRoad(road: road_meta_data, sessionId: number) {
 /**
  * Helper function to add roads to a neighbor tile if it needs to be added.
  * @param road the road whose neighbor we're looking for
+ * @param sessionId the session in which to check for a road's neighbors
  */
 function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number){
      const current_game = all_games[findGameIndexById(sessionId)]
@@ -617,7 +643,6 @@ function checkForNeighborPotentialRoad (road: road_meta_data, sessionId: number)
 /**
  * Returns all roads that surround the given road 
  * @param road the road to search around
- * @param sessionId the game ID of the current session
  */
 function checkAroundRoads(road: road_meta_data) {
      const possible_roads: triad_leg[] = []
@@ -658,9 +683,8 @@ function checkAroundRoads(road: road_meta_data) {
 /**
  * Polyfills a bug associated with adding roads on the edges of the board.
  * @param road the road that's just been built
- * @param sessionId the game ID of the current game session
  */
-function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
+function checkRoadsAroundOnEdges(road: road_meta_data) {
 
      const edge_tiles = [7, 12, 16, 17, 18, 15, 11, 6, 2, 1, 0, 3];
      const edge_index = edge_tiles.findIndex(number => number === road.tile_index);
@@ -682,7 +706,7 @@ function checkRoadsAroundOnEdges(road: road_meta_data, sessionId: number) {
           offset_vertex = (road.edge + 5) % 6;
      }
 
-     const translated_edge = translateToNumberKey(tile_edge)
+     const translated_edge = tile_edge as community_keys
 
      const newRoad: road_meta_data = {tile_index: edge_tiles[tile_index], edge: translated_edge}
 
@@ -893,7 +917,7 @@ function cleanPotentials(settlement: community_meta_data, sessionId: number) {
  * @param community the community to check for
  * @param reference the community to check against
  */ 
-const isWithinOneVertex = (community: community_meta_data, reference: community_meta_data) => {
+function isWithinOneVertex (community: community_meta_data, reference: community_meta_data) {
      if (community.tile_index !== reference.tile_index) {
           return false;
      }
@@ -989,8 +1013,8 @@ function tradeWithBank(resourceOffer: string, resourceGain: string, sessionId: n
 
      const player = current_game.current_player;
 
-     let translatedOffer = translateToResourcesKey(resourceOffer)
-     let translatedGain = translateToResourcesKey(resourceGain)
+     let translatedOffer = resourceOffer as ResourcesKey
+     let translatedGain = resourceGain as ResourcesKey
 
      if (player.hand[translatedOffer] >= 3){
           player.hand[translatedOffer] -= 3;
@@ -1004,38 +1028,10 @@ function tradeWithBank(resourceOffer: string, resourceGain: string, sessionId: n
 }
 
 /**
- * Translates a string literal (typically from a JSON object) 
- * to the ResourcseKey type.
- * @param toTranslate the string to translate
- */
-function translateToResourcesKey(toTranslate: string) {
-     var translation: ResourcesKey
-     switch (toTranslate) {
-          case "wheat":
-               translation = "wheat"
-               break;
-          case "brick":
-               translation = "brick"
-               break;
-          case "stone":
-               translation = "stone"
-               break;
-          case "sheep":
-               translation = "sheep"
-               break;
-          case "wood":
-               translation = "wood"
-               break;
-          default:
-               throw new InvalidResourceError(`The resource type '${toTranslate}' isn't recognized by the system!`);
-     }
-     return translation
-}
-
-/**
  * Functionality for buying a settlement.
  * 
  * @param settlement info for settlement that is being bought
+ * @param sessionId the session in which the settlement is being bought
  */
 function buySettlement(settlement: community_meta_data, sessionId: number){
      const current_game = all_games[findGameIndexById(sessionId)]
@@ -1080,6 +1076,11 @@ function buySettlement(settlement: community_meta_data, sessionId: number){
      return getGamestate(sessionId);
 }
 
+/**
+ * Function to handle placing the settlement on the board.
+ * @param settlement the settlement to place on the board
+ * @param sessionId the session in which the settlement is being placed
+ */
 function addingSettlement(settlement: community_meta_data, sessionId: number){
 	const current_game = all_games[findGameIndexById(sessionId)]
 	const player = current_game.current_player;
@@ -1128,7 +1129,7 @@ function addingSettlement(settlement: community_meta_data, sessionId: number){
 /**
  * Checks if a given list has the community
  * @param communities list of communities to check against
- * @param community community to check for
+ * @param community the community to check for
  */
 function containsCommunity (communities: community_meta_data[], community: community_meta_data) {
 
@@ -1150,6 +1151,7 @@ function containsCommunity (communities: community_meta_data[], community: commu
 
 /**
  * Helper function to find relative vertices at the same spot for the other two tiles given one tile. 
+ * @param community the community "spot" to check for relative vertices
  */
 function findRelativeNeighboringVertexFromVertex (community: community_meta_data){
      //given tile 5 vertex 3
@@ -1184,6 +1186,8 @@ function findRelativeNeighboringVertexFromVertex (community: community_meta_data
 
 /**
  * Helper function to determine the vertex inbetween two roads.
+ * @param edge1 the edge of the first road
+ * @param edge 2 the edge of the second road
  */
 function vertexBetweenRoads(edge1: number, edge2: number){
      if((edge1 === 0 && edge2 === 5) || (edge1 === 5 && edge2 === 0)){
@@ -1196,6 +1200,7 @@ function vertexBetweenRoads(edge1: number, edge2: number){
 
 /**
  * Awards the most roads to the current player if they have the most roads owned. Updates their victory points accordingly.
+ * @param sessionId the session in which to award the most roads card
  */
 function awardMostRoads(sessionId: number){
      const current_game = all_games[findGameIndexById(sessionId)];
@@ -1222,6 +1227,7 @@ function awardMostRoads(sessionId: number){
 
 /**
  * Awards largest army to the current player if they have the largest army. Updates their victory points accordingly.
+ * @param sessionId the session in which to award the largest army card
  */
 function awardLargestArmy(sessionId: number){
      const current_game = all_games[findGameIndexById(sessionId)];
@@ -1249,6 +1255,7 @@ function awardLargestArmy(sessionId: number){
 /**
  * Checks each player's victory points and sets the game state's winner
  * property accordingly.
+ * @param sessionId the session in which to check the win state
  */
 function checkWinState(sessionId: number) {
      const current_game = all_games[findGameIndexById(sessionId)]
@@ -1265,6 +1272,7 @@ function checkWinState(sessionId: number) {
 
 /**
  * Ends the current game.
+ * @param sessionId the session to end
  */
 function endGame(sessionId: number){
      let current_game = all_games[findGameIndexById(sessionId)] 
@@ -1276,6 +1284,7 @@ function endGame(sessionId: number){
 
 /**
  * Passes the turn to the next player. 
+ * @param sessionId the session in which the player passes their turn
  */
 function passTurn(sessionId: number) {
 
@@ -1304,6 +1313,8 @@ function passTurn(sessionId: number) {
 
 /**
  * Used to switch clients. 
+ * @param player_id the unique client id to switch to
+ * @param sessionId the session in which the client is switching
  */
 function switchClient(player_id: string, sessionId: number) {
 
@@ -1320,6 +1331,7 @@ function switchClient(player_id: string, sessionId: number) {
 
 /**
  * Translates current game to a limited state object.
+ * @param sessionId the session to translate to a limited state
  */
 function translateToLimitedState(sessionId: number) {
 
@@ -1369,40 +1381,6 @@ function translateToLimitedState(sessionId: number) {
      return limited_state
      
 }
-
-type numberKey = keyof community_spaces
-
-/**
-     * Translates a number into a community space or road space's index.
-     * @param toTranslate the index to translate to number key
-     * @returns a number key that provides strong 0-5 typing to the index.
-     */
-function translateToNumberKey(toTranslate: number) {
-     var translation: numberKey
-     switch (toTranslate) {
-         case 0:
-             translation = 0;
-             break;
-         case 1:
-             translation = 1;
-             break;
-         case 2: 
-             translation = 2;
-             break;
-         case 3: 
-             translation = 3;
-             break;
-         case 4: 
-             translation = 4;
-             break;
-         case 5:
-             translation = 5;
-             break;
-         default:
-             throw new InvalidResourceError("Tried accessing an invalid index of a community space!")
-     }
-     return translation
- }
 
 /**
  * Assigns a unique client ID to the user.
@@ -1487,6 +1465,8 @@ function joinGame(newPlayer: Player, sessionId?: number) {
 
 /**
  * Readies or unreadies the player. Once all players are ready, the game begins.
+ * @param sessionId the session in which the player is readying up
+ * @param client the player that's readying up
  */
 function handleReady(sessionId: number, client: Player) {
      const current_game = all_games[findGameIndexById(sessionId)]
@@ -1501,6 +1481,7 @@ function handleReady(sessionId: number, client: Player) {
  * Removes a player from the game. If the game has no players,
  * it is removed from the list of ongoing games.
  * @param sessionId the current game to leave
+ * @param client the player that's leaving the game
  * @returns false if there are no more games or players
  */
 function leaveGame(sessionId: number, client: Player) {
@@ -1604,7 +1585,6 @@ function startGame(sessionId: number) {
  * @returns an updated, limited gamestate
  */
 function getGamestate(sessionId: number) {
-     const current_game = all_games[findGameIndexById(sessionId)];
      updateResourceCounts(sessionId);
      checkWinState(sessionId);
      updateStarted(sessionId);
@@ -1615,7 +1595,7 @@ function getGamestate(sessionId: number) {
  * Used when we can't find a game, typically due to trying to join a game
  * via ID when it's already full.
  */
-function getNullGame(sessionId: number) {
+function getNullGame() {
      return null_game;
 }
 

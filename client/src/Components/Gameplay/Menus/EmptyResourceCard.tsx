@@ -41,8 +41,11 @@ interface EmptyResourceCardProp {
 
 }
 
+/**
+ * Component that shows a single resource card in a lineup of resource cards for the trading
+ * modal.
+ */
 const EmptyResourceCard: React.FC<EmptyResourceCardProp> = ({ type, cardIsSelected, setCardIsSelected, tradeType, tradeParameters }) => {
-  const [numCards, setNumCards] = useState(0);
   const cardType = type;
   const [isSelected, setSelected] = useState(false);
 

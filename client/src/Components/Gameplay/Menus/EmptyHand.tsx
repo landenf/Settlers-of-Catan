@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../../../Styles/Gameplay/Player/Hand.css"
-import { LimitedSession } from "@shared/types";
 import EmptyResourceCard from "./EmptyResourceCard";
 import { TradeParams } from "../../../Enums/tradebody";
 
@@ -8,10 +7,6 @@ import { TradeParams } from "../../../Enums/tradebody";
  * An interface that provides strong typing to an empty hand prop.
  */
 interface EmptyHandProps {
-  /**
-   * The current game session's state.
-   */
-  gamestate: LimitedSession
 
   /**
    * The current trade parameters.
@@ -45,18 +40,9 @@ interface EmptyHandProps {
 }
 
 /**
- * Component that displays the amount of victory points a player has as well as
- * the numbers of all 5 resource cards and the number of development cards currently
- * in a player's hand
- *
- * @returns all cards in hand and victory points
+ * Component that displays a row of resource cards that are clickable in the trade modal.
  */
-const EmptyHand: React.FC<EmptyHandProps> = ({ gamestate, tradeParameters, setTradeParams, tradeType, setTradeEmpty, tradeEmpty }) => {
-
-  /**
-   *get player resources
-   */
-  const hand = gamestate.client.hand;
+const EmptyHand: React.FC<EmptyHandProps> = ({ tradeParameters, setTradeParams, tradeType, setTradeEmpty, tradeEmpty }) => {
 
   /**
    * the set of resources this player holds
@@ -88,7 +74,6 @@ const EmptyHand: React.FC<EmptyHandProps> = ({ gamestate, tradeParameters, setTr
 
   return (
     <div className="displayCards">
-      {/** Makes a card for each resource */}
       {resources.map((resource) => {
         return <EmptyResourceCard key={resource.name} type={resource.name} cardIsSelected={cardIsSelected} 
           setCardIsSelected={updateCardIsSelected} setTradeParams={setTradeParams} tradeType={tradeType} 

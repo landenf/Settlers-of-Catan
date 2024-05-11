@@ -31,7 +31,7 @@ const WebSocket = require('ws');
  */
 const gameplay = require("./src/gameplay")
 
-const player_data = require("./StaticData/PlayerData");
+const playerData = require("./StaticData/PlayerData");
 const { InvalidEndpointError } = require('./src/errors');
 
 // setup middleware
@@ -41,7 +41,6 @@ app.use(cors("*"))
 
 
 // open app server.
-// TODO: Run API on online hosting.
 const server = app.listen(port, '0.0.0.0', () => {console.log("Server Started")} )
 
 
@@ -49,13 +48,10 @@ const server = app.listen(port, '0.0.0.0', () => {console.log("Server Started")}
 // this connects our wss to the server we are already using. This means we can run everything on the same 5000 port.
 const wss = new WebSocket.Server({ server: server});
 
-// objects representing all players. TODO: get this when we set up the landing page and game start!
-const clients = player_data.players
-
 /**
  * Becomes true if there are no more games currently being played.
  */
-let no_games_left = false;
+let noGamesLeft = false;
 
 /**
  * Handles a frontend request to update the gamestate.
@@ -90,19 +86,19 @@ function handleRequest(request, body) {
             gameplay.switchClient(body.player, body.state.id);
             break;
         case "generateGame":
-            const new_game = gameplay.generateGame(body.state.client);
-            body.state.id = new_game.id;
+            const newGame = gameplay.generateGame(body.state.client);
+            body.state.id = newGame.id;
             break;
         case "joinGameByID":
-            const join_game = gameplay.joinGame(body.state.client, body.id);
-            body.state.id = join_game.id
+            const joinGame = gameplay.joinGame(body.state.client, body.id);
+            body.state.id = joinGame.id
             break;
         case "joinRandomGame":
-            const random_game = gameplay.joinGame(body.state.client, body.id);
-            body.state.id = random_game.id
+            const randomGame = gameplay.joinGame(body.state.client, body.id);
+            body.state.id = randomGame.id
             break;
         case "leaveGame":
-            no_games_left = gameplay.leaveGame(body.state.id, body.state.client);
+            noGamesLeft = gameplay.leaveGame(body.state.id, body.state.client);
             break;
         case "handleReady":
             gameplay.handleReady(body.state.id, body.state.client)
@@ -129,18 +125,18 @@ function handleRequest(request, body) {
  * Function used to send a limited gamestate to every client
  * using the websocket.
  */
-function updateFrontend(session_id, current_client) {
+function updateFrontend(sessionID, currentClient) {
     wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN && !no_games_left && gameplay.findPlayerInGame(session_id, client.id)) {
+        if (client.readyState === WebSocket.OPEN && !noGamesLeft && gameplay.findPlayerInGame(sessionID, client.id)) {
 
-            let state = gameplay.switchClient(client.id, session_id)
+            let state = gameplay.switchClient(client.id, sessionID)
             client.send(JSON.stringify(state))
         } 
         else if (gameplay.findPlayerCantJoin(client.id)) {
             let state = gameplay.getNullGame();
-            state.client = current_client;
+            state.client = currentClient;
             client.send(JSON.stringify(state))
-            no_games_left = false;
+            noGamesLeft = false;
 
         }
     });

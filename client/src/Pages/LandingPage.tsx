@@ -15,9 +15,24 @@ import { auth, db } from "../firebase-config";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 
+/**
+ * Interface providing strong typing to the landing page's props
+ */
 interface LandingProps {
+
+  /**
+   * The method with which to send and receive websocket messages
+   */
   backend: WebSocket,
+
+  /**
+   * The current game session
+   */
   state: LimitedSession,
+
+  /**
+   * Function used to update the current game session
+   */
   setState: (newState: LimitedSession) => void
 }
 
@@ -25,8 +40,6 @@ interface LandingProps {
  * Page where the user starts after logging in and sees their individual player stats.
  * From here they can choose to create a game, join an online game, or join an already
  * existing game with a join code.
- *
- * @returns Landing page for the user.
  */
 const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
   const [setupNeeded, setSetupNeeded] = useState(true);
@@ -50,10 +63,16 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
     }
   })
 
+  /**
+   * Toggles the instructions modal.
+   */
   const updateInstructionsModal = () => {
     setInstructionsModal(!instructionsModalEnabled);
   };
 
+  /**
+   * Logs out the current database user.
+   */
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -87,6 +106,9 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
     backend.send(JSON.stringify(message));
   };
 
+  /**
+   * Function used to translate the current database user to a game player
+   */
   const generateUser = async () => {
     if (user) {
         const userProfilesRef = collection(db, "UserProfiles");
@@ -156,7 +178,6 @@ const LandingPage: React.FC<LandingProps> = ({ backend, state, setState }) => {
   return (
     <div className="landing-page">
       <InstructionsModal
-        setInstructionsModal={() => setInstructionsModal(false)}
         instructionsModalState={instructionsModalEnabled}
       />
       <div className="menu">

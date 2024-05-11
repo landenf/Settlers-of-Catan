@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { query, collection, where, getDocs, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../../firebase-config';
-import "../../../Styles/EndModal.css";
+import "../../../Styles/Gameplay/Menus/EndModal.css";
 import "../../../Styles/Gameplay/Player/PlayerComponent.css";
 import { LimitedSession } from "@shared/types";
-import { BackendRequest } from "../../../Enums/requests";
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -26,17 +25,13 @@ interface EndGameModalProps {
      * The final game state.
      */
     gamestate: LimitedSession;
-
-    /**
-     * Function to call the backend through the main websocket.
-     */
-    callBackend: (type: string, body: BackendRequest) => void;
+    
 }
 
 /**
  * Component used to display the end game summary and options.
  */
-const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGameModal, gamestate, callBackend }) => {
+const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGameModal, gamestate }) => {
     const [user, loading, error] = useAuthState(auth);
     const sortedPlayers = [...gamestate.players].sort((a, b) => b.vp - a.vp);
     const navigate = useNavigate(); // For navigation
@@ -80,7 +75,9 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
         }
     }, [user]); 
 
-    // Function to render a medal icon based on rank
+    /**
+     * Function to render a medal icon based on rank 
+     */
     const renderMedal = (rank: number) => {
         switch (rank) {
         case 1:
@@ -98,9 +95,6 @@ const EndGameModal: React.FC<EndGameModalProps> = ({ endGameModalState, setEndGa
      * Function to exit the end game modal and potentially the application or game lobby.
      */
     const handleExitGame = () => {
-        const request: BackendRequest = {
-            state: gamestate
-        }
         
         setEndGameModal(false);
 

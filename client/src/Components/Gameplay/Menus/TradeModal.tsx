@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "../../../Styles/Gameplay/Menus/TradeModal.css";
 import EmptyHand from "./EmptyHand";
 import { LimitedSession } from "@shared/types";
-import { TradeParams } from "../../../Enums/tradebody";
 import { BackendRequest, TradeRequest } from "../../../Enums/requests";
 
 /**
@@ -33,21 +32,12 @@ export interface TradeModalProp {
   }
 
 /**
- * A modal that pops out when trading. TODO: Work to include this with other forms of trading
- * besides the bank!
+ * A modal that pops out when trading. 
  */
 const TradeModalComponent: React.FC<TradeModalProp> = ({ setTradeModal, tradeModalState, gamestate, callBackend }) => {
 
     const [trade, setTrade] = useState({offer: "", gain: ""});
     const [tradeEmpty, setTradeEmpty] = useState(0);
-
-    const updateTrade = (newParams: TradeParams) => {
-        setTrade(newParams);
-      }
-
-    const updateTradeEmpty = (newState: number) => {
-        setTradeEmpty(newState);
-    }
 
     /**
      * Sets the new trade parameters, given the card type.
@@ -65,9 +55,9 @@ const TradeModalComponent: React.FC<TradeModalProp> = ({ setTradeModal, tradeMod
         <div className={"trade-modal " + (tradeModalState ? "" : "disabled")}>
             <div className="header">TRADE</div>
             <div className="description">Please select a resource to trade from your hand:</div>
-            <EmptyHand gamestate={gamestate} setTradeParams={updateTrade} tradeType={"offer"} tradeParameters={trade} setTradeEmpty={updateTradeEmpty} tradeEmpty={tradeEmpty}/>
+            <EmptyHand setTradeParams={setTrade} tradeType={"offer"} tradeParameters={trade} setTradeEmpty={setTradeEmpty} tradeEmpty={tradeEmpty}/>
             <div className="description">Please select a resource to receive:</div>
-            <EmptyHand gamestate={gamestate} setTradeParams={updateTrade} tradeType={"gain"} tradeParameters={trade} setTradeEmpty={updateTradeEmpty} tradeEmpty={tradeEmpty}/>
+            <EmptyHand setTradeParams={setTrade} tradeType={"gain"} tradeParameters={trade} setTradeEmpty={setTradeEmpty} tradeEmpty={tradeEmpty}/>
             <div className="tradeButtons">
                 <button className="cancelTrade" onClick={() => setTradeModal(false)}>Cancel</button>
                 <button className={"affirmTrade " + (tradeEmpty != 2 ? "dark" : "")} disabled={tradeEmpty != 2} onClick={() => handleButtonClick()}>Let's Trade!</button>

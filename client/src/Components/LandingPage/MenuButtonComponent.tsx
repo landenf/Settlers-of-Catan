@@ -73,12 +73,18 @@ const MenuButtonComponent: React.FC<MenuButtonProps> = ({callBackend, state, col
     }
   })
 
+  /**
+   * Handles the button click and calls the backend if needed
+   */
   const handleButtonClick = () => {
     if (backendCall !== "joinGameByID") {
       callBackend(backendCall, {state: state})
     }
   }
 
+  /**
+   * Handles form submission when the user enters a game code
+   */
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const request: JoinGameByIdRequest = {

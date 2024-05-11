@@ -4,6 +4,9 @@ import { query, collection, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../firebase-config';
 import "../../Styles/Gameplay/Player/PlayerStats.css";
 
+/**
+ * Component used to render the player's statistics upon loading up the game lobby.
+ */
 const PlayerStatisticsComponent = () => {
     const [user, loading, error] = useAuthState(auth);
     const [userProfile, setUserProfile] = useState<any>(null);

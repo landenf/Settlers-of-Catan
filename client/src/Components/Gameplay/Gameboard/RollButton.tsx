@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import '../../../Styles/Gameplay/Player/RollButton.css'
-import { GameState, LimitedSession } from "@shared/types";
+import { LimitedSession } from "@shared/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDice } from "@fortawesome/free-solid-svg-icons";
 import { BackendRequest } from "../../../Enums/requests";
@@ -24,7 +24,7 @@ interface RollButtonProps {
      * Updates whenever the player rolls. Prevents the player from
      * rolling twice in a single turn.
      */
-    updateRolled: (newState: boolean) => void;
+    setRolled: (newState: boolean) => void;
 
     /**
      * Determines if the client is the current player. If not,
@@ -38,23 +38,25 @@ interface RollButtonProps {
     state: LimitedSession
 }
 
-const RollButton: React.FC<RollButtonProps> = ({ callBackend, rolled, updateRolled, isCurrentPlayer, state }) => {
+/**
+ * The button component which lets the user roll the dice. Should only be clickable
+ * once per turn.
+ */
+const RollButton: React.FC<RollButtonProps> = ({ callBackend, rolled, setRolled, isCurrentPlayer, state }) => {
     
     /**
      * Function used to call the backend to roll the dice and distribute resources.
      */
     async function handleClick() {
         callBackend("roll", {state})
-        updateRolled(true)
+        setRolled(true)
     }
 
     return (
-
         <button aria-label={"rollButton"} className={'rollButton ' + (rolled ? "roll-dark " : " ") + 
             ((isCurrentPlayer && state.roundNumber > 2) ? "" : "disabled")} onClick={handleClick} disabled={rolled}>
             <FontAwesomeIcon icon={faDice} />
         </button>
-
     )
 };
 

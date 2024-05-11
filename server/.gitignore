@@ -25,6 +25,8 @@
 /src/lobby.js
 /src/gameplay.js
 /src/errors.js
+/StaticData/PlayerData.js
+/StaticData/TileData.js
 
 npm-debug.log*
 yarn-debug.log*

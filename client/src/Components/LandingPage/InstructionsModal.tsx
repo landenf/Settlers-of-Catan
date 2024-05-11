@@ -2,13 +2,9 @@ import React, { useState } from "react";
 import "../../Styles/LandingAuth/InstructionsModal.css";
 
 /**
- * An interface that provides strong typing to a instruction modal's enabled prop.
+ * An interface that provides strong typing to an instruction modal's enabled prop.
  */
 export interface InstructionsModalProp {
-  /**
-   * Function to change the modal from being enabled or disabled.
-   */
-  setInstructionsModal: (newState: boolean) => void;
 
   /**
    * Whether or not the modal is enabled.
@@ -20,10 +16,7 @@ export interface InstructionsModalProp {
  * A modal that pops out when the i icon is clicked on the homepage.
  * It brings a popup with the instructions of how to play the game.
  */
-const InstructionsModal: React.FC<InstructionsModalProp> = ({
-  setInstructionsModal,
-  instructionsModalState,
-}) => {
+const InstructionsModal: React.FC<InstructionsModalProp> = ({instructionsModalState}) => {
   return (
     <div
       className={
