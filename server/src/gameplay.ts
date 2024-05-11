@@ -1,6 +1,6 @@
 import { GameState, Player, road_keys, community_meta_data, road_meta_data, LimitedSession, LimitedPlayer, community_keys, community_spaces, resource_counts } from "@shared/types";
-import { tiles } from "@shared/StaticData/GameBoardStatic"
-import { players } from "@shared/StaticData/PlayerData";
+import { tiles } from "../StaticData/TileData"
+import { players } from "../StaticData/PlayerData";
 import { assignPlayerColor, newGame, reassignPlayers } from "./lobby";
 
 /**

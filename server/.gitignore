@@ -25,7 +25,6 @@
 /src/lobby.js
 /src/gameplay.js
 /src/errors.js
-/src/types.js
 
 npm-debug.log*
 yarn-debug.log*

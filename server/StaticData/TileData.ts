@@ -1,8 +1,5 @@
-import { Tile } from "../types";
+import { Tile } from "@shared/types"
 
-/**
- * Dictionary of all the resources corresponding to each tile.
- */
 const Tile_Resources: {[index: number]:any} = {
     0: "wheat",
     1: "wood",
@@ -25,9 +22,6 @@ const Tile_Resources: {[index: number]:any} = {
     18: "stone",
   };
 
-/**
- * Dictionary of all the dice rolls corresponding to each tile.
- */
 const Tile_Dice: {[index: number]:any} = {
   0: 9,
   1: 8,
@@ -50,14 +44,8 @@ const Tile_Dice: {[index: number]:any} = {
   18: 8,
 }
 
-/**
- * List of tiles 0-18.
- */
 const total_tiles = [...Array(19).keys()]
 
-/**
- * List of all tiles used to generate new game boards.
- */
 export const tiles: Tile[] = total_tiles.map((index) => (
   {
     community_spaces: {
@@ -80,15 +68,3 @@ export const tiles: Tile[] = total_tiles.map((index) => (
     type: Tile_Resources[index]
   })
 )
-
-/**
- * The current configuration of the game board's display in the frontend
- */
-export const GameBoardConfiguration =  {
-    "width": "100%",
-    "height": "70vh",
-    "layout": { "width": 9, "height": 9, "flat": false, "spacing": 1.1 },
-    "origin": { "x": 0, "y": 0 },
-    "map": "hexagon",
-    "mapProps": [ 2 ]
-  };

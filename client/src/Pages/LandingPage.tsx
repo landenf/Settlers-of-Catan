@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../Styles/LandingAuth/LandingPage.css";
 import MenuToggleComponent from "../Components/LandingPage/MenuToggleComponent";
-import { MockGameState, MockLimitedGameState } from "@shared/StaticData/GameStateStatic";
+import { MockGameState, MockLimitedGameState } from "../StaticData/GameStateStatic";
 import { LimitedSession, Player } from "@shared/types";
 import { BackendRequest } from "../Enums/requests";
 import RoomPanel from "../Components/LandingPage/RoomPanel";

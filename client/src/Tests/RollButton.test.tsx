@@ -1,5 +1,5 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
-import { MockGameState, MockLimitedGameState } from "@shared/StaticData/GameStateStatic";
+import { MockGameState, MockLimitedGameState } from "../StaticData/GameStateStatic";
 import React from "react";
 import userEvent from "@testing-library/user-event";
 import MockGameSession from "./__mocking__/mockGameSession";
